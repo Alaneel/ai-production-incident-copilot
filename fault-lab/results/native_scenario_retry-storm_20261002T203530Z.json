@@ -1,0 +1,2086 @@
+{
+  "ok": true,
+  "checks": {
+    "no_causal_upgrade": true,
+    "stopped_before_execution": true,
+    "fresh_process_checkpoint_matches": true,
+    "fresh_process_repository_matches": true,
+    "checkpoint_history_retained": true,
+    "approval_interrupt_retained": true,
+    "fresh_process_recovery_succeeded": true,
+    "baseline_log_server_span_correlated": true,
+    "baseline_parentage_verified": true,
+    "checkpoint_observations_retained": true,
+    "live_metrics": true,
+    "live_logs": true,
+    "live_traces": true,
+    "service_identification": true,
+    "incident_classification": true,
+    "hypothesis_present": true,
+    "remediation_selection": true,
+    "approval_boundary": true
+  },
+  "run_at": "2026-10-02T20:35:30.050249+00:00",
+  "duration_seconds": 91.142,
+  "scope": "actual native fault-lab HTTP services -> live Prometheus/Loki/Tempo -> actual Go gateway -> actual MCP HTTP -> deterministic LangGraph PostgreSQL checkpoint/repository + fresh-process recovery",
+  "limitations": [
+    "No model, real remediation, Redis or live API-server crash recovery",
+    "Sampled synchronous call parentage is not incident causation",
+    "Fault-lab CPU gauge reports configured fault intensity, not measured host CPU utilization",
+    "Catalog/deployment metadata and knowledge remain fixture-backed"
+  ],
+  "live_metrics_logs": true,
+  "fault_injected": "retry_storm",
+  "scenario": "retry-storm",
+  "primary_service": "checkout-api",
+  "fault_injected_at": "2026-10-02T20:34:58.419152+00:00",
+  "workload_status_counts": {
+    "200": 31
+  },
+  "diagnostic_seconds": 0.118,
+  "workload_continued_through_diagnosis": true,
+  "trace_id": "01928af7a2ec318c2ec5e4cf44c4c850",
+  "retrieval_attempts": 15,
+  "topology": {
+    "service": "checkout-api",
+    "edges": [
+      {
+        "source": "checkout-api",
+        "target": "payment-service"
+      }
+    ],
+    "dependencies": [
+      "payment-service"
+    ],
+    "source": "service-catalog-via-telemetry-gateway",
+    "topology_kind": "static_fixture_catalog",
+    "observed": {
+      "status": "available",
+      "source": "tempo_client_server_parentage",
+      "calls": [
+        {
+          "source": "checkout-api",
+          "target": "payment-service",
+          "trace_id": "01928af7a2ec318c2ec5e4cf44c4c850",
+          "client_span_id": "e9c6394708db3146",
+          "server_span_id": "3503699d099af6f8",
+          "observed_at": "2026-10-02T20:34:25.854862Z"
+        }
+      ],
+      "start": "2026-10-02T20:04:40.110872Z",
+      "end": "2026-10-02T20:34:40.110872Z",
+      "coverage": "sampled_not_exhaustive",
+      "traces_read": 1,
+      "traces_failed": 0,
+      "calls_omitted": 0,
+      "calls_discarded": 0
+    },
+    "catalog_status": "available"
+  },
+  "topology_phase": "baseline",
+  "baseline_request_id": "probe-b48a3e80ee99b118",
+  "correlated_baseline_logs": [
+    {
+      "service": "payment-service",
+      "message": "request completed",
+      "level": "INFO",
+      "trace_id": "01928af7a2ec318c2ec5e4cf44c4c850",
+      "span_id": "3503699d099af6f8",
+      "request_id": "probe-b48a3e80ee99b118",
+      "timestamp": "2026-10-02T20:34:25.861076+00:00",
+      "active": 0,
+      "max": 0
+    }
+  ],
+  "incident": {
+    "incident_id": "INC-C7740D",
+    "trace_id": "tr_d0ba0550f3674ca89006485470ee5b4d",
+    "question": "Why is checkout-api slow today?",
+    "environment": "prod-sg",
+    "status": "diagnosed",
+    "current_step": "complete",
+    "incident_type": "retry_storm",
+    "candidate_incident_types": [
+      "retry_storm"
+    ],
+    "service_impacts": [
+      {
+        "service": "payment-service",
+        "relation": "downstream_observed_call",
+        "topology_kind": "static_fixture_catalog",
+        "observed_call_count": 8,
+        "status": "unconfirmed",
+        "evidence_ids": [
+          "ev_a9aed7f9eb95",
+          "ev_9a6b1d849701"
+        ],
+        "anomaly_windows": [],
+        "overlaps_primary_window": null,
+        "causal_direction_verified": false
+      }
+    ],
+    "service_topology": {
+      "service": "checkout-api",
+      "edges": [
+        {
+          "source": "checkout-api",
+          "target": "payment-service"
+        }
+      ],
+      "dependencies": [
+        "payment-service"
+      ],
+      "source": "service-catalog-via-telemetry-gateway",
+      "topology_kind": "static_fixture_catalog",
+      "observed": {
+        "status": "available",
+        "source": "tempo_client_server_parentage",
+        "calls": [
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "7b7acb0e7e3069ff38255d993b0f035c",
+            "client_span_id": "e3b9af32ddbb390a",
+            "server_span_id": "9e08fcd79b8984f7",
+            "observed_at": "2026-10-02T20:34:48.275650Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "5f01bec4e232f75b67db36f89321c15d",
+            "client_span_id": "7dde0bcddf2a7ffb",
+            "server_span_id": "bbc13f6b09fe4517",
+            "observed_at": "2026-10-02T20:34:47.261568Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "58eb937fb3a75136384305bb7c58313d",
+            "client_span_id": "629d8cee49a26f82",
+            "server_span_id": "a3f2cd97052eef9b",
+            "observed_at": "2026-10-02T20:34:44.218571Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "245d77588f5834fccb12f1b166163f8b",
+            "client_span_id": "ad226f27b05daac4",
+            "server_span_id": "de32f971686bd5f6",
+            "observed_at": "2026-10-02T20:34:43.204954Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "d3beb8272b3c2749da42305a34d9c51e",
+            "client_span_id": "0d48ab81bbdaa6d4",
+            "server_span_id": "363d84cc16518d7a",
+            "observed_at": "2026-10-02T20:34:42.192067Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "66c37b3e9b1cfee85b91f7b07999dad1",
+            "client_span_id": "0df03293ef9236a3",
+            "server_span_id": "dd36a323334006d2",
+            "observed_at": "2026-10-02T20:34:41.179164Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "c007762bd3c3d3f5dffbf4960d9bd3c7",
+            "client_span_id": "c51129fb46ae578b",
+            "server_span_id": "1b1b59f6b7206868",
+            "observed_at": "2026-10-02T20:34:40.165521Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "01928af7a2ec318c2ec5e4cf44c4c850",
+            "client_span_id": "e9c6394708db3146",
+            "server_span_id": "3503699d099af6f8",
+            "observed_at": "2026-10-02T20:34:25.854862Z"
+          }
+        ],
+        "start": "2026-10-02T20:05:29.310388Z",
+        "end": "2026-10-02T20:35:29.310388Z",
+        "coverage": "sampled_not_exhaustive",
+        "traces_read": 8,
+        "traces_failed": 0,
+        "calls_omitted": 0,
+        "calls_discarded": 0
+      },
+      "catalog_status": "available"
+    },
+    "severity": "SEV-2",
+    "services": [
+      "checkout-api",
+      "payment-service"
+    ],
+    "anomalous_window": [
+      "2026-10-02T20:34:59.367000Z",
+      "2026-10-02T20:35:29.367000Z"
+    ],
+    "evidence": [
+      {
+        "id": "ev_36972da391bf",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_latency_p95 samples",
+        "observation": "request_latency_p95 peaked at 46.5 milliseconds in the bounded query window",
+        "observed_at": "2026-10-02T20:35:29.367000Z",
+        "service": "checkout-api",
+        "score": 0.95,
+        "query": "request_latency_p95",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T20:34:44.367000+00:00",
+              "value": 9.500000000000002
+            },
+            {
+              "timestamp": "2026-10-02T20:34:59.367000+00:00",
+              "value": 42.08333333333333
+            },
+            {
+              "timestamp": "2026-10-02T20:35:14.367000+00:00",
+              "value": 45.625
+            },
+            {
+              "timestamp": "2026-10-02T20:35:29.367000+00:00",
+              "value": 46.5
+            }
+          ],
+          "unit": "milliseconds",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T20:05:29.367385+00:00",
+          "query_end": "2026-10-02T20:35:29.367385+00:00"
+        }
+      },
+      {
+        "id": "ev_5a2126ce3d48",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_error_rate unavailable",
+        "observation": "No valid samples returned for request_error_rate in the bounded query window",
+        "observed_at": "2026-10-02T20:35:29.367385Z",
+        "service": "checkout-api",
+        "score": 0.0,
+        "query": "request_error_rate",
+        "attributes": {
+          "series": [],
+          "unit": "ratio",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T20:05:29.367385+00:00",
+          "query_end": "2026-10-02T20:35:29.367385+00:00"
+        }
+      },
+      {
+        "id": "ev_823e238a1867",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "db_pool_active_ratio samples",
+        "observation": "db_pool_active_ratio peaked at 0.16 ratio in the bounded query window",
+        "observed_at": "2026-10-02T20:35:29.367000Z",
+        "service": "checkout-api",
+        "score": 0.87,
+        "query": "db_pool_active_ratio",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T20:34:29.367000+00:00",
+              "value": 0.16
+            },
+            {
+              "timestamp": "2026-10-02T20:34:44.367000+00:00",
+              "value": 0.16
+            },
+            {
+              "timestamp": "2026-10-02T20:34:59.367000+00:00",
+              "value": 0.16
+            },
+            {
+              "timestamp": "2026-10-02T20:35:14.367000+00:00",
+              "value": 0.16
+            },
+            {
+              "timestamp": "2026-10-02T20:35:29.367000+00:00",
+              "value": 0.16
+            }
+          ],
+          "unit": "ratio",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T20:05:29.367385+00:00",
+          "query_end": "2026-10-02T20:35:29.367385+00:00"
+        }
+      },
+      {
+        "id": "ev_619c86562406",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "cpu_utilization samples",
+        "observation": "cpu_utilization peaked at 0 ratio in the bounded query window",
+        "observed_at": "2026-10-02T20:35:29.367000Z",
+        "service": "checkout-api",
+        "score": 0.83,
+        "query": "cpu_utilization",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T20:34:59.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:14.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:29.367000+00:00",
+              "value": 0.0
+            }
+          ],
+          "unit": "ratio",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T20:05:29.367385+00:00",
+          "query_end": "2026-10-02T20:35:29.367385+00:00"
+        }
+      },
+      {
+        "id": "ev_22ece65148a4",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "memory_working_set samples",
+        "observation": "memory_working_set peaked at 0 bytes in the bounded query window",
+        "observed_at": "2026-10-02T20:35:29.367000Z",
+        "service": "checkout-api",
+        "score": 0.7899999999999999,
+        "query": "memory_working_set",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T20:34:54.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:34:59.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:04.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:09.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:14.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:19.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:24.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:29.367000+00:00",
+              "value": 0.0
+            }
+          ],
+          "unit": "bytes",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T20:30:29.367385+00:00",
+          "query_end": "2026-10-02T20:35:29.367385+00:00"
+        }
+      },
+      {
+        "id": "ev_c9b95b240bfa",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "kafka_consumer_lag samples",
+        "observation": "kafka_consumer_lag peaked at 0 messages in the bounded query window",
+        "observed_at": "2026-10-02T20:35:29.367000Z",
+        "service": "checkout-api",
+        "score": 0.75,
+        "query": "kafka_consumer_lag",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T20:34:59.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:14.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:29.367000+00:00",
+              "value": 0.0
+            }
+          ],
+          "unit": "messages",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T20:05:29.367385+00:00",
+          "query_end": "2026-10-02T20:35:29.367385+00:00"
+        }
+      },
+      {
+        "id": "ev_43b3b391ea3b",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "retry_rate samples",
+        "observation": "retry_rate peaked at 6 retries_per_second in the bounded query window",
+        "observed_at": "2026-10-02T20:35:29.367000Z",
+        "service": "checkout-api",
+        "score": 0.71,
+        "query": "retry_rate",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T20:34:59.367000+00:00",
+              "value": 6.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:14.367000+00:00",
+              "value": 6.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:29.367000+00:00",
+              "value": 6.0
+            }
+          ],
+          "unit": "retries_per_second",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T20:05:29.367385+00:00",
+          "query_end": "2026-10-02T20:35:29.367385+00:00"
+        }
+      },
+      {
+        "id": "ev_7b026710c6fd",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "cache_miss_rate samples",
+        "observation": "cache_miss_rate peaked at 0 misses_per_second in the bounded query window",
+        "observed_at": "2026-10-02T20:35:29.367000Z",
+        "service": "checkout-api",
+        "score": 0.6699999999999999,
+        "query": "cache_miss_rate",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T20:34:59.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:14.367000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T20:35:29.367000+00:00",
+              "value": 0.0
+            }
+          ],
+          "unit": "misses_per_second",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T20:05:29.367385+00:00",
+          "query_end": "2026-10-02T20:35:29.367385+00:00"
+        }
+      },
+      {
+        "id": "ev_90cc83816402",
+        "kind": "log",
+        "source": "loki-via-telemetry-gateway",
+        "title": "Log matches for service events",
+        "observation": "45 valid retained events in the query window",
+        "observed_at": "2026-10-02T20:35:28.288696Z",
+        "service": "checkout-api",
+        "score": 0.94,
+        "query": "service events",
+        "attributes": {
+          "events": [
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "01928af7a2ec318c2ec5e4cf44c4c850",
+              "span_id": "e7be2fdd0f76fa8a",
+              "request_id": "probe-b48a3e80ee99b118",
+              "timestamp": "2026-10-02T20:34:25.861859+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "c007762bd3c3d3f5dffbf4960d9bd3c7",
+              "span_id": "d79eb161987ddf97",
+              "request_id": "ce09147d37134c98",
+              "timestamp": "2026-10-02T20:34:40.170036+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "66c37b3e9b1cfee85b91f7b07999dad1",
+              "span_id": "87fb9d3aeab95bb1",
+              "request_id": "a1253c6178cd87f0",
+              "timestamp": "2026-10-02T20:34:41.184784+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "d3beb8272b3c2749da42305a34d9c51e",
+              "span_id": "c640c482da60933c",
+              "request_id": "fae7e6075a3ebdbf",
+              "timestamp": "2026-10-02T20:34:42.197955+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "245d77588f5834fccb12f1b166163f8b",
+              "span_id": "549c5e37343a6f89",
+              "request_id": "4d7b1720988535cd",
+              "timestamp": "2026-10-02T20:34:43.210626+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "58eb937fb3a75136384305bb7c58313d",
+              "span_id": "ffed87bc5820cdb7",
+              "request_id": "815190cb9c756736",
+              "timestamp": "2026-10-02T20:34:44.223513+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "fc63e0d03ef233539633929929941d52",
+              "span_id": "f68fd90d7cd1e987",
+              "request_id": "abf2f30b373c3330",
+              "timestamp": "2026-10-02T20:34:45.240055+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "f21223f81c7c6f65b65a37eab8d82913",
+              "span_id": "1a9f79ce91fcc7f5",
+              "request_id": "55bd2ff709c310d2",
+              "timestamp": "2026-10-02T20:34:46.253734+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "5f01bec4e232f75b67db36f89321c15d",
+              "span_id": "cc534964d71199c6",
+              "request_id": "9e0684a6d5427bb9",
+              "timestamp": "2026-10-02T20:34:47.267763+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "7b7acb0e7e3069ff38255d993b0f035c",
+              "span_id": "a6f6eb016b85748d",
+              "request_id": "63b01c9b5dd2f481",
+              "timestamp": "2026-10-02T20:34:48.281684+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "10e083616139f7c725c83bfbbcfddcbb",
+              "span_id": "942f50b40b98d757",
+              "request_id": "a300838cfee17ac8",
+              "timestamp": "2026-10-02T20:34:55.393132+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "30a4fe57abec332a785495e04d51c491",
+              "span_id": "3c2b0fd0b538af73",
+              "request_id": "f7165089e4299bf7",
+              "timestamp": "2026-10-02T20:34:56.406740+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "79e0f6fedea3535a66a66a1c5417ab0b",
+              "span_id": "4064eeec39674e90",
+              "request_id": "af784a900bc049c9",
+              "timestamp": "2026-10-02T20:34:57.417341+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "fault injected",
+              "level": "WARNING",
+              "trace_id": "632d679f4f054d902ee04ff48e8762f0",
+              "span_id": "e01056f84bb1a428",
+              "timestamp": "2026-10-02T20:34:58.423184+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "632d679f4f054d902ee04ff48e8762f0",
+              "span_id": "e01056f84bb1a428",
+              "request_id": "85762239fca56fce",
+              "timestamp": "2026-10-02T20:34:58.423543+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "a92ce57e2ab4bd2ef2b76e8e6e4f190f",
+              "span_id": "26f405313a455f48",
+              "request_id": "b1ef78f39008b856",
+              "timestamp": "2026-10-02T20:34:58.446857+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "b780ac37d608ac4fae68dd2811f093f7",
+              "span_id": "18c45e457b97ae52",
+              "request_id": "6a5982e8c7007bd2",
+              "timestamp": "2026-10-02T20:34:59.476943+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "eec06fb627fe3bbc1f7f4b3634f3504a",
+              "span_id": "a9d80370618df9d6",
+              "request_id": "d1c60e970f8513e7",
+              "timestamp": "2026-10-02T20:35:00.506067+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "b68ddaac1b1fee1cb32f8c0a2914bfcd",
+              "span_id": "7d98375ac5c0878f",
+              "request_id": "992f0643e273fc16",
+              "timestamp": "2026-10-02T20:35:01.534852+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "7682171c6caf61a5897116afa8634ae2",
+              "span_id": "5589f58c05ffa463",
+              "request_id": "0e29e22f911031a4",
+              "timestamp": "2026-10-02T20:35:02.561427+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "6d668c763a81d987fa0d0cfad93a7b83",
+              "span_id": "949b388f132dd1c8",
+              "request_id": "105954eee6ea2cf3",
+              "timestamp": "2026-10-02T20:35:03.588576+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "f115cc27fbf9765dd78669f3fa295f19",
+              "span_id": "7fec4bd99c82f3e7",
+              "request_id": "295914bfe4d70ce2",
+              "timestamp": "2026-10-02T20:35:04.613919+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "c4357dcd3d135fd1288b9cfc76ba6104",
+              "span_id": "427b45ff756d9c14",
+              "request_id": "8c1f94eb61171cef",
+              "timestamp": "2026-10-02T20:35:05.637203+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "b2444e3b51bf58ac05752b184351af64",
+              "span_id": "0057f745463666a5",
+              "request_id": "889af6e8f82a0dca",
+              "timestamp": "2026-10-02T20:35:06.666237+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "6a5508de52d4845ca0bb08deaa20b560",
+              "span_id": "483653246fbc933e",
+              "request_id": "e9c8c0928367c916",
+              "timestamp": "2026-10-02T20:35:07.696921+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "b87054b14606b6b38723dc16649c1893",
+              "span_id": "7edf81e828e7ee11",
+              "request_id": "6920ef3ee4a6b1da",
+              "timestamp": "2026-10-02T20:35:08.724913+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "a503f3ed46a7e432e6974837d0e351fc",
+              "span_id": "aa00dcce00560fa4",
+              "request_id": "cefaea5c67a512e9",
+              "timestamp": "2026-10-02T20:35:09.754331+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "660ef327e1c05ec9894d0947f089c957",
+              "span_id": "6cc320428d1cba85",
+              "request_id": "dcc3cfb43b755e45",
+              "timestamp": "2026-10-02T20:35:10.784015+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "7247f35dc05470521506f940fbe0da2c",
+              "span_id": "90c8c8720037eb9c",
+              "request_id": "21770e9b5e8b5236",
+              "timestamp": "2026-10-02T20:35:11.814932+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "589f76bc3875a13002a7cafe60ac0dc4",
+              "span_id": "f539fe57445661ff",
+              "request_id": "ee12cc31ccf1a7dc",
+              "timestamp": "2026-10-02T20:35:12.847143+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "c5e822bd63574e935b68a8a07679d86f",
+              "span_id": "b098b87e7ae56f9b",
+              "request_id": "6410bfca3c953752",
+              "timestamp": "2026-10-02T20:35:13.875216+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "243e66639d3379c6fe4837a426f0f97e",
+              "span_id": "19b933c2f650ccb1",
+              "request_id": "76abc88bf125d875",
+              "timestamp": "2026-10-02T20:35:14.902500+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "db7d9a549707f785fae1e8050734a8e2",
+              "span_id": "b57f66206a1d95a8",
+              "request_id": "22f4b9b02abb3133",
+              "timestamp": "2026-10-02T20:35:15.932114+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "79d49f3258f45cdb471c0bd827f0194b",
+              "span_id": "f5ffb7f38be64ef9",
+              "request_id": "6473c31cd0bb16fc",
+              "timestamp": "2026-10-02T20:35:16.963380+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "829e2ebb67d279bd06a9c6c9af79977d",
+              "span_id": "d28e89a44d0f1e60",
+              "request_id": "2e7c3ef928137042",
+              "timestamp": "2026-10-02T20:35:17.994822+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "6d41f14b5684b0fddbf30576db5cd673",
+              "span_id": "a47edb96c1d2d067",
+              "request_id": "e872bdb275d6390f",
+              "timestamp": "2026-10-02T20:35:19.026482+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "7cddd4c0af7234e9a54b153f42d12445",
+              "span_id": "9a2dc497dbbd998e",
+              "request_id": "53df7d7759d78262",
+              "timestamp": "2026-10-02T20:35:20.057222+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "3c295d9bae14d6d7aab9f1e607801124",
+              "span_id": "db7dce230cad8585",
+              "request_id": "c2d8c2abff8583bd",
+              "timestamp": "2026-10-02T20:35:21.088661+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "d1459bc32e25c8e82373aef2a1b4d0a2",
+              "span_id": "4dc4ddd2cf621bae",
+              "request_id": "2e642331a6116db7",
+              "timestamp": "2026-10-02T20:35:22.120504+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "35880aed559cb481b80bf16a285166cd",
+              "span_id": "c6fdb9a9ad59801f",
+              "request_id": "3fe027abfe82840d",
+              "timestamp": "2026-10-02T20:35:23.145403+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "6ad21faaebaf06a70afa133f5d1dce80",
+              "span_id": "b80d0d28bd167c40",
+              "request_id": "180d4d6ee6768e7b",
+              "timestamp": "2026-10-02T20:35:24.175530+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "2c2f22eedbf4d7a38fc93f9262a374d7",
+              "span_id": "88ba032bbfb9a271",
+              "request_id": "652908ca5ef8194f",
+              "timestamp": "2026-10-02T20:35:25.201525+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "9d083fbd6f522b481628001e9debafff",
+              "span_id": "3221aabba7df69b6",
+              "request_id": "ff13ba4024d51fd7",
+              "timestamp": "2026-10-02T20:35:26.230636+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "748a78ece8069e34e379d4956090da4f",
+              "span_id": "ca4c5ade96535f18",
+              "request_id": "a7e9215e5d3e7391",
+              "timestamp": "2026-10-02T20:35:27.258422+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "462827a547eef743742432d0411494ed",
+              "span_id": "159a90eae5fed47f",
+              "request_id": "a156490ffebf7a76",
+              "timestamp": "2026-10-02T20:35:28.288696+00:00",
+              "active": 0,
+              "max": 0
+            }
+          ],
+          "discarded_events": 0,
+          "query_start": "2026-10-02T20:05:29.367426+00:00",
+          "query_end": "2026-10-02T20:35:29.367426+00:00"
+        }
+      },
+      {
+        "id": "ev_b6d2471996e5",
+        "kind": "trace",
+        "source": "tempo-via-telemetry-gateway",
+        "title": "Distributed traces for checkout-api",
+        "observation": "20 traces retained; longest sampled trace was 26 ms",
+        "observed_at": "2026-10-02T20:35:29.367636Z",
+        "service": "checkout-api",
+        "score": 0.93,
+        "query": "service trace search",
+        "attributes": {
+          "traces": [
+            {
+              "trace_id": "6d668c763a81d987fa0d0cfad93a7b83",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:35:03.563759Z",
+              "duration_ms": 24
+            },
+            {
+              "trace_id": "7682171c6caf61a5897116afa8634ae2",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:35:02.537654Z",
+              "duration_ms": 23
+            },
+            {
+              "trace_id": "b68ddaac1b1fee1cb32f8c0a2914bfcd",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:35:01.509642Z",
+              "duration_ms": 25
+            },
+            {
+              "trace_id": "eec06fb627fe3bbc1f7f4b3634f3504a",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:35:00.479808Z",
+              "duration_ms": 26
+            },
+            {
+              "trace_id": "b780ac37d608ac4fae68dd2811f093f7",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:59.450001Z",
+              "duration_ms": 26
+            },
+            {
+              "trace_id": "a92ce57e2ab4bd2ef2b76e8e6e4f190f",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:58.42575Z",
+              "duration_ms": 21
+            },
+            {
+              "trace_id": "632d679f4f054d902ee04ff48e8762f0",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /admin/fault",
+              "started_at": "2026-10-02T20:34:58.420978Z",
+              "duration_ms": 2
+            },
+            {
+              "trace_id": "79e0f6fedea3535a66a66a1c5417ab0b",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:57.410332Z",
+              "duration_ms": 7
+            },
+            {
+              "trace_id": "30a4fe57abec332a785495e04d51c491",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:56.398966Z",
+              "duration_ms": 7
+            },
+            {
+              "trace_id": "10e083616139f7c725c83bfbbcfddcbb",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:55.383059Z",
+              "duration_ms": 10
+            },
+            {
+              "trace_id": "7b7acb0e7e3069ff38255d993b0f035c",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:48.273051Z",
+              "duration_ms": 8
+            },
+            {
+              "trace_id": "5f01bec4e232f75b67db36f89321c15d",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:47.258935Z",
+              "duration_ms": 8
+            },
+            {
+              "trace_id": "f21223f81c7c6f65b65a37eab8d82913",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:46.245505Z",
+              "duration_ms": 8
+            },
+            {
+              "trace_id": "fc63e0d03ef233539633929929941d52",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:45.229334Z",
+              "duration_ms": 10
+            },
+            {
+              "trace_id": "58eb937fb3a75136384305bb7c58313d",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:44.216122Z",
+              "duration_ms": 7
+            },
+            {
+              "trace_id": "245d77588f5834fccb12f1b166163f8b",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:43.202755Z",
+              "duration_ms": 7
+            },
+            {
+              "trace_id": "d3beb8272b3c2749da42305a34d9c51e",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:42.189689Z",
+              "duration_ms": 8
+            },
+            {
+              "trace_id": "66c37b3e9b1cfee85b91f7b07999dad1",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:41.175982Z",
+              "duration_ms": 8
+            },
+            {
+              "trace_id": "c007762bd3c3d3f5dffbf4960d9bd3c7",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T20:34:40.163477Z",
+              "duration_ms": 6
+            },
+            {
+              "trace_id": "01928af7a2ec318c2ec5e4cf44c4c850",
+              "root_service_name": "<root span not yet received>",
+              "root_trace_name": "",
+              "started_at": "2026-10-02T20:34:25.852222Z",
+              "duration_ms": 9
+            }
+          ]
+        }
+      },
+      {
+        "id": "ev_a9aed7f9eb95",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_latency_p95 samples",
+        "observation": "request_latency_p95 peaked at 9.5 milliseconds in the bounded query window",
+        "observed_at": "2026-10-02T20:35:29.385999Z",
+        "service": "payment-service",
+        "score": 0.95,
+        "query": "request_latency_p95",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T20:34:44.385999+00:00",
+              "value": 9.5
+            },
+            {
+              "timestamp": "2026-10-02T20:34:59.385999+00:00",
+              "value": 9.5
+            },
+            {
+              "timestamp": "2026-10-02T20:35:14.385999+00:00",
+              "value": 9.5
+            },
+            {
+              "timestamp": "2026-10-02T20:35:29.385999+00:00",
+              "value": 9.5
+            }
+          ],
+          "unit": "milliseconds",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T20:05:29.386287+00:00",
+          "query_end": "2026-10-02T20:35:29.386287+00:00"
+        }
+      },
+      {
+        "id": "ev_9a6b1d849701",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_error_rate unavailable",
+        "observation": "No valid samples returned for request_error_rate in the bounded query window",
+        "observed_at": "2026-10-02T20:35:29.386287Z",
+        "service": "payment-service",
+        "score": 0.0,
+        "query": "request_error_rate",
+        "attributes": {
+          "series": [],
+          "unit": "ratio",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T20:05:29.386287+00:00",
+          "query_end": "2026-10-02T20:35:29.386287+00:00"
+        }
+      },
+      {
+        "id": "ev_9289ff1f8a20",
+        "kind": "runbook",
+        "source": "runbook://resilience/retry-storm",
+        "title": "Retry storm containment",
+        "observation": "Measure retry amplification against original request volume and dependency error rate.",
+        "observed_at": "2026-05-19T14:00:00Z",
+        "service": "checkout-api",
+        "score": 1.0,
+        "query": null,
+        "attributes": {
+          "section": "Containment",
+          "document_type": "runbook",
+          "updated_at": "2026-05-19T14:00:00Z",
+          "content_hash": "00769a65929c972a7c7e9c7e971edbdb8e6f0ac1b0a8d798ecc9f6df8e7dfefe",
+          "matched_terms": [
+            "amplification",
+            "api",
+            "backoff",
+            "breaker",
+            "checkout",
+            "checkout-api",
+            "circuit",
+            "retry",
+            "storm"
+          ]
+        }
+      },
+      {
+        "id": "ev_e5930eb2b9fa",
+        "kind": "past_incident",
+        "source": "incident://INC-2026-033/inventory-retry-storm",
+        "title": "Inventory 5xx responses triggered retry amplification",
+        "observation": "Enforcing a shared retry budget contained the incident.",
+        "observed_at": "2026-05-23T17:25:00Z",
+        "service": "checkout-api",
+        "score": 0.5694,
+        "query": null,
+        "attributes": {
+          "section": "Resolution",
+          "document_type": "past_incident",
+          "updated_at": "2026-05-23T17:25:00Z",
+          "content_hash": "c60854f7c508a3f4639f97b9cac1233cbdba0e417c638ac368fee62957163aff",
+          "matched_terms": [
+            "amplification",
+            "api",
+            "checkout",
+            "checkout-api",
+            "retry",
+            "storm"
+          ]
+        }
+      },
+      {
+        "id": "ev_2310e990a177",
+        "kind": "past_incident",
+        "source": "incident://INC-2026-027/risk-timeout",
+        "title": "Risk engine timeout propagated to checkout",
+        "observation": "Risk-engine p95 latency exceeded the checkout client deadline.",
+        "observed_at": "2026-04-21T13:20:00Z",
+        "service": "checkout-api",
+        "score": 0.4902,
+        "query": null,
+        "attributes": {
+          "section": "Root cause",
+          "document_type": "past_incident",
+          "updated_at": "2026-04-21T13:20:00Z",
+          "content_hash": "da8060f912077c038fb18d661ddc491d7cadeb080553b17bada08e1659b8bf5d",
+          "matched_terms": [
+            "amplification",
+            "api",
+            "checkout",
+            "checkout-api",
+            "retry"
+          ]
+        }
+      },
+      {
+        "id": "ev_2c4cf5b6ec8b",
+        "kind": "past_incident",
+        "source": "incident://INC-2026-036/checkout-regression",
+        "title": "Checkout parser regression isolated to new revision",
+        "observation": "Errors began with the new checkout revision while the old canary remained healthy.",
+        "observed_at": "2026-06-25T15:10:00Z",
+        "service": "checkout-api",
+        "score": 0.3632,
+        "query": null,
+        "attributes": {
+          "section": "Evidence",
+          "document_type": "past_incident",
+          "updated_at": "2026-06-25T15:10:00Z",
+          "content_hash": "791ceba2ff6f5f49e743bdea0c5ec42da9aa8b5b2b5c1a59d78aa0b48d59c096",
+          "matched_terms": [
+            "api",
+            "checkout",
+            "checkout-api"
+          ]
+        }
+      },
+      {
+        "id": "ev_4aa7df43020a",
+        "kind": "technical_doc",
+        "source": "doc://platform/evidence-correlation",
+        "title": "Incident evidence correlation standard",
+        "observation": "Temporal correlation alone is insufficient; include a causal mechanism, conflicting evidence, and a stable source URI for every retrieved document.",
+        "observed_at": "2026-07-01T00:00:00Z",
+        "service": "checkout-api",
+        "score": 0.3469,
+        "query": null,
+        "attributes": {
+          "section": "Grounding requirements",
+          "document_type": "technical_doc",
+          "updated_at": "2026-07-01T00:00:00Z",
+          "content_hash": "8ab3a97446b114f4bb5fff91d6debbc7ccb020298c288d45fdaef99446ff3bc7",
+          "matched_terms": [
+            "api",
+            "checkout",
+            "checkout-api",
+            "is"
+          ]
+        }
+      },
+      {
+        "id": "ev_ab1ee219f3be",
+        "kind": "runbook",
+        "source": "runbook://platform/downstream-timeouts",
+        "title": "Downstream timeout isolation",
+        "observation": "Compare dependency p95 latency and timeout rate by edge. Confirm the upstream remains healthy, bound retries, and isolate the single regressing dependency before changing global timeout values.",
+        "observed_at": "2026-06-03T10:00:00Z",
+        "service": "checkout-api",
+        "score": 0.3116,
+        "query": null,
+        "attributes": {
+          "section": "Triage",
+          "document_type": "runbook",
+          "updated_at": "2026-06-03T10:00:00Z",
+          "content_hash": "26df7c1a89ace1e091c1d7d24106ce5a977317581027ab4dd586641d256da6e7",
+          "matched_terms": [
+            "api",
+            "checkout",
+            "checkout-api"
+          ]
+        }
+      },
+      {
+        "id": "ev_9edf29c3f829",
+        "kind": "runbook",
+        "source": "runbook://delivery/deployment-regression",
+        "title": "Deployment regression correlation",
+        "observation": "Align error and latency onset with revision rollout times. Compare old and new revision error rates and run a rollback dry-run. Production rollback requires approval tied to the exact service and revision.",
+        "observed_at": "2026-06-22T06:30:00Z",
+        "service": "checkout-api",
+        "score": 0.2982,
+        "query": null,
+        "attributes": {
+          "section": "Validation",
+          "document_type": "runbook",
+          "updated_at": "2026-06-22T06:30:00Z",
+          "content_hash": "9d28c1d2b2a29e4db92deea035eb608e512d67b8bca7c67993d0fc24b6775bd9",
+          "matched_terms": [
+            "api",
+            "checkout",
+            "checkout-api"
+          ]
+        }
+      },
+      {
+        "id": "ev_240b98560dad",
+        "kind": "runbook",
+        "source": "runbook://platform/memory-growth",
+        "title": "Monotonic memory growth and OOM recovery",
+        "observation": "A restart is temporary containment; roll back the introducing revision after human approval.",
+        "observed_at": "2026-02-25T12:00:00Z",
+        "service": "checkout-api",
+        "score": 0.0531,
+        "query": null,
+        "attributes": {
+          "section": "Mitigation",
+          "document_type": "runbook",
+          "updated_at": "2026-02-25T12:00:00Z",
+          "content_hash": "340de9f1907ca6926bdc4d3998c013e0a5db882e4bc0cc3875669b2395cf99a5",
+          "matched_terms": [
+            "is"
+          ]
+        }
+      },
+      {
+        "id": "ev_2399df2e0286",
+        "kind": "deployment",
+        "source": "kubernetes-via-telemetry-gateway",
+        "title": "Release 142",
+        "observation": "Parallelize ledger balance lookups",
+        "observed_at": "2026-10-03T04:06:29.395353+08:00",
+        "service": "checkout-api",
+        "score": 0.9,
+        "query": null,
+        "attributes": {
+          "service": "checkout-api",
+          "revision": "142",
+          "previous_revision": "141",
+          "deployed_at": "2026-10-03T04:06:29.395353+08:00",
+          "commit_sha": "7b4d23e",
+          "summary": "Parallelize ledger balance lookups"
+        }
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "hyp_5f8203ad8a",
+        "rank": 1,
+        "cause": "Downstream retry amplification storm",
+        "confidence": 0.86,
+        "evidence_ids": [
+          "ev_43b3b391ea3b",
+          "ev_90cc83816402",
+          "ev_9289ff1f8a20",
+          "ev_e5930eb2b9fa"
+        ],
+        "conflicting_evidence_ids": [],
+        "validation_notes": [
+          "Citations are selected by failure-profile metric priority, then evidence score.",
+          "Operational knowledge provides context, not independent proof of causation.",
+          "This is a deterministic profile hypothesis, not a validated causal conclusion."
+        ]
+      },
+      {
+        "id": "hyp_a8ab8f01b9",
+        "rank": 2,
+        "cause": "Organic request-volume increase",
+        "confidence": 0.31,
+        "evidence_ids": [
+          "ev_43b3b391ea3b",
+          "ev_90cc83816402"
+        ],
+        "conflicting_evidence_ids": [],
+        "validation_notes": [
+          "This alternative has less corroborating evidence."
+        ]
+      }
+    ],
+    "remediation": {
+      "id": "rem_260cc7cb9d",
+      "title": "Contain downstream retry amplification storm",
+      "tool": "none",
+      "arguments": {
+        "service": "checkout-api"
+      },
+      "command_preview": "No production mutation; apply runbook guidance.",
+      "risk": "low",
+      "requires_approval": false,
+      "dry_run_passed": true,
+      "expected_result": "Apply retry budgets, backoff, and circuit breaking."
+    },
+    "approval_decision": null,
+    "approval_actor": null,
+    "approval_reason": null,
+    "trace": [
+      {
+        "sequence": 1,
+        "step": "classify_incident",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T20:35:29.307303Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 2,
+        "step": "classify_incident",
+        "event": "incident_classified",
+        "occurred_at": "2026-10-02T20:35:29.307337Z",
+        "duration_ms": null,
+        "payload": {
+          "incident_type": "database_connection_pool_exhaustion"
+        }
+      },
+      {
+        "sequence": 3,
+        "step": "classify_incident",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T20:35:29.307341Z",
+        "duration_ms": 0,
+        "payload": {}
+      },
+      {
+        "sequence": 4,
+        "step": "select_services",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T20:35:29.308251Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 5,
+        "step": "select_services",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T20:35:29.308263Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "get_service_dependencies",
+          "arguments": {
+            "service": "checkout-api"
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 6,
+        "step": "select_services",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T20:35:29.365900Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "get_service_dependencies",
+          "dependencies": [
+            "payment-service"
+          ],
+          "topology": {
+            "service": "checkout-api",
+            "edges": [
+              {
+                "source": "checkout-api",
+                "target": "payment-service"
+              }
+            ],
+            "dependencies": [
+              "payment-service"
+            ],
+            "source": "service-catalog-via-telemetry-gateway",
+            "topology_kind": "static_fixture_catalog",
+            "observed": {
+              "status": "available",
+              "source": "tempo_client_server_parentage",
+              "calls": [
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "7b7acb0e7e3069ff38255d993b0f035c",
+                  "client_span_id": "e3b9af32ddbb390a",
+                  "server_span_id": "9e08fcd79b8984f7",
+                  "observed_at": "2026-10-02T20:34:48.275650Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "5f01bec4e232f75b67db36f89321c15d",
+                  "client_span_id": "7dde0bcddf2a7ffb",
+                  "server_span_id": "bbc13f6b09fe4517",
+                  "observed_at": "2026-10-02T20:34:47.261568Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "58eb937fb3a75136384305bb7c58313d",
+                  "client_span_id": "629d8cee49a26f82",
+                  "server_span_id": "a3f2cd97052eef9b",
+                  "observed_at": "2026-10-02T20:34:44.218571Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "245d77588f5834fccb12f1b166163f8b",
+                  "client_span_id": "ad226f27b05daac4",
+                  "server_span_id": "de32f971686bd5f6",
+                  "observed_at": "2026-10-02T20:34:43.204954Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "d3beb8272b3c2749da42305a34d9c51e",
+                  "client_span_id": "0d48ab81bbdaa6d4",
+                  "server_span_id": "363d84cc16518d7a",
+                  "observed_at": "2026-10-02T20:34:42.192067Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "66c37b3e9b1cfee85b91f7b07999dad1",
+                  "client_span_id": "0df03293ef9236a3",
+                  "server_span_id": "dd36a323334006d2",
+                  "observed_at": "2026-10-02T20:34:41.179164Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "c007762bd3c3d3f5dffbf4960d9bd3c7",
+                  "client_span_id": "c51129fb46ae578b",
+                  "server_span_id": "1b1b59f6b7206868",
+                  "observed_at": "2026-10-02T20:34:40.165521Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "01928af7a2ec318c2ec5e4cf44c4c850",
+                  "client_span_id": "e9c6394708db3146",
+                  "server_span_id": "3503699d099af6f8",
+                  "observed_at": "2026-10-02T20:34:25.854862Z"
+                }
+              ],
+              "start": "2026-10-02T20:05:29.310388Z",
+              "end": "2026-10-02T20:35:29.310388Z",
+              "coverage": "sampled_not_exhaustive",
+              "traces_read": 8,
+              "traces_failed": 0,
+              "calls_omitted": 0,
+              "calls_discarded": 0
+            },
+            "catalog_status": "available"
+          },
+          "causal_direction_verified": false
+        }
+      },
+      {
+        "sequence": 7,
+        "step": "select_services",
+        "event": "services_selected",
+        "occurred_at": "2026-10-02T20:35:29.365909Z",
+        "duration_ms": null,
+        "payload": {
+          "primary": "checkout-api",
+          "dependencies": [
+            "payment-service"
+          ]
+        }
+      },
+      {
+        "sequence": 8,
+        "step": "select_services",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T20:35:29.365913Z",
+        "duration_ms": 58,
+        "payload": {}
+      },
+      {
+        "sequence": 9,
+        "step": "query_telemetry",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T20:35:29.367338Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 10,
+        "step": "query_telemetry",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T20:35:29.367344Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "arguments": {
+            "service": "checkout-api",
+            "metrics": [
+              "request_latency_p95",
+              "request_error_rate",
+              "db_pool_active_ratio",
+              "cpu_utilization",
+              "memory_working_set",
+              "kafka_consumer_lag",
+              "retry_rate",
+              "cache_miss_rate"
+            ],
+            "window": "last_30_minutes",
+            "step_seconds": 15,
+            "metric_overrides": {
+              "memory_working_set": {
+                "window": "last_5_minutes",
+                "step_seconds": 5
+              }
+            }
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 11,
+        "step": "query_telemetry",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T20:35:29.367347Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "search_logs",
+          "arguments": {
+            "service": "checkout-api",
+            "query": "",
+            "window": "last_30_minutes"
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 12,
+        "step": "query_telemetry",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T20:35:29.367349Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_traces",
+          "arguments": {
+            "service": "checkout-api",
+            "window": "last_30_minutes",
+            "limit": 20
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 13,
+        "step": "query_telemetry",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T20:35:29.386056Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "service": "checkout-api",
+          "evidence_ids": [
+            "ev_36972da391bf",
+            "ev_5a2126ce3d48",
+            "ev_823e238a1867",
+            "ev_619c86562406",
+            "ev_22ece65148a4",
+            "ev_c9b95b240bfa",
+            "ev_43b3b391ea3b",
+            "ev_7b026710c6fd"
+          ],
+          "sources": [
+            "prometheus-via-telemetry-gateway"
+          ]
+        }
+      },
+      {
+        "sequence": 14,
+        "step": "query_telemetry",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T20:35:29.386063Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "search_logs",
+          "service": "checkout-api",
+          "evidence_ids": [
+            "ev_90cc83816402"
+          ],
+          "sources": [
+            "loki-via-telemetry-gateway"
+          ]
+        }
+      },
+      {
+        "sequence": 15,
+        "step": "query_telemetry",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T20:35:29.386065Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_traces",
+          "service": "checkout-api",
+          "evidence_ids": [
+            "ev_b6d2471996e5"
+          ],
+          "sources": [
+            "tempo-via-telemetry-gateway"
+          ]
+        }
+      },
+      {
+        "sequence": 16,
+        "step": "query_telemetry",
+        "event": "anomaly_windows_detected",
+        "occurred_at": "2026-10-02T20:35:29.386155Z",
+        "duration_ms": null,
+        "payload": {
+          "windows": [
+            {
+              "evidence_id": "ev_43b3b391ea3b",
+              "metric": "retry_rate",
+              "start": "2026-10-02T20:34:59.367000+00:00",
+              "end": "2026-10-02T20:35:29.367000+00:00",
+              "sample_count": 3,
+              "peak": 6.0,
+              "criterion": "threshold",
+              "threshold": 1.0,
+              "left_censored": true
+            }
+          ],
+          "method": "bounded_fault_lab_thresholds_and_memory_trend"
+        }
+      },
+      {
+        "sequence": 17,
+        "step": "query_telemetry",
+        "event": "signals_classified",
+        "occurred_at": "2026-10-02T20:35:29.386228Z",
+        "duration_ms": null,
+        "payload": {
+          "initial_type": "database_connection_pool_exhaustion",
+          "inferred_type": "retry_storm",
+          "candidate_types": [
+            "retry_storm"
+          ],
+          "ambiguous": false,
+          "metric_count": 8,
+          "log_evidence_count": 1,
+          "trace_evidence_count": 1
+        }
+      },
+      {
+        "sequence": 18,
+        "step": "query_telemetry",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T20:35:29.386237Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "arguments": {
+            "service": "payment-service",
+            "metrics": [
+              "request_latency_p95",
+              "request_error_rate"
+            ]
+          },
+          "read_only": true,
+          "purpose": "dependency_impact",
+          "timeout_seconds": 10
+        }
+      },
+      {
+        "sequence": 19,
+        "step": "query_telemetry",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T20:35:29.390873Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "service": "payment-service",
+          "purpose": "dependency_impact",
+          "evidence_ids": [
+            "ev_a9aed7f9eb95",
+            "ev_9a6b1d849701"
+          ],
+          "error_type": null
+        }
+      },
+      {
+        "sequence": 20,
+        "step": "query_telemetry",
+        "event": "dependency_impacts_assessed",
+        "occurred_at": "2026-10-02T20:35:29.390875Z",
+        "duration_ms": null,
+        "payload": {
+          "impacts": [
+            {
+              "service": "payment-service",
+              "relation": "downstream_observed_call",
+              "topology_kind": "static_fixture_catalog",
+              "observed_call_count": 8,
+              "status": "unconfirmed",
+              "evidence_ids": [
+                "ev_a9aed7f9eb95",
+                "ev_9a6b1d849701"
+              ],
+              "anomaly_windows": [],
+              "overlaps_primary_window": null,
+              "causal_direction_verified": false
+            }
+          ],
+          "omitted_services": [],
+          "max_services": 8,
+          "max_concurrency": 4,
+          "method": "timestamped_latency_error_thresholds_not_causal_proof"
+        }
+      },
+      {
+        "sequence": 21,
+        "step": "query_telemetry",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T20:35:29.390879Z",
+        "duration_ms": 24,
+        "payload": {}
+      },
+      {
+        "sequence": 22,
+        "step": "retrieve_context",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T20:35:29.392860Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 23,
+        "step": "retrieve_context",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T20:35:29.392865Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "search_incident_knowledge",
+          "arguments": {
+            "service": "checkout-api",
+            "query": "Why is checkout-api slow today? retry amplification storm backoff circuit breaker",
+            "content_types": [
+              "runbook",
+              "past_incident",
+              "technical_doc"
+            ]
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 24,
+        "step": "retrieve_context",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T20:35:29.392867Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "get_recent_deployments",
+          "arguments": {
+            "service": "checkout-api"
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 25,
+        "step": "retrieve_context",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T20:35:29.396466Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "search_incident_knowledge",
+          "evidence_ids": [
+            "ev_9289ff1f8a20",
+            "ev_e5930eb2b9fa",
+            "ev_2310e990a177",
+            "ev_2c4cf5b6ec8b",
+            "ev_4aa7df43020a",
+            "ev_ab1ee219f3be",
+            "ev_9edf29c3f829",
+            "ev_240b98560dad"
+          ],
+          "sources": [
+            "runbook://resilience/retry-storm",
+            "incident://INC-2026-033/inventory-retry-storm",
+            "incident://INC-2026-027/risk-timeout",
+            "incident://INC-2026-036/checkout-regression",
+            "doc://platform/evidence-correlation",
+            "runbook://platform/downstream-timeouts",
+            "runbook://delivery/deployment-regression",
+            "runbook://platform/memory-growth"
+          ]
+        }
+      },
+      {
+        "sequence": 26,
+        "step": "retrieve_context",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T20:35:29.396474Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "get_recent_deployments",
+          "evidence_ids": [
+            "ev_2399df2e0286"
+          ],
+          "sources": [
+            "kubernetes-via-telemetry-gateway"
+          ]
+        }
+      },
+      {
+        "sequence": 27,
+        "step": "retrieve_context",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T20:35:29.396492Z",
+        "duration_ms": 4,
+        "payload": {}
+      },
+      {
+        "sequence": 28,
+        "step": "generate_hypotheses",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T20:35:29.398533Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 29,
+        "step": "generate_hypotheses",
+        "event": "evidence_selection",
+        "occurred_at": "2026-10-02T20:35:29.398593Z",
+        "duration_ms": null,
+        "payload": {
+          "policy": "profile_metric_priority_then_score",
+          "profile": "retry_storm",
+          "primary_service": "checkout-api",
+          "preferred_metrics": [
+            "retry_rate",
+            "request_latency_p95"
+          ],
+          "selected_ids": [
+            "ev_43b3b391ea3b",
+            "ev_90cc83816402",
+            "ev_9289ff1f8a20",
+            "ev_e5930eb2b9fa"
+          ]
+        }
+      },
+      {
+        "sequence": 30,
+        "step": "generate_hypotheses",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T20:35:29.398621Z",
+        "duration_ms": 0,
+        "payload": {}
+      },
+      {
+        "sequence": 31,
+        "step": "validate_evidence",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T20:35:29.400488Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 32,
+        "step": "validate_evidence",
+        "event": "hypothesis_citations_validated",
+        "occurred_at": "2026-10-02T20:35:29.400511Z",
+        "duration_ms": null,
+        "payload": {
+          "checks": [
+            "retained_unique_ids",
+            "usable_observations",
+            "metric_or_log",
+            "distinct_kinds"
+          ],
+          "hypotheses": [
+            {
+              "rank": 1,
+              "evidence_ids": [
+                "ev_43b3b391ea3b",
+                "ev_90cc83816402",
+                "ev_9289ff1f8a20",
+                "ev_e5930eb2b9fa"
+              ]
+            },
+            {
+              "rank": 2,
+              "evidence_ids": [
+                "ev_43b3b391ea3b",
+                "ev_90cc83816402"
+              ]
+            }
+          ],
+          "semantic_entailment_verified": false
+        }
+      },
+      {
+        "sequence": 33,
+        "step": "validate_evidence",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T20:35:29.400514Z",
+        "duration_ms": 0,
+        "payload": {}
+      },
+      {
+        "sequence": 34,
+        "step": "propose_remediation",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T20:35:29.402644Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 35,
+        "step": "propose_remediation",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T20:35:29.402730Z",
+        "duration_ms": 0,
+        "payload": {}
+      },
+      {
+        "sequence": 36,
+        "step": "complete",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T20:35:29.404940Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 37,
+        "step": "complete",
+        "event": "workflow_completed",
+        "occurred_at": "2026-10-02T20:35:29.404951Z",
+        "duration_ms": null,
+        "payload": {
+          "executed": false
+        }
+      },
+      {
+        "sequence": 38,
+        "step": "complete",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T20:35:29.404953Z",
+        "duration_ms": 0,
+        "payload": {}
+      }
+    ],
+    "created_at": "2026-10-02T20:35:29.292771Z",
+    "updated_at": "2026-10-02T20:35:29.404954Z"
+  },
+  "model_calls": 0,
+  "production_actions_executed": false,
+  "checkpoint_backend": "postgresql",
+  "fresh_process_recovery": {
+    "ok": true,
+    "checks": {
+      "fresh_process_checkpoint_matches": true,
+      "fresh_process_repository_matches": true,
+      "checkpoint_history_retained": true,
+      "approval_interrupt_retained": true
+    },
+    "history_checkpoint_count": 9
+  }
+}

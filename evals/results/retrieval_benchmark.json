@@ -1,0 +1,57 @@
+{
+  "benchmark": "bm25-incident-knowledge-v1",
+  "measured_at": "2026-08-01T13:40:49.011122+00:00",
+  "cases": 150,
+  "k": 5,
+  "recall_at_5": 1.0,
+  "ndcg_at_5": 0.9790490149535866,
+  "mean_latency_ms": 0.2401094495629271,
+  "p95_latency_ms": 0.31704199500381947,
+  "by_fault": {
+    "cache_penetration": {
+      "cases": 18,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0
+    },
+    "cpu_saturation": {
+      "cases": 19,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 0.9704234486335428
+    },
+    "database_connection_pool_exhaustion": {
+      "cases": 19,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 0.9755764567069901
+    },
+    "deployment_regression": {
+      "cases": 19,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 0.9248855231032094
+    },
+    "downstream_timeout": {
+      "cases": 19,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0
+    },
+    "kafka_consumer_lag": {
+      "cases": 19,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 1.0
+    },
+    "memory_leak": {
+      "cases": 19,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 0.9806129445270604
+    },
+    "retry_storm": {
+      "cases": 18,
+      "recall_at_5": 1.0,
+      "ndcg_at_5": 0.9821601753662639
+    }
+  },
+  "query_contract": "service + incident question + retrieved telemetry evidence labels; the root-cause label is not included in the query",
+  "token_cost_usd": null,
+  "token_cost_note": "N/A: deterministic local retrieval, no model call",
+  "dataset_sha256": "939a09ba5ee9ebf0caf98a2d91dcd4e0a0d0b89fece2640e7ff0a92f31248ba3",
+  "corpus_sha256": "5d75f3185bac37a93914078aace1851485098a64a36336ea2bd2d5ee704b5a50"
+}

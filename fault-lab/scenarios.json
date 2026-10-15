@@ -1,0 +1,58 @@
+{
+  "db-pool-exhaustion": {
+    "service": "payment-service",
+    "mode": "db_pool_exhaustion",
+    "question": "为什么 payment-service 今天延迟突然升高？",
+    "expected_root_cause": "Database connection pool exhaustion",
+    "expected_signals": ["request_latency_p95", "db_pool_utilization", "acquisition timed out"]
+  },
+  "downstream-timeout": {
+    "service": "ledger-service",
+    "mode": "downstream_timeout",
+    "question": "为什么 payment-service 请求 ledger-service 时持续超时？",
+    "expected_root_cause": "Downstream ledger timeout",
+    "expected_signals": ["request_latency_p95", "downstream request timed out"]
+  },
+  "cpu-spike": {
+    "service": "risk-engine",
+    "mode": "cpu_spike",
+    "question": "为什么 risk-engine CPU 和延迟同时升高？",
+    "expected_root_cause": "CPU saturation",
+    "expected_signals": ["cpu_load", "request_latency_p95"]
+  },
+  "memory-leak": {
+    "service": "payment-service",
+    "mode": "memory_leak",
+    "question": "为什么 payment-service 内存持续增长？",
+    "expected_root_cause": "Bounded memory leak simulation",
+    "expected_signals": ["memory_working_set"]
+  },
+  "deployment-regression": {
+    "service": "payment-service",
+    "mode": "deployment_regression",
+    "question": "为什么 payment-service v142 发布后错误率升高？",
+    "expected_root_cause": "Release v142 response-shape regression",
+    "expected_signals": ["error_rate", "invalid ledger response shape"]
+  },
+  "kafka-consumer-lag": {
+    "service": "ledger-service",
+    "mode": "kafka_consumer_lag",
+    "question": "为什么 ledger consumer lag 持续增长？",
+    "expected_root_cause": "Kafka consumer processing slowdown",
+    "expected_signals": ["kafka_consumer_lag"]
+  },
+  "retry-storm": {
+    "service": "checkout-api",
+    "mode": "retry_storm",
+    "question": "为什么 checkout-api 到 payment-service 的请求量突然放大？",
+    "expected_root_cause": "Unbounded downstream retry amplification",
+    "expected_signals": ["retry_rate", "request_latency_p95"]
+  },
+  "cache-penetration": {
+    "service": "payment-service",
+    "mode": "cache_penetration",
+    "question": "为什么 payment-service 缓存未命中和数据库负载一起升高？",
+    "expected_root_cause": "Cache penetration",
+    "expected_signals": ["cache_miss_rate", "db_pool_utilization"]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "component": "loki",
+  "upstream_repo": "grafana/loki",
+  "version": "v3.7.8",
+  "commit": "09e6ce2ff1bdc19763a10265b870c86f51c98655",
+  "source_url": "https://api.github.com/repos/grafana/loki/tarball/09e6ce2ff1bdc19763a10265b870c86f51c98655",
+  "source_sha256": "4302923af3479c2d129e71a7645ad5ebeff3c5ac8d1a104beb99abf1b8f0746f",
+  "archive_bytes": 109285129,
+  "archive_file": "loki-api-09e6ce2.tar.gz",
+  "authentication_scope": "official GitHub TLS + immutable commit/SHA pin; no independent signatureverificationclaim",
+  "compiler_image": "golang:1.26.9-alpine@sha256:3082400e369fa24d5fc60bca20edab3f6d604e0c5a690ec66b295eff4dd87ade",
+  "parent_image": "grafana/loki:3.7.8@sha256:1107dd5274e0ada47e42472b7a7e71f3b2a2fe878878108f3e2f9e51528f0193",
+  "security_module_pins": [
+    "golang.org/x/net@v0.60.0"
+  ],
+  "status": "PREPARED NOT BUILT"
+}

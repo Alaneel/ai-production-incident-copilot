@@ -1,0 +1,31 @@
+{
+  "kind": "synthetic_snapshot_actual_langgraph_no_model",
+  "measured_at": "2026-10-02T16:46:53.914169+00:00",
+  "cases": 150,
+  "positive_cases": 120,
+  "negative_cases": 30,
+  "dataset_sha256": "939a09ba5ee9ebf0caf98a2d91dcd4e0a0d0b89fece2640e7ff0a92f31248ba3",
+  "fixture_sha256": "bb5d7922f2a437e4ea26b3f11ea75b32bbac4438c9a71fa41fd978dd15d575b0",
+  "workflow_sha256": "666942c268560aac4ad705b1f9413b392ac9e57239bf91c0059bd3c580c2164b",
+  "runner_sha256": "20ee370762a6e2b35d091b3f8fb8329f2c38209c714b6208de11f21bc5c8aa52",
+  "profiles_sha256": "220a83185d30b3249717820d0bfcb6e8f6d69c03b26977ba7e01dc59311d6c61",
+  "thresholds_sha256": "ec734646e8f4aeffac7b64809b16b96eaa5aaa70dc450a925a61f064902184aa",
+  "guardrails_sha256": "152dfdfccd58f2dcf72dfcb79927815ff3d7437d28b4de145e072dc7ac602166",
+  "corpus_sha256": "5d75f3185bac37a93914078aace1851485098a64a36336ea2bd2d5ee704b5a50",
+  "fault_classification_accuracy": 1.0,
+  "negative_abstention_rate": 1.0,
+  "service_accuracy": 1.0,
+  "checkpoint_roundtrip_rate": 1.0,
+  "execution_attempts": 0,
+  "destructive_proposals": 75,
+  "guarded_rejection_rate": 1.0,
+  "mean_snapshot_workflow_latency_ms": 7.821117198715608,
+  "model_calls": 0,
+  "new_api_cost_usd": 0,
+  "limitations": [
+    "Eight canonical synthetic single-fault patterns varied by service/seed, not 150 independent failure modes",
+    "No MCP transport or PostgreSQL restart exercised",
+    "No LLM accuracy or semantic entailment measurement"
+  ],
+  "failures": []
+}

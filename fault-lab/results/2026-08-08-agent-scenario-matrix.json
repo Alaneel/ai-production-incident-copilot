@@ -1,0 +1,797 @@
+{
+  "verified_at": "2026-08-08T15:42:07Z",
+  "workflow": "orchestrator -> MCP -> Go gateway -> Prometheus/Loki/Tempo",
+  "uses_generic_questions_without_fault_labels": true,
+  "scenarios": [
+    {
+      "scenario": "db-pool-exhaustion",
+      "incident_id": "INC-2E2ABF",
+      "generic_question": "What is causing the production regression in payment-service?",
+      "service": "payment-service",
+      "incident_type": "database_connection_pool_exhaustion",
+      "leading_cause": "Database connection pool exhaustion",
+      "confidence": 0.87,
+      "action": "rollback_release",
+      "initial_status": "waiting_approval",
+      "final_status": "rejected",
+      "diagnostic_latency_ms": 143.67,
+      "evidence_count": 19,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc",
+        "trace"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "metric_signals": {
+        "request_latency_p95": {
+          "latest": 835.000000000001,
+          "peak": 3229.999999999998,
+          "points": 11
+        },
+        "request_error_rate": {
+          "latest": 0.08702064896755163,
+          "peak": 0.42094771678398374,
+          "points": 11
+        },
+        "db_pool_active_ratio": {
+          "latest": 1.0,
+          "peak": 1.0,
+          "points": 11
+        },
+        "cpu_utilization": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 10
+        },
+        "memory_working_set": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 10
+        },
+        "kafka_consumer_lag": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 10
+        },
+        "retry_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 6
+        },
+        "cache_miss_rate": {
+          "latest": 0.0,
+          "peak": 9.0,
+          "points": 6
+        }
+      },
+      "trace_events": 32,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "database_connection_pool_exhaustion",
+        "metric_count": 8,
+        "log_evidence_count": 1,
+        "trace_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "live_traces": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "tool_trace": true,
+        "metric_panel": true,
+        "rejection_prevented_execution": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "downstream-timeout",
+      "incident_id": "INC-AE3CC1",
+      "generic_question": "What is causing the production regression in ledger-service?",
+      "service": "ledger-service",
+      "incident_type": "downstream_timeout",
+      "leading_cause": "Downstream dependency timeout",
+      "confidence": 0.84,
+      "action": "none",
+      "initial_status": "diagnosed",
+      "final_status": "diagnosed",
+      "diagnostic_latency_ms": 101.1,
+      "evidence_count": 19,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc",
+        "trace"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "metric_signals": {
+        "request_latency_p95": {
+          "latest": 9.998307952622673,
+          "peak": 3751.2820512820513,
+          "points": 12
+        },
+        "request_error_rate": {
+          "latest": 0.04983922829581993,
+          "peak": 0.08008213552361397,
+          "points": 11
+        },
+        "db_pool_active_ratio": {
+          "latest": 0.16,
+          "peak": 0.16,
+          "points": 12
+        },
+        "cpu_utilization": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 9
+        },
+        "memory_working_set": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 9
+        },
+        "kafka_consumer_lag": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 9
+        },
+        "retry_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 6
+        },
+        "cache_miss_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 6
+        }
+      },
+      "trace_events": 32,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "downstream_timeout",
+        "metric_count": 8,
+        "log_evidence_count": 1,
+        "trace_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "live_traces": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "tool_trace": true,
+        "metric_panel": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "cpu-spike",
+      "incident_id": "INC-109F04",
+      "generic_question": "What is causing the production regression in risk-engine?",
+      "service": "risk-engine",
+      "incident_type": "cpu_saturation",
+      "leading_cause": "CPU saturation and request throttling",
+      "confidence": 0.85,
+      "action": "restart_deployment",
+      "initial_status": "waiting_approval",
+      "final_status": "rejected",
+      "diagnostic_latency_ms": 86.14,
+      "evidence_count": 19,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc",
+        "trace"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "metric_signals": {
+        "request_latency_p95": {
+          "latest": 485.9375,
+          "peak": 485.9375,
+          "points": 10
+        },
+        "request_error_rate": {
+          "latest": null,
+          "peak": null,
+          "points": 0
+        },
+        "db_pool_active_ratio": {
+          "latest": 0.16,
+          "peak": 0.16,
+          "points": 13
+        },
+        "cpu_utilization": {
+          "latest": 0.9,
+          "peak": 0.9,
+          "points": 8
+        },
+        "memory_working_set": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 8
+        },
+        "kafka_consumer_lag": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 8
+        },
+        "retry_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 6
+        },
+        "cache_miss_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 6
+        }
+      },
+      "trace_events": 32,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "cpu_saturation",
+        "metric_count": 8,
+        "log_evidence_count": 1,
+        "trace_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "live_traces": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "tool_trace": true,
+        "metric_panel": true,
+        "rejection_prevented_execution": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "memory-leak",
+      "incident_id": "INC-13FF26",
+      "generic_question": "What is causing the production regression in payment-service?",
+      "service": "payment-service",
+      "incident_type": "memory_leak",
+      "leading_cause": "Monotonic application memory leak",
+      "confidence": 0.83,
+      "action": "rollback_release",
+      "initial_status": "waiting_approval",
+      "final_status": "rejected",
+      "diagnostic_latency_ms": 104.5,
+      "evidence_count": 19,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc",
+        "trace"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "metric_signals": {
+        "request_latency_p95": {
+          "latest": 860.9374999999992,
+          "peak": 3416.4453276953814,
+          "points": 13
+        },
+        "request_error_rate": {
+          "latest": 0.06686930091185411,
+          "peak": 0.4302752655988177,
+          "points": 12
+        },
+        "db_pool_active_ratio": {
+          "latest": 0.16,
+          "peak": 0.16,
+          "points": 13
+        },
+        "cpu_utilization": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 11
+        },
+        "memory_working_set": {
+          "latest": 39845888.0,
+          "peak": 39845888.0,
+          "points": 11
+        },
+        "kafka_consumer_lag": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 11
+        },
+        "retry_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 7
+        },
+        "cache_miss_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 7
+        }
+      },
+      "trace_events": 32,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "memory_leak",
+        "metric_count": 8,
+        "log_evidence_count": 1,
+        "trace_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "live_traces": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "tool_trace": true,
+        "metric_panel": true,
+        "rejection_prevented_execution": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "deployment-regression",
+      "incident_id": "INC-DB5BBD",
+      "generic_question": "What is causing the production regression in payment-service?",
+      "service": "payment-service",
+      "incident_type": "deployment_regression",
+      "leading_cause": "Release regression after deployment",
+      "confidence": 0.9,
+      "action": "rollback_release",
+      "initial_status": "waiting_approval",
+      "final_status": "rejected",
+      "diagnostic_latency_ms": 108.16,
+      "evidence_count": 19,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc",
+        "trace"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "metric_signals": {
+        "request_latency_p95": {
+          "latest": 854.6874999999992,
+          "peak": 3138.2754013101344,
+          "points": 13
+        },
+        "request_error_rate": {
+          "latest": 0.08858858858858859,
+          "peak": 0.3720963386767411,
+          "points": 12
+        },
+        "db_pool_active_ratio": {
+          "latest": 0.16,
+          "peak": 0.16,
+          "points": 13
+        },
+        "cpu_utilization": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 11
+        },
+        "memory_working_set": {
+          "latest": 0.0,
+          "peak": 26214400.0,
+          "points": 11
+        },
+        "kafka_consumer_lag": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 11
+        },
+        "retry_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 7
+        },
+        "cache_miss_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 7
+        }
+      },
+      "trace_events": 32,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "deployment_regression",
+        "metric_count": 8,
+        "log_evidence_count": 1,
+        "trace_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "live_traces": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "tool_trace": true,
+        "metric_panel": true,
+        "rejection_prevented_execution": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "kafka-consumer-lag",
+      "incident_id": "INC-3C724A",
+      "generic_question": "What is causing the production regression in ledger-service?",
+      "service": "ledger-service",
+      "incident_type": "kafka_consumer_lag",
+      "leading_cause": "Kafka consumer processing slowdown",
+      "confidence": 0.82,
+      "action": "restart_deployment",
+      "initial_status": "waiting_approval",
+      "final_status": "rejected",
+      "diagnostic_latency_ms": 103.06,
+      "evidence_count": 19,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc",
+        "trace"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "metric_signals": {
+        "request_latency_p95": {
+          "latest": 3237.499999999999,
+          "peak": 3946.8049141366305,
+          "points": 13
+        },
+        "request_error_rate": {
+          "latest": 0.05673758865248227,
+          "peak": 0.07770184694679012,
+          "points": 11
+        },
+        "db_pool_active_ratio": {
+          "latest": 0.16,
+          "peak": 0.16,
+          "points": 13
+        },
+        "cpu_utilization": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 10
+        },
+        "memory_working_set": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 10
+        },
+        "kafka_consumer_lag": {
+          "latest": 6975.0,
+          "peak": 6975.0,
+          "points": 10
+        },
+        "retry_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 7
+        },
+        "cache_miss_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 7
+        }
+      },
+      "trace_events": 32,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "kafka_consumer_lag",
+        "metric_count": 8,
+        "log_evidence_count": 1,
+        "trace_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "live_traces": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "tool_trace": true,
+        "metric_panel": true,
+        "rejection_prevented_execution": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "retry-storm",
+      "incident_id": "INC-348A15",
+      "generic_question": "What is causing the production regression in checkout-api?",
+      "service": "checkout-api",
+      "incident_type": "retry_storm",
+      "leading_cause": "Downstream retry amplification storm",
+      "confidence": 0.86,
+      "action": "none",
+      "initial_status": "diagnosed",
+      "final_status": "diagnosed",
+      "diagnostic_latency_ms": 97.07,
+      "evidence_count": 19,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc",
+        "trace"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "metric_signals": {
+        "request_latency_p95": {
+          "latest": 963.5416666666667,
+          "peak": 3596.4549958202697,
+          "points": 13
+        },
+        "request_error_rate": {
+          "latest": null,
+          "peak": null,
+          "points": 0
+        },
+        "db_pool_active_ratio": {
+          "latest": 0.16,
+          "peak": 0.16,
+          "points": 13
+        },
+        "cpu_utilization": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 8
+        },
+        "memory_working_set": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 8
+        },
+        "kafka_consumer_lag": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 8
+        },
+        "retry_rate": {
+          "latest": 5.0,
+          "peak": 5.0,
+          "points": 6
+        },
+        "cache_miss_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 6
+        }
+      },
+      "trace_events": 32,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "retry_storm",
+        "metric_count": 8,
+        "log_evidence_count": 1,
+        "trace_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "live_traces": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "tool_trace": true,
+        "metric_panel": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "cache-penetration",
+      "incident_id": "INC-C9516F",
+      "generic_question": "What is causing the production regression in payment-service?",
+      "service": "payment-service",
+      "incident_type": "cache_penetration",
+      "leading_cause": "Cache penetration from repeated missing keys",
+      "confidence": 0.84,
+      "action": "none",
+      "initial_status": "diagnosed",
+      "final_status": "diagnosed",
+      "diagnostic_latency_ms": 82.86,
+      "evidence_count": 19,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc",
+        "trace"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "metric_signals": {
+        "request_latency_p95": {
+          "latest": 844.5312499999989,
+          "peak": 3229.999999999998,
+          "points": 13
+        },
+        "request_error_rate": {
+          "latest": 0.08836524300441827,
+          "peak": 0.4210293410407986,
+          "points": 13
+        },
+        "db_pool_active_ratio": {
+          "latest": 0.7,
+          "peak": 1.0,
+          "points": 13
+        },
+        "cpu_utilization": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 12
+        },
+        "memory_working_set": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 12
+        },
+        "kafka_consumer_lag": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 12
+        },
+        "retry_rate": {
+          "latest": 0.0,
+          "peak": 0.0,
+          "points": 8
+        },
+        "cache_miss_rate": {
+          "latest": 9.0,
+          "peak": 9.0,
+          "points": 8
+        }
+      },
+      "trace_events": 32,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "cache_penetration",
+        "metric_count": 8,
+        "log_evidence_count": 1,
+        "trace_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "live_traces": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "tool_trace": true,
+        "metric_panel": true
+      },
+      "passed": true
+    }
+  ],
+  "passed": true
+}

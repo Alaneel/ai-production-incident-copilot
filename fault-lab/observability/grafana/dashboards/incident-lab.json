@@ -1,0 +1,79 @@
+{
+  "annotations": {"list": []},
+  "editable": false,
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "ms"}},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (service, le) (rate(incident_http_request_duration_seconds_bucket[5m]))) * 1000",
+          "legendFormat": "{{service}}"
+        }
+      ],
+      "title": "Request latency p95",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "percentunit", "min": 0, "max": 1}},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "id": 2,
+      "targets": [
+        {
+          "expr": "incident_db_pool_active / incident_db_pool_max",
+          "legendFormat": "{{service}}"
+        }
+      ],
+      "title": "Database pool utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "percentunit", "min": 0, "max": 1}},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "id": 3,
+      "targets": [
+        {
+          "expr": "sum by (service) (rate(incident_http_requests_total{status=\"error\"}[5m])) / clamp_min(sum by (service) (rate(incident_http_requests_total[5m])), 0.000001)",
+          "legendFormat": "{{service}}"
+        }
+      ],
+      "title": "Error rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "id": 4,
+      "targets": [
+        {
+          "expr": "incident_fault_active",
+          "legendFormat": "{{service}} · {{fault}}"
+        }
+      ],
+      "title": "Active injected fault",
+      "type": "state-timeline"
+    },
+    {
+      "datasource": {"type": "loki", "uid": "loki"},
+      "gridPos": {"h": 10, "w": 24, "x": 0, "y": 16},
+      "id": 5,
+      "options": {"showTime": true, "wrapLogMessage": true},
+      "targets": [{"expr": "{environment=\"fault-lab\"} |= \"error\""}],
+      "title": "Fault evidence logs",
+      "type": "logs"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 41,
+  "tags": ["incident", "fault-lab"],
+  "templating": {"list": []},
+  "time": {"from": "now-30m", "to": "now"},
+  "timezone": "browser",
+  "title": "AI Incident Copilot · Fault Lab",
+  "uid": "incident-fault-lab",
+  "version": 1
+}

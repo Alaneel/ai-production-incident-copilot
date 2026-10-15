@@ -1,0 +1,9 @@
+{
+  "scenario": "db-pool-exhaustion",
+  "service": "payment-service",
+  "metric": "request_latency_p95",
+  "metric_points": 26,
+  "log_events": 50,
+  "trace_count": 20,
+  "passed": true
+}

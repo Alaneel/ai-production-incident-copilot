@@ -1,0 +1,420 @@
+{
+  "contract": "kind-live-fault-acceptance-v2",
+  "scenario": "db-pool-exhaustion",
+  "primary_service": "payment-service",
+  "cluster": "copilot-live-ac56e74831cf4f88913a",
+  "image_tag": "kind-copilot-live-ac56e74831cf4f88913a",
+  "started_at": "2026-10-14T14:35:17.264443+00:00",
+  "images": {
+    "orchestrator": "sha256:6bd8b1a1c48b064d87b081872252fb6540698ef97b62af7d51c9bb693edd90f4",
+    "mcp-server": "sha256:a7d6c7b4c28a841417b4805dbe183a2a182df1a16c5436903ee12b6d4832a467",
+    "telemetry-gateway": "sha256:e953a73f714d8e3f1f3c3222f88a2b63d0a5666ab068b35b8bcc8bd304b97f7d",
+    "fault-lab": "sha256:63d88ce4383e28b6ac8b1ccaa2eb86f6fa555c8dabb23efbda454238da01b284"
+  },
+  "checks": {},
+  "model_calls": 0,
+  "production_actions": 0,
+  "full_fault_matrix": false,
+  "cleanup_complete": true,
+  "fault_scope": "actual four-session PostgreSQL application-pool exhaustion",
+  "controlled_log_span_correlation_attempted": true,
+  "source_sha256": {
+    "deploy/kubernetes/verify_live_fault_lab.py": "193de6136c4bdb2007aae9c1f29af4ca6e7d5ce00918892cc0bf9d25b59a8f9a",
+    "deploy/kubernetes/render_fault_lab.py": "9d3c51f4634b0a07b036fd9adcec14a8c4f0cdf311c88ecae35157e04d465619",
+    "fault-lab/scenarios.json": "2a4eaa32d5ddb1e9a17d9ec5a7b3b9dcf6732afdd343bb6fa86c9850f74e3135",
+    "deploy/kubernetes/base/kustomization.yaml": "a88ac91fa3fd4c9777e0b4fa79f3322bba452b12f0ee2c955c24622366d3039c",
+    "deploy/kubernetes/base/mcp-server.yaml": "893241ac588183b4a958e1d90f5e7e70185c6dc0a89af142d635accce6cbcac8",
+    "deploy/kubernetes/base/namespace.yaml": "b374f5cde93065e8fb4277af80a7193aaa2c999d2d09413e5bd7b74ea497147e",
+    "deploy/kubernetes/base/networkpolicy.yaml": "cd8c87dc2112d6959cd04843edb6caed8d3c934c2c16795db2536946117a4258",
+    "deploy/kubernetes/base/orchestrator.yaml": "73df444491fae7c76c3afbdd01b5b1ec33928038f53ffe90a849b8d81386c688",
+    "deploy/kubernetes/base/postgres.yaml": "d0e6e70c64c6cfed76fd3bf66a916084a4f6bec1babaf63538591e34729de305",
+    "deploy/kubernetes/base/redis.yaml": "a1240ec0fc26626d3f2bf8d87471071ce040f76184ac2ccbc6e7586c17c7026c",
+    "deploy/kubernetes/base/serviceaccounts-rbac.yaml": "6f39e08ce7b47f036450639265bee8de5db8fc485e444910d05f4db4cce9da1f",
+    "deploy/kubernetes/base/telemetry-gateway.yaml": "3d88a1982def9c11f89466c53e140f2f7687cf5bf79bab353b63b37daa4d1fd7",
+    "deploy/kubernetes/experiments/real-pool/payment.yaml": "7cfcbdeeb01253456650d3510d5d7d1fe0b6b1683acf33bd5a8871e7abbad12c",
+    "fault-lab/observability/loki.yml": "77a8cf98eed2151b4f1529afd6dcca00b056dfb0148d86bf557df3535e5d2ef7",
+    "fault-lab/observability/otel-collector.yml": "b8d64cebdbf3f4dda076f425e8315116dbdc75de3f424c00e1028b6739c034a3",
+    "fault-lab/observability/prometheus-native.yml": "ca71ea9eb435ce0c3de0949a02078bf1c23e45a1ba7cb48556c82564dfb7b7fd",
+    "fault-lab/observability/prometheus.yml": "56c91b3eadd20d26c1c2556f2085972ae6ead2f043802020dfa800f6fa852c6a",
+    "fault-lab/observability/tempo.yml": "9d7576e98afdc38d9ad4cc782e2a79dbf16a3ec1580ce65a7f377c42febe293a",
+    "services/telemetry-gateway/cmd/gateway/main.go": "8d7298c61dce93844249acade0ff0a14042e1d0ea3429ab9e12e2d9f8aeffd0d",
+    "services/telemetry-gateway/internal/gateway/fixture.go": "4217cc10ec96d837c6e7ee5a7210f8e1feded68b8731a0e6b79b22f88f7da06f",
+    "services/telemetry-gateway/internal/gateway/models.go": "634efbc408ac5879b16ad1890c16ea5edb674f33c00df458a345c261d00d5e5d",
+    "services/telemetry-gateway/internal/gateway/observability.go": "5518f41db602cd6889aece5c463bca623758343633cf0a78ebd9a4f5ca6031a4",
+    "services/telemetry-gateway/internal/gateway/observability_test.go": "b4d1fcb10e8dae29a00378016fe768faedbc2846fb4a2828dedf204a3a2a9c26",
+    "services/telemetry-gateway/internal/gateway/ratelimit.go": "272394e1d2641f0e860612d48d8bfa2330b7e9c108224fa2105c28136760e3d1",
+    "services/telemetry-gateway/internal/gateway/server.go": "0db0d03a415404026387098b77ce69ee93384cc6992ec30c9f8f6404d9018ede",
+    "services/telemetry-gateway/internal/gateway/server_test.go": "7e0f9a4a83f13dbf362f8a5906561457e4a04ee3fc8c0f0675a87cc44a5e5548",
+    "services/telemetry-gateway/internal/gateway/trace_topology.go": "53c63e61201ffd32597e9a6042366be3b5e35eb069cc60b4de9998c37a1d22c2",
+    "services/telemetry-gateway/internal/gateway/trace_topology_test.go": "09ab23eac53efb593585024efa104effc28cd7ebcd280878c45de691c7a4d6a1",
+    "services/telemetry-gateway/go.mod": "61f0788077160459ac33bbba8cf4a7387bb6e66b195988c7116a5449b5491310",
+    "services/telemetry-gateway/Dockerfile": "aacd75497ee9dafee4dd02b0061a0610cd0933e20bea3f4282bb74f285fdf48a",
+    "container-images.lock.json": "1cb9f1d4dd12a0685065871ee6b89c42d586e516cbc8e79acaf30087291a1ad9",
+    "requirements-runtime.lock": "e1ef31501297b5bc1a4c6ce30f399b44e1a76bc863faf05b2e39786355c01f33",
+    "requirements-build.lock": "891d2994d3a0349aa73cd73d03b81dc822c2e94986a46dd1ac8480bf3bcf71c4",
+    "requirements-fault-lab.lock": "526a70cf99159537dd004acdd009172f4ade4f28f2e4cd6c0aedb0acb0b47645",
+    "services/orchestrator/incident_copilot/__init__.py": "db2c62f8b6f42f4133010561099be7cd6feebd525a7d1708c5be0348c360fe90",
+    "services/orchestrator/incident_copilot/action_applicability.py": "1fb4411af2c6591ff7dff80c95bf2b8c8784d3c0f72c927f6068664fa22a8dfb",
+    "services/orchestrator/incident_copilot/action_signal_time.py": "33f40dd09717df3645f60e108ac442fd1477ed6b081eea8b87681a52e2ffd0b6",
+    "services/orchestrator/incident_copilot/anomaly_windows.py": "510b499e6dc5ff63349dd7122bb36bd91957b754e78cc068adabda7d4bc35c70",
+    "services/orchestrator/incident_copilot/api.py": "ea453fd2344fac7241ae256e2a89ecaef86910dab120d0d4e828e7462c8abbf4",
+    "services/orchestrator/incident_copilot/api_auth.py": "9f701c1594e6d9726ab1d43aa9c6a907ef92bffec9a7982c4f19f5c6a7687e72",
+    "services/orchestrator/incident_copilot/approval.py": "a9f23c0cc9e91410db922bf05792301736829df9396e550bea01f867152b81cb",
+    "services/orchestrator/incident_copilot/cause_family.py": "f9132d622fa3ba4bd5e9193213a48c820b1da47bf5e936ac29df111c30920d9f",
+    "services/orchestrator/incident_copilot/cross_service_rca.py": "99bc5dcc6941d20ef2514af09cc08e917d15f158198076ee99d6815eac9d2c6d",
+    "services/orchestrator/incident_copilot/dependency_topology.py": "9eca089423fbce99eeb7eb1db041b06d2193935e43571a528d640fd240bd91e0",
+    "services/orchestrator/incident_copilot/deployment_timeline.py": "f19e1305bf650bcac2fc4475cb534dded59526dee68ef6e443a797c36d034a8f",
+    "services/orchestrator/incident_copilot/guardrails.py": "c0474c48ad335b44042cb53cb8a98f51a43888c4728cb3c7f4c2295860e421b4",
+    "services/orchestrator/incident_copilot/incident_profiles.py": "08d1530492b8dc7bb3bd6c91af2bf3e039e1a40d6c3513680624e8ad9a2703c4",
+    "services/orchestrator/incident_copilot/langgraph_workflow.py": "0b18e9152c7292f3f901fc7beaec99273985e7c2247a94068116cbdb997d4aa0",
+    "services/orchestrator/incident_copilot/mcp_client.py": "13183baee7955b6ea43e1cad6e865abdb2ff2169f22e2c4c14c366970bb6bc2f",
+    "services/orchestrator/incident_copilot/models.py": "9b7ee80a5bc3f2749955e65da9e5e04f94575e5a247d091c19f52016f49631ed",
+    "services/orchestrator/incident_copilot/operation_status.py": "dab777b0485e901b75481dc4edd08118403352c51991544343193e8e578bc8c4",
+    "services/orchestrator/incident_copilot/reasoning.py": "fdee76682105aca5bf3fa603fea7983ff5253a5d6e70394ffec3b5fac91e0ac9",
+    "services/orchestrator/incident_copilot/recovery_verification.py": "f2d7e249ce29011e64d86e88cc46529f65aea12ab35f0f9134ebab0c026135e1",
+    "services/orchestrator/incident_copilot/signal_thresholds.py": "661dc75db83da171800a8929abb98f5fe834da0f35fc42fc88c8853d725fe54b",
+    "services/orchestrator/incident_copilot/store.py": "de5241adfc4947fcd0fd425bdb95964b42eb274d6bcdef727e2bd364aee35d0c",
+    "services/orchestrator/incident_copilot/task_state.py": "0dcf8b320d73fc33c71f275a5f6ae94c539ede7b13b419c11e5c6ae570abd25a",
+    "services/orchestrator/incident_copilot/tools.py": "0056e3f8d365552cb7f09c97812ce4708eec587aebf3cd52c5f1747d84fde852",
+    "services/orchestrator/Dockerfile": "4561b2e65879342ffdb97149cab3a8d2eba05982c5f923fe3bda020aa8fa0a39",
+    "services/orchestrator/pyproject.toml": "9c73a78a2b4d5984d091654f64082781a355c985aacddcc25a3c08acd2e54775",
+    "services/mcp-server/incident_mcp/__init__.py": "a4e5e43678312b7a0ee85e09f92245d46f92a17182e30aadd3b9d7916fb01b2c",
+    "services/mcp-server/incident_mcp/deployment_events.py": "faee2eb869f9ec298b32c46bc1f54d5fc3dc6bd6cb08f98490ba1346a962b947",
+    "services/mcp-server/incident_mcp/deployments.py": "222c177b852e21d9d4d215bc708d0859f67dd022037cd7749caeb1856f1ed93f",
+    "services/mcp-server/incident_mcp/gateway.py": "faa3364f405ff705e259e75972cc93d9634a1a37c8671fe29ea8dac87a065981",
+    "services/mcp-server/incident_mcp/knowledge.py": "8951de3d0c4222177c865da4720bd9291f7d64d7db94c39f633f98a685a7cb57",
+    "services/mcp-server/incident_mcp/kubernetes.py": "15f6272ecce4d82ab8ebc4fd7c066993430f09c424733516efcf90c1f1ff7241",
+    "services/mcp-server/incident_mcp/schemas.py": "94a4d580c5b50856e6bb2819e72d6caf65d7478a64ecfdb166cc2064bd881c64",
+    "services/mcp-server/incident_mcp/security.py": "207612005ed86b36ae467d93fb05ec1e30cdfe4a18721d333835936c751b793b",
+    "services/mcp-server/incident_mcp/server.py": "6e573df25e0f29a767bf0b10ac0ac670f18581d0c07bc6a6ee2a08b2a8d3a06a",
+    "services/mcp-server/incident_mcp/target_context.py": "89faab2a142bb4c6db855cccf031262915c77df8e7b719545f3e1b32ae47050a",
+    "services/mcp-server/incident_mcp/tools.py": "cd6decf63e9bcab6cefad8b2e19ac79430077fcb1b364d4973e706e7888b4dc8",
+    "services/mcp-server/Dockerfile": "d07d6fbe939219beedf16eda1e5bba9a3de3737a04591ab761c9769a91a6cd6e",
+    "services/mcp-server/pyproject.toml": "1bf75cfc2ce83f35d1b2568aa25c8e74b541def325a62ed5ca979b70b51acaef",
+    "fault-lab/app/incident_lab/__init__.py": "08488714589bd386b34fb9e04062bfbcfcfa5475008323862f94d5c6ab59596d",
+    "fault-lab/app/incident_lab/app.py": "995bb2412a86a46f87d99713e30d6a0bb23aba416eb2d20152ce4b5bc9b2e3c3",
+    "fault-lab/app/incident_lab/postgres_pool.py": "e2513e139e783cd0139c121547620dd84a81900131dfd96d11bb7d4026b7427f",
+    "fault-lab/app/incident_lab/start.py": "371a9e9f7fe227378016c7c332657197f926dab935c82e5add93dd3696c4b077",
+    "fault-lab/app/incident_lab/traffic.py": "c24971c67985918d8db794ed4a47f46efd234d02c78aaae786d3c602bfd62c95",
+    "fault-lab/app/Dockerfile": "21d7811246f7c13eca5eab051c24924d3b944522ed2a9df63629c15142a4e150",
+    "fault-lab/app/pyproject.toml": "2bd7acb1a59f606e7c6d9104a3e97adb70ae2b112cd41ea3dee1e3f83e4b12fb",
+    "services/mcp-server/incident_mcp/knowledge_corpus.json": "5d75f3185bac37a93914078aace1851485098a64a36336ea2bd2d5ee704b5a50",
+    "deploy/images/collector-security/.dockerignore": "84d175a2881b936a15811161fb8aa3a9efc7bd81dc4ab7c4b5ff3357f658c702",
+    "deploy/images/collector-security/Dockerfile": "3051a75f7148efe062dd28278bab8f47b681d377f953449a37f198e4ab005193",
+    "deploy/images/collector-security/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "deploy/images/collector-security/builder-config.yaml": "4724490be2e38d3eee9ad501e207264ec407435f525eb39f1f312254bc968e31",
+    "deploy/images/collector-security/collect-module-notices.go": "aa398786bfa146d39ae98f03ba392f88e92e17f65df0a9460faa99605958e8cf",
+    "deploy/images/collector-security/generated/components.go": "50a9b428d19cbc122c6ed00c2616da88875c323dbac4242b8258a3b576fca92e",
+    "deploy/images/collector-security/generated/main.go": "55f00e67318bf376d395a55a9c7a1ad47af2c8fb06ff6cd086d09d994c60a1af",
+    "deploy/images/collector-security/generated/main_others.go": "0cd81e903710b93f8d16d205678aaeed914f334aaf63a2fda77eae845c7e5bd7",
+    "deploy/images/collector-security/generated/main_windows.go": "1e941b0fb681f58969660b0fc85d905f3c15a735e1212a25c76c336b604ade2c",
+    "deploy/images/collector-security/generated-source-manifest.json": "8304cb8e0bcb7fd858d63d770a912d53a298a703687b24e33209d7977cefa9b8",
+    "deploy/images/collector-security/go.mod": "182198eaee3c0fa2594fa55d14cdb3a63ee3b61aeb35498116f94a67d66e41bb",
+    "deploy/images/collector-security/go.sum": "5a930bad6574a39bdf87f094fb2e557fb5615b8df10e86f0833cd1f542bf5ffb",
+    "deploy/images/grafana-security/.dockerignore": "53769171b40ef20cb99e35b0100af2334c8299c6a8cc2b57cf6b193af3f5e0ad",
+    "deploy/images/grafana-security/Dockerfile": "0bacea7d3b228c2efba669ee48024befe2bbd31f4822142b3ba4fac33b3beef8",
+    "deploy/images/grafana-security/install-patches.sh": "3414908626499b17ec39027921c5943cfd7be257c80dfbf053dd97cfa75669c0",
+    "deploy/images/grafana-security/licenses/Grafana-LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+    "deploy/images/grafana-security/licenses/zlib-LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+    "deploy/images/grafana-security/packages.lock": "772e3704cbb44ed1e14d5daf16dd61a9cd1c8a081c5c78d6e7af3d07caea5657",
+    "deploy/images/loki-security/.dockerignore": "1293c2472cf341de662cb3855b61516164a319ee6b4641a33f17bd718e8e9cb7",
+    "deploy/images/loki-security/Dockerfile": "eaa971c151626db607a29becbeb53ce0c7c2d9c55d6578cdf13df2cd41d865db",
+    "deploy/images/loki-security/LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+    "deploy/images/loki-security/collect-module-notices.go": "aa398786bfa146d39ae98f03ba392f88e92e17f65df0a9460faa99605958e8cf",
+    "deploy/images/loki-security/go.mod": "ede0678aab73dc43e810b1112ae2fd3960363394b1eec64f48fb4f96925f14e6",
+    "deploy/images/loki-security/go.sum": "7df86b4b54b6a8f9532d9ad3035681e5bc8548f83fc1c14fe9ae5a23b021a881",
+    "deploy/images/loki-security/source-lock.json": "45a02fa6c4620180d7191e23e609c8ac4c7caa07b73b48d48238ff73ba12f789",
+    "deploy/images/postgres-security/.dockerignore": "a4d19dcda7f31c0b955cd8feb51ffc5623ad03e488cdb2b2e76b32737300d7fb",
+    "deploy/images/postgres-security/Dockerfile": "08aa7f79b6b775edebccf66badbd3cdee4a5cdf1376776fbd7b0de9696510990",
+    "deploy/images/postgres-security/gosu/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "deploy/images/postgres-security/gosu/go.mod": "2447b9b5daca5823aeaaf296a96f698e29b8d9a23e79265ce1eb292b411b6f0b",
+    "deploy/images/postgres-security/gosu/go.sum": "3f4d244f09dc5009ad68d99b2d99815f48fddf693fad8e734bbe820b315f43e7",
+    "deploy/images/postgres-security/gosu/main.go": "5b51466d021951038377ce7d2405087588bf86fb321299e749c73a6777865584",
+    "deploy/images/postgres-security/gosu/security_test.go": "a37ec54f81caccd3b2e47f7d6ba1213db93e2384b66368e914a641ee51d38e72",
+    "deploy/images/postgres-security/gosu/setup-user.go": "8baa6800c3a43b34ca39cfd4ff2c27a9af015ec985f814d7b6cf2446eeed5fba",
+    "deploy/images/postgres-security/gosu/version.go": "4129772c7234743b3f45a3828d32040ac7462884d599bd22bdab2266588c619a",
+    "deploy/images/postgres-security/licenses/gosu-LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "deploy/images/postgres-security/licenses/sys-LICENSE": "2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067",
+    "deploy/images/postgres-security/licenses/sys-PATENTS": "96f408bfae65bf137fc2525d3ecb030271c50c1e90799f87abf8846d8dd505cc",
+    "deploy/images/postgres-security/licenses/user-LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "deploy/images/postgres-security/user-fixture/user_test.go": "92ed0c87132f2261a2e025c1ca312ab8fb747adb397b67cd2515ba2782b254c6",
+    "deploy/images/prometheus-security/.dockerignore": "9970e064093d29aab7bc065b6ed1df3c0b3fbf4ada388ed9b8d8a5634b377c06",
+    "deploy/images/prometheus-security/Dockerfile": "0cf72d2370a185941b68370a7c0d5e3af755e95b00aa32fce05c47c411d9a263",
+    "deploy/images/prometheus-security/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "deploy/images/prometheus-security/NOTICE": "ac9e304462a58a4d71b6488423d4447e614c8b31d517fe24345016522c102a78",
+    "deploy/images/prometheus-security/collect-module-notices.go": "aa398786bfa146d39ae98f03ba392f88e92e17f65df0a9460faa99605958e8cf",
+    "deploy/images/prometheus-security/go.mod": "d85af091d5bf9ba19f98e4d92e24b368d3e5537af086521ef10c7dd669695fd7",
+    "deploy/images/prometheus-security/go.sum": "eaeb5e4f16a9edcab1aeeb2b1a90a0f85decbd0065b3bf63e03729d324f7fc1f",
+    "deploy/images/prometheus-security/prepare-ui.sh": "ea5c2568ce71bc9a0b023ea62fb3ea23964f4234db960cfa053cb769ade98a85",
+    "deploy/images/prometheus-security/source-lock.json": "cab22e8f0b6e5cebe8ef4eeba18d25d751327bfd43dfd2c58fe4ebec75c30e1d",
+    "deploy/images/redis-security/.dockerignore": "b42291f2acfaf84ec05adfab0ef1e489ccf62b7b06163e606abc7dc270b3c618",
+    "deploy/images/redis-security/Dockerfile": "ce8675e0538bf10611b5861b06994f84bc0752770e4c813abc5f1874d88bc0b8",
+    "deploy/images/redis-security/install-patches.sh": "b7e931d4c4cbdd94fa81c46e0aa43f4ecd2d07ba320172ddf5ac7d803efbe4ef",
+    "deploy/images/redis-security/licenses/OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+    "deploy/images/redis-security/licenses/Redis-LICENSE.txt": "abffee3703161c0a6a0cd7f635b2c1ebb3b81bd199e9d18ea89652d678ae4287",
+    "deploy/images/redis-security/licenses/zlib-LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+    "deploy/images/redis-security/packages.lock": "db904181223e2e21af0025b9eaf845c83a530bd9d81e43feb6b9155a5c6757f3",
+    "deploy/images/tempo-security/.dockerignore": "1293c2472cf341de662cb3855b61516164a319ee6b4641a33f17bd718e8e9cb7",
+    "deploy/images/tempo-security/Dockerfile": "c58caa0b827424a2c8cf72a63a79eb327c240589341393d8767ceaedc8cd377d",
+    "deploy/images/tempo-security/LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+    "deploy/images/tempo-security/collect-module-notices.go": "aa398786bfa146d39ae98f03ba392f88e92e17f65df0a9460faa99605958e8cf",
+    "deploy/images/tempo-security/go.mod": "7da36745bda2cc5241ebc440baba9763de99cb4b63042387e4dd65aadcd3f58f",
+    "deploy/images/tempo-security/go.sum": "bd3efdbd44e063f95bce966651a35b722242b444c1ffb0a2536dd377109f706a",
+    "deploy/images/tempo-security/source-lock.json": "d104b336e2e09aa541b0653cbb2568f522407bfa7d6239e4d9ce091d8345e184"
+  },
+  "manifest_sha256": "aea77bf91fff30ffd6bc506e28c7d82f83c45fb2c78d17b84c137b702f21dcd2",
+  "kind_node_image": "kindest/node:v1.36.1@sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5",
+  "error_type": "OperationFailure",
+  "operation_error": {
+    "returncode": 1,
+    "stderr": "error: timed out waiting for the condition\n"
+  },
+  "pod_status": [
+    {
+      "name": "checkout-api-7fc8c997fb-9brhm",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "checkout-api",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-14T14:37:00Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ledger-service-79f457d57-6pg4t",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "ledger-service",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-14T14:37:00Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "loki-849b99979-df2b6",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "loki",
+          "ready": false,
+          "restarts": 4,
+          "state": {
+            "terminated": {
+              "exitCode": 1,
+              "finishedAt": "2026-10-14T14:38:33Z",
+              "reason": "Error",
+              "startedAt": "2026-10-14T14:38:33Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mcp-server-6f57cf6c4-d4qx8",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "mcp-server",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-14T14:37:00Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "orchestrator-768bf9dc46-hzgnp",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "orchestrator",
+          "ready": false,
+          "restarts": 1,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-14T14:38:10Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "otel-collector-b4b875d5b-pfbfj",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "otel-collector",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-14T14:37:02Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "payment-service-7bc94bf5ff-bmfjp",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "payment-service",
+          "ready": false,
+          "restarts": 2,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-14T14:38:52Z"
+            }
+          }
+        },
+        {
+          "name": "pool-postgres",
+          "ready": false,
+          "restarts": 4,
+          "state": {
+            "waiting": {
+              "reason": "CrashLoopBackOff"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "postgres-0",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "postgres",
+          "ready": false,
+          "restarts": 4,
+          "state": {
+            "waiting": {
+              "reason": "CrashLoopBackOff"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "prometheus-599c7f894-6zl4l",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "prometheus",
+          "ready": false,
+          "restarts": 4,
+          "state": {
+            "terminated": {
+              "exitCode": 1,
+              "finishedAt": "2026-10-14T14:38:25Z",
+              "reason": "Error",
+              "startedAt": "2026-10-14T14:38:25Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "redis-74465c9d96-wrx9f",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "redis",
+          "ready": false,
+          "restarts": 4,
+          "state": {
+            "waiting": {
+              "reason": "CrashLoopBackOff"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "risk-engine-69c9dffdf6-5jh6j",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "risk-engine",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-14T14:37:01Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "telemetry-gateway-5f8fccf9c-9lgc8",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "telemetry-gateway",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-14T14:37:00Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "tempo-7bb7b8c5df-6dgjl",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "tempo",
+          "ready": false,
+          "restarts": 4,
+          "state": {
+            "terminated": {
+              "exitCode": 1,
+              "finishedAt": "2026-10-14T14:38:41Z",
+              "reason": "Error",
+              "startedAt": "2026-10-14T14:38:41Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "traffic-generator-7f8cd5f4d4-hsjpg",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "traffic-generator",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-14T14:37:01Z"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "last_phase": "rollout:deployment/orchestrator",
+  "elapsed_seconds": 227.319,
+  "ok": false
+}

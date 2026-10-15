@@ -1,0 +1,182 @@
+[
+  {
+    "uri": "runbook://payments/db-pool-saturation",
+    "document_type": "runbook",
+    "title": "Payment database pool saturation",
+    "section": "Diagnosis and mitigation",
+    "content": "Confirm db_pool_active_ratio is near one and correlate database acquisition timeouts with the latency window. If saturation begins immediately after a query-shape deployment, validate the prior release and use an approved rollback. Do not increase the pool before checking database capacity.",
+    "services": ["payment-service", "order-service", "profile-service"],
+    "tags": ["database_connection_pool_exhaustion", "latency", "rollback"],
+    "updated_at": "2026-06-18T09:00:00Z"
+  },
+  {
+    "uri": "incident://INC-2026-041/payment-pool-exhaustion",
+    "document_type": "past_incident",
+    "title": "Payment v142 ledger fan-out exhausted the connection pool",
+    "section": "Root cause and resolution",
+    "content": "Release v142 parallelized ledger balance lookups. Active database connections reached 50 of 50, acquisition timeouts increased, and payment p95 latency regressed. An approved rollback to v141 restored the previous query pattern.",
+    "services": ["payment-service", "ledger-service"],
+    "tags": ["database_connection_pool_exhaustion", "v142", "ledger", "acquire_timeout"],
+    "updated_at": "2026-07-11T16:40:00Z"
+  },
+  {
+    "uri": "doc://platform/database-pool-capacity",
+    "document_type": "technical_doc",
+    "title": "Database connection pool capacity model",
+    "section": "Operational constraints",
+    "content": "Application pool size multiplied by replica count must remain below the database connection budget. Parallel request fan-out increases concurrent acquisition demand even when request volume is unchanged. Pool wait time and acquisition timeout are leading saturation indicators.",
+    "services": ["payment-service", "order-service", "profile-service"],
+    "tags": ["database", "pool", "capacity", "fan-out"],
+    "updated_at": "2026-05-02T08:00:00Z"
+  },
+  {
+    "uri": "runbook://platform/downstream-timeouts",
+    "document_type": "runbook",
+    "title": "Downstream timeout isolation",
+    "section": "Triage",
+    "content": "Compare dependency p95 latency and timeout rate by edge. Confirm the upstream remains healthy, bound retries, and isolate the single regressing dependency before changing global timeout values.",
+    "services": ["checkout-api", "payment-service", "order-service"],
+    "tags": ["downstream_timeout", "dependency", "trace"],
+    "updated_at": "2026-06-03T10:00:00Z"
+  },
+  {
+    "uri": "incident://INC-2026-027/risk-timeout",
+    "document_type": "past_incident",
+    "title": "Risk engine timeout propagated to checkout",
+    "section": "Root cause",
+    "content": "Risk-engine p95 latency exceeded the checkout client deadline. Checkout retries amplified traffic while unrelated dependencies remained healthy. Disabling retry amplification and restoring risk capacity ended the incident.",
+    "services": ["checkout-api", "risk-engine"],
+    "tags": ["downstream_timeout", "timeout_burst", "single_dependency_regression", "upstream_healthy", "retry", "deadline"],
+    "updated_at": "2026-04-21T13:20:00Z"
+  },
+  {
+    "uri": "runbook://platform/cpu-saturation",
+    "document_type": "runbook",
+    "title": "CPU saturation and throttling",
+    "section": "Diagnosis",
+    "content": "Correlate cpu_utilization, throttled seconds, and request latency. Check whether a new revision changed computational complexity. Restart only for bounded recovery and prefer an approved rollback for a repeatable code regression.",
+    "services": ["risk-engine", "pricing-service", "search-service"],
+    "tags": ["cpu_saturation", "throttling", "latency"],
+    "updated_at": "2026-03-14T07:45:00Z"
+  },
+  {
+    "uri": "incident://INC-2026-019/risk-cpu-regression",
+    "document_type": "past_incident",
+    "title": "Risk ruleset caused CPU throttling",
+    "section": "Resolution",
+    "content": "A ruleset revision increased evaluation complexity and pushed risk-engine near its CPU limit. Container throttling aligned with p95 latency. Rolling back the ruleset removed the regression.",
+    "services": ["risk-engine"],
+    "tags": ["cpu_saturation", "ruleset", "throttling"],
+    "updated_at": "2026-03-16T11:05:00Z"
+  },
+  {
+    "uri": "runbook://platform/memory-growth",
+    "document_type": "runbook",
+    "title": "Monotonic memory growth and OOM recovery",
+    "section": "Mitigation",
+    "content": "Confirm monotonic memory working-set growth across traffic cycles, inspect garbage collection pauses, and identify OOM kills. A restart is temporary containment; roll back the introducing revision after human approval.",
+    "services": ["catalog-service", "profile-service", "notification-service"],
+    "tags": ["memory_leak", "oom", "gc"],
+    "updated_at": "2026-02-25T12:00:00Z"
+  },
+  {
+    "uri": "incident://INC-2026-012/catalog-memory-leak",
+    "document_type": "past_incident",
+    "title": "Catalog cache refresh leaked response buffers",
+    "section": "Root cause",
+    "content": "Catalog memory increased monotonically after the cache refresh deployment. OOM kills and long garbage collection pauses followed. Rollback stopped the leak and stabilized replicas.",
+    "services": ["catalog-service"],
+    "tags": ["memory_leak", "cache", "oom"],
+    "updated_at": "2026-02-28T18:30:00Z"
+  },
+  {
+    "uri": "runbook://delivery/deployment-regression",
+    "document_type": "runbook",
+    "title": "Deployment regression correlation",
+    "section": "Validation",
+    "content": "Align error and latency onset with revision rollout times. Compare old and new revision error rates and run a rollback dry-run. Production rollback requires approval tied to the exact service and revision.",
+    "services": ["payment-service", "checkout-api", "risk-engine"],
+    "tags": ["deployment_regression", "canary", "rollback"],
+    "updated_at": "2026-06-22T06:30:00Z"
+  },
+  {
+    "uri": "incident://INC-2026-036/checkout-regression",
+    "document_type": "past_incident",
+    "title": "Checkout parser regression isolated to new revision",
+    "section": "Evidence",
+    "content": "Errors began with the new checkout revision while the old canary remained healthy. Logs showed a response parser failure. An approved rollback restored the healthy revision.",
+    "services": ["checkout-api"],
+    "tags": ["deployment_regression", "parser", "canary"],
+    "updated_at": "2026-06-25T15:10:00Z"
+  },
+  {
+    "uri": "runbook://streaming/consumer-lag",
+    "document_type": "runbook",
+    "title": "Kafka consumer lag and partition skew",
+    "section": "Triage",
+    "content": "Inspect consumer group lag, consume rate, rebalance events, and lag by partition. A single hot partition needs key-distribution remediation; restarting consumers without evidence can trigger another rebalance.",
+    "services": ["ledger-consumer", "notification-consumer", "fraud-consumer"],
+    "tags": ["kafka_consumer_lag", "partition_skew", "rebalance"],
+    "updated_at": "2026-04-04T04:00:00Z"
+  },
+  {
+    "uri": "incident://INC-2026-023/ledger-hot-partition",
+    "document_type": "past_incident",
+    "title": "Ledger tenant key created a hot Kafka partition",
+    "section": "Root cause",
+    "content": "One high-volume tenant mapped to a single partition. Consumer group lag grew while aggregate consume capacity looked normal. Repartitioning the key distribution removed the skew.",
+    "services": ["ledger-consumer"],
+    "tags": ["kafka_consumer_lag", "hot_partition", "tenant"],
+    "updated_at": "2026-04-08T09:35:00Z"
+  },
+  {
+    "uri": "runbook://resilience/retry-storm",
+    "document_type": "runbook",
+    "title": "Retry storm containment",
+    "section": "Containment",
+    "content": "Measure retry amplification against original request volume and dependency error rate. Apply retry budgets, exponential backoff, and circuit breaking before increasing downstream capacity.",
+    "services": ["payment-service", "checkout-api", "inventory-service"],
+    "tags": ["retry_storm", "backoff", "circuit_breaker"],
+    "updated_at": "2026-05-19T14:00:00Z"
+  },
+  {
+    "uri": "incident://INC-2026-033/inventory-retry-storm",
+    "document_type": "past_incident",
+    "title": "Inventory 5xx responses triggered retry amplification",
+    "section": "Resolution",
+    "content": "A dependency error caused synchronous retries at three layers. Total request volume multiplied and queues grew. Enforcing a shared retry budget contained the incident.",
+    "services": ["inventory-service", "checkout-api"],
+    "tags": ["retry_storm", "dependency_5xx", "queue"],
+    "updated_at": "2026-05-23T17:25:00Z"
+  },
+  {
+    "uri": "runbook://caching/cache-penetration",
+    "document_type": "runbook",
+    "title": "Cache penetration and missing-key protection",
+    "section": "Diagnosis and mitigation",
+    "content": "Correlate cache hit-ratio collapse with database QPS and repeated missing keys. Use negative caching, request coalescing, and bounded bloom-filter protection; do not scale the database before confirming the key pattern.",
+    "services": ["catalog-service", "pricing-service", "profile-service"],
+    "tags": ["cache_penetration", "database_qps", "missing_keys"],
+    "updated_at": "2026-05-30T03:30:00Z"
+  },
+  {
+    "uri": "incident://INC-2026-039/catalog-cache-penetration",
+    "document_type": "past_incident",
+    "title": "Catalog crawler bypassed cache with missing keys",
+    "section": "Root cause",
+    "content": "A crawler generated repeated requests for nonexistent catalog keys. Cache hit ratio collapsed and database QPS spiked. Negative caching and request coalescing restored normal load.",
+    "services": ["catalog-service"],
+    "tags": ["cache_penetration", "crawler", "negative_cache"],
+    "updated_at": "2026-07-02T12:15:00Z"
+  },
+  {
+    "uri": "doc://platform/evidence-correlation",
+    "document_type": "technical_doc",
+    "title": "Incident evidence correlation standard",
+    "section": "Grounding requirements",
+    "content": "A root-cause conclusion must cite at least two independent evidence kinds. Temporal correlation alone is insufficient; include a causal mechanism, conflicting evidence, and a stable source URI for every retrieved document.",
+    "services": ["payment-service", "checkout-api", "risk-engine", "catalog-service"],
+    "tags": ["groundedness", "evidence", "citation"],
+    "updated_at": "2026-07-01T00:00:00Z"
+  }
+]

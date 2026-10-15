@@ -1,0 +1,9 @@
+**
+!Dockerfile
+!LICENSE
+!NOTICE
+!source-lock.json
+!collect-module-notices.go
+!go.mod
+!go.sum
+!dependency-lock-provenance.json

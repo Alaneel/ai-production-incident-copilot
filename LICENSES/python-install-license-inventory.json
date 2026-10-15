@@ -1,0 +1,635 @@
+[
+  {
+    "name": "annotated-doc",
+    "version": "0.0.4",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "annotated_doc-0.0.4.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "annotated-types",
+    "version": "0.7.0",
+    "license": [
+      "License :: OSI Approved :: MIT License"
+    ],
+    "distributed_notice_paths": [
+      "annotated_types-0.7.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "anyio",
+    "version": "4.14.2",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "anyio-4.14.2.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "certifi",
+    "version": "2026.7.22",
+    "license": "MPL-2.0",
+    "distributed_notice_paths": [
+      "certifi-2026.7.22.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "charset-normalizer",
+    "version": "3.4.9",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "charset_normalizer-3.4.9.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "click",
+    "version": "8.4.2",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "click-8.4.2.dist-info/licenses/LICENSE.txt"
+    ]
+  },
+  {
+    "name": "distro",
+    "version": "1.9.0",
+    "license": "Apache License, Version 2.0",
+    "distributed_notice_paths": [
+      "distro-1.9.0.dist-info/LICENSE"
+    ]
+  },
+  {
+    "name": "editables",
+    "version": "0.5",
+    "license": [
+      "License :: OSI Approved :: MIT License"
+    ],
+    "distributed_notice_paths": [
+      "editables-0.5.dist-info/LICENSE.txt"
+    ]
+  },
+  {
+    "name": "fastapi",
+    "version": "0.139.2",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "fastapi-0.139.2.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "googleapis-common-protos",
+    "version": "1.75.5",
+    "license": "Apache-2.0",
+    "distributed_notice_paths": [
+      "googleapis_common_protos-1.75.5.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "h11",
+    "version": "0.16.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "h11-0.16.0.dist-info/licenses/LICENSE.txt"
+    ]
+  },
+  {
+    "name": "hatchling",
+    "version": "1.32.4",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "hatchling-1.32.4.dist-info/licenses/LICENSE.txt",
+      "hatchling/licenses/__init__.py",
+      "hatchling/licenses/supported.py"
+    ]
+  },
+  {
+    "name": "httpcore",
+    "version": "1.0.9",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "httpcore-1.0.9.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
+    "name": "httptools",
+    "version": "0.8.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "httptools-0.8.0.dist-info/licenses/LICENSE",
+      "httptools-0.8.0.dist-info/licenses/vendor/http-parser/LICENSE-MIT",
+      "httptools-0.8.0.dist-info/licenses/vendor/llhttp/LICENSE"
+    ]
+  },
+  {
+    "name": "httpx",
+    "version": "0.28.1",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "httpx-0.28.1.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
+    "name": "idna",
+    "version": "3.18",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "idna-3.18.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
+    "name": "incident-copilot-mcp-server",
+    "version": "0.2.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "incident_copilot_mcp_server-0.2.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "incident-copilot-orchestrator",
+    "version": "0.2.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "incident_copilot_orchestrator-0.2.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "incident-fault-lab",
+    "version": "0.1.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "incident_fault_lab-0.1.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "iniconfig",
+    "version": "2.3.1",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "iniconfig-2.3.1.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "jsonpatch",
+    "version": "1.33",
+    "license": "Modified BSD License",
+    "distributed_notice_paths": [
+      "jsonpatch-1.33.dist-info/LICENSE"
+    ]
+  },
+  {
+    "name": "jsonpointer",
+    "version": "3.1.1",
+    "license": "Modified BSD License",
+    "distributed_notice_paths": [
+      "jsonpointer-3.1.1.dist-info/licenses/AUTHORS",
+      "jsonpointer-3.1.1.dist-info/licenses/LICENSE.txt"
+    ]
+  },
+  {
+    "name": "langchain-core",
+    "version": "1.5.0",
+    "license": "MIT",
+    "distributed_notice_paths": []
+  },
+  {
+    "name": "langchain-protocol",
+    "version": "0.0.18",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "langchain_protocol-0.0.18.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "langgraph",
+    "version": "1.2.9",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "langgraph-1.2.9.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "langgraph-checkpoint",
+    "version": "4.1.1",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "langgraph_checkpoint-4.1.1.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "langgraph-checkpoint-postgres",
+    "version": "3.1.1",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "langgraph_checkpoint_postgres-3.1.1.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "langgraph-prebuilt",
+    "version": "1.1.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "langgraph_prebuilt-1.1.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "langgraph-sdk",
+    "version": "0.4.4",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "langgraph_sdk-0.4.4.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "langsmith",
+    "version": "0.10.10",
+    "license": "MIT",
+    "distributed_notice_paths": []
+  },
+  {
+    "name": "opentelemetry-api",
+    "version": "1.44.0",
+    "license": "Apache-2.0",
+    "distributed_notice_paths": [
+      "opentelemetry_api-1.44.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "opentelemetry-exporter-otlp-proto-common",
+    "version": "1.44.0",
+    "license": "Apache-2.0",
+    "distributed_notice_paths": [
+      "opentelemetry_exporter_otlp_proto_common-1.44.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "opentelemetry-exporter-otlp-proto-http",
+    "version": "1.44.0",
+    "license": "Apache-2.0",
+    "distributed_notice_paths": [
+      "opentelemetry_exporter_otlp_proto_http-1.44.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "opentelemetry-proto",
+    "version": "1.44.0",
+    "license": "Apache-2.0",
+    "distributed_notice_paths": [
+      "opentelemetry_proto-1.44.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "opentelemetry-sdk",
+    "version": "1.44.0",
+    "license": "Apache-2.0",
+    "distributed_notice_paths": [
+      "opentelemetry_sdk-1.44.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "opentelemetry-semantic-conventions",
+    "version": "0.65b0",
+    "license": "Apache-2.0",
+    "distributed_notice_paths": [
+      "opentelemetry_semantic_conventions-0.65b0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "orjson",
+    "version": "3.11.9",
+    "license": "MPL-2.0 AND (Apache-2.0 OR MIT)",
+    "distributed_notice_paths": [
+      "orjson-3.11.9.dist-info/licenses/LICENSE-APACHE",
+      "orjson-3.11.9.dist-info/licenses/LICENSE-MIT",
+      "orjson-3.11.9.dist-info/licenses/LICENSE-MPL-2.0"
+    ]
+  },
+  {
+    "name": "ormsgpack",
+    "version": "1.12.2",
+    "license": "Apache-2.0 OR MIT",
+    "distributed_notice_paths": [
+      "ormsgpack-1.12.2.dist-info/licenses/LICENSE-APACHE",
+      "ormsgpack-1.12.2.dist-info/licenses/LICENSE-MIT"
+    ]
+  },
+  {
+    "name": "packaging",
+    "version": "26.2",
+    "license": "Apache-2.0 OR BSD-2-Clause",
+    "distributed_notice_paths": [
+      "packaging-26.2.dist-info/licenses/LICENSE",
+      "packaging-26.2.dist-info/licenses/LICENSE.APACHE",
+      "packaging-26.2.dist-info/licenses/LICENSE.BSD",
+      "packaging/licenses/__init__.py",
+      "packaging/licenses/_spdx.py"
+    ]
+  },
+  {
+    "name": "pathspec",
+    "version": "1.1.1",
+    "license": [
+      "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
+    ],
+    "distributed_notice_paths": [
+      "pathspec-1.1.1.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "pip",
+    "version": "26.2.1",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "pip-26.2.1.dist-info/licenses/AUTHORS.txt",
+      "pip-26.2.1.dist-info/licenses/LICENSE.txt",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/cachecontrol/LICENSE.txt",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/certifi/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/distlib/LICENSE.txt",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/distro/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/idna/LICENSE.md",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/msgpack/COPYING",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/packaging/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.APACHE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.BSD",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/pkg_resources/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/platformdirs/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/pygments/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/pyproject_hooks/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/requests/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/resolvelib/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/rich/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/tomli/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/tomli_w/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/truststore/LICENSE",
+      "pip-26.2.1.dist-info/licenses/src/pip/_vendor/urllib3/LICENSE.txt",
+      "pip/_vendor/cachecontrol/LICENSE.txt",
+      "pip/_vendor/certifi/LICENSE",
+      "pip/_vendor/distlib/LICENSE.txt",
+      "pip/_vendor/distro/LICENSE",
+      "pip/_vendor/idna/LICENSE.md",
+      "pip/_vendor/msgpack/COPYING",
+      "pip/_vendor/packaging/LICENSE",
+      "pip/_vendor/packaging/LICENSE.APACHE",
+      "pip/_vendor/packaging/LICENSE.BSD",
+      "pip/_vendor/packaging/licenses/__init__.py",
+      "pip/_vendor/packaging/licenses/_spdx.py",
+      "pip/_vendor/pkg_resources/LICENSE",
+      "pip/_vendor/platformdirs/LICENSE",
+      "pip/_vendor/pygments/LICENSE",
+      "pip/_vendor/pyproject_hooks/LICENSE",
+      "pip/_vendor/requests/LICENSE",
+      "pip/_vendor/resolvelib/LICENSE",
+      "pip/_vendor/rich/LICENSE",
+      "pip/_vendor/tomli/LICENSE",
+      "pip/_vendor/tomli_w/LICENSE",
+      "pip/_vendor/truststore/LICENSE",
+      "pip/_vendor/urllib3/LICENSE.txt"
+    ]
+  },
+  {
+    "name": "pluggy",
+    "version": "1.6.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "pluggy-1.6.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "prometheus_client",
+    "version": "0.25.0",
+    "license": "Apache-2.0 AND BSD-2-Clause",
+    "distributed_notice_paths": [
+      "prometheus_client-0.25.0.dist-info/licenses/LICENSE",
+      "prometheus_client-0.25.0.dist-info/licenses/NOTICE"
+    ]
+  },
+  {
+    "name": "protobuf",
+    "version": "7.36.2",
+    "license": "3-Clause BSD License",
+    "distributed_notice_paths": [
+      "protobuf-7.36.2.dist-info/LICENSE"
+    ]
+  },
+  {
+    "name": "psycopg",
+    "version": "3.3.4",
+    "license": "LGPL-3.0-only",
+    "distributed_notice_paths": [
+      "psycopg-3.3.4.dist-info/licenses/LICENSE.txt"
+    ]
+  },
+  {
+    "name": "psycopg-binary",
+    "version": "3.3.4",
+    "license": "LGPL-3.0-only",
+    "distributed_notice_paths": [
+      "psycopg_binary-3.3.4.dist-info/licenses/LICENSE.txt"
+    ]
+  },
+  {
+    "name": "psycopg-pool",
+    "version": "3.3.1",
+    "license": "LGPL-3.0-only",
+    "distributed_notice_paths": [
+      "psycopg_pool-3.3.1.dist-info/licenses/LICENSE.txt"
+    ]
+  },
+  {
+    "name": "pydantic",
+    "version": "2.13.4",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "pydantic-2.13.4.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "pydantic_core",
+    "version": "2.46.4",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "pydantic_core-2.46.4.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "Pygments",
+    "version": "2.21.0",
+    "license": "BSD-2-Clause",
+    "distributed_notice_paths": [
+      "pygments-2.21.0.dist-info/licenses/AUTHORS",
+      "pygments-2.21.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "pytest",
+    "version": "9.0.3",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "pytest-9.0.3.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "python-dotenv",
+    "version": "1.2.2",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "python_dotenv-1.2.2.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "PyYAML",
+    "version": "6.0.3",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "pyyaml-6.0.3.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "redis",
+    "version": "6.4.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "redis-6.4.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "requests",
+    "version": "2.34.2",
+    "license": "Apache-2.0",
+    "distributed_notice_paths": [
+      "requests-2.34.2.dist-info/licenses/LICENSE",
+      "requests-2.34.2.dist-info/licenses/NOTICE"
+    ]
+  },
+  {
+    "name": "requests-toolbelt",
+    "version": "1.0.0",
+    "license": "Apache 2.0",
+    "distributed_notice_paths": [
+      "requests_toolbelt-1.0.0.dist-info/LICENSE"
+    ]
+  },
+  {
+    "name": "sniffio",
+    "version": "1.3.1",
+    "license": "MIT OR Apache-2.0",
+    "distributed_notice_paths": [
+      "sniffio-1.3.1.dist-info/LICENSE",
+      "sniffio-1.3.1.dist-info/LICENSE.APACHE2",
+      "sniffio-1.3.1.dist-info/LICENSE.MIT"
+    ]
+  },
+  {
+    "name": "starlette",
+    "version": "1.3.1",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "starlette-1.3.1.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
+    "name": "tenacity",
+    "version": "9.1.4",
+    "license": "Apache 2.0",
+    "distributed_notice_paths": [
+      "tenacity-9.1.4.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "tomlkit",
+    "version": "0.15.1",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "tomlkit-0.15.1.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "trove-classifiers",
+    "version": "2026.9.21.13",
+    "license": [
+      "License :: OSI Approved :: Apache Software License"
+    ],
+    "distributed_notice_paths": [
+      "trove_classifiers-2026.9.21.13.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "typing-inspection",
+    "version": "0.4.2",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "typing_inspection-0.4.2.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "typing_extensions",
+    "version": "4.16.0",
+    "license": "PSF-2.0",
+    "distributed_notice_paths": [
+      "typing_extensions-4.16.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "urllib3",
+    "version": "2.8.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "urllib3-2.8.0.dist-info/licenses/LICENSE.txt"
+    ]
+  },
+  {
+    "name": "uuid_utils",
+    "version": "0.17.0",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "uuid_utils-0.17.0.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
+    "name": "uvicorn",
+    "version": "0.51.0",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "uvicorn-0.51.0.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
+    "name": "uvloop",
+    "version": "0.22.1",
+    "license": "MIT License",
+    "distributed_notice_paths": [
+      "uvloop-0.22.1.dist-info/licenses/LICENSE-APACHE",
+      "uvloop-0.22.1.dist-info/licenses/LICENSE-MIT"
+    ]
+  },
+  {
+    "name": "watchfiles",
+    "version": "1.2.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "watchfiles-1.2.0.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "websockets",
+    "version": "15.0.1",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "websockets-15.0.1.dist-info/LICENSE"
+    ]
+  },
+  {
+    "name": "xxhash",
+    "version": "3.8.1",
+    "license": "BSD-2-Clause",
+    "distributed_notice_paths": [
+      "xxhash-3.8.1.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "zstandard",
+    "version": "0.25.0",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "zstandard-0.25.0.dist-info/licenses/LICENSE"
+    ]
+  }
+]

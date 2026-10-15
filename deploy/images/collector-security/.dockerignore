@@ -1,0 +1,10 @@
+**
+!Dockerfile
+!LICENSE
+!builder-config.yaml
+!collect-module-notices.go
+!go.mod
+!go.sum
+!generated
+!generated/*.go
+!generated-source-manifest.json

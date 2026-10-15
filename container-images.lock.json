@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "resolution_date_utc": "2026-10-14",
+  "base_images": {
+    "python": "python:3.13.16-slim-trixie@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f",
+    "go": "golang:1.26.9-alpine@sha256:3082400e369fa24d5fc60bca20edab3f6d604e0c5a690ec66b295eff4dd87ade",
+    "gateway_runtime": "gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab"
+  },
+  "note": "Digests bind manifests, not a security guarantee; see release validation.",
+  "compose_service_images": {
+    "docker-compose.yml": [
+      "opspilot-postgres:17.11-security-20261013",
+      "opspilot-redis:7.4.11-security-20261013"
+    ],
+    "compose.fault-lab.yml": [
+      "opspilot-prometheus:3.15.0-security-20261014",
+      "opspilot-loki:3.7.8-security-20261014",
+      "opspilot-tempo:2.10.8-security-20261014",
+      "opspilot-collector:0.162.0-security-20261014",
+      "opspilot-grafana:12.4.13-security-20261014"
+    ],
+    "compose.real-pool.yml": [
+      "opspilot-postgres:17.11-security-20261013",
+      "incident-copilot/fault-lab:real-pool"
+    ]
+  },
+  "python_runtime_security_packages": {
+    "liblzma5": "5.8.1-1+deb13u2"
+  },
+  "runtime_installers_removed": [
+    "pip (global base and venv)",
+    "hatchling",
+    "editables",
+    "pathspec",
+    "pluggy",
+    "tomlkit",
+    "trove-classifiers"
+  ],
+  "kind_node_image": "kindest/node:v1.36.1@sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5",
+  "postgres_security_derivative": {
+    "local_image_tag": "opspilot-postgres:17.11-security-20261013",
+    "context": "deploy/images/postgres-security",
+    "immutable_parent": "postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+    "gosu_version": "1.19",
+    "gosu_compiler": "go1.26.9",
+    "moby_user_version": "0.4.1",
+    "zlib_version": "1.3.2-r1",
+    "verified_local_linux_arm64_image_id": "sha256:dbbcf11a55e5f51d2cde3e5b49b12d98ab7ccc839c5e79cf780d24a2d54bf4bd"
+  },
+  "redis_security_derivative": {
+    "local_image_tag": "opspilot-redis:7.4.11-security-20261013",
+    "context": "deploy/images/redis-security",
+    "immutable_parent": "redis:7.4.11-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499",
+    "server_version": "7.4.11",
+    "alpine_branch": "3.21",
+    "openssl_version": "3.3.7-r2",
+    "zlib_version": "1.3.2-r1",
+    "verified_local_linux_arm64_image_id": "sha256:cf899dc251f3311931b823b9b2d7093af5d5a202e76615c879e935570a599aaf",
+    "upstream_license": "RSALv2 or SSPLv1, separate from first-party MIT",
+    "alpine_main_support_end": "2026-11-01"
+  },
+  "go_observability_derivatives": {
+    "collector": {
+      "local_image_tag": "opspilot-collector:0.162.0-security-20261014",
+      "context": "deploy/images/collector-security",
+      "immutable_parent": "otel/opentelemetry-collector-contrib:0.162.0@sha256:39923a8e431bd1f57be82411999d389fcfe40857492e4365456d97a4c1f74be6",
+      "version": "0.162.0",
+      "verified_local_linux_arm64_image_id": "sha256:596a2d48675d0bb22aacf3c1de3c6d7e478f89b1339e98414bedaff95819644a",
+      "lock_sha256": {
+        "go.mod": "182198eaee3c0fa2594fa55d14cdb3a63ee3b61aeb35498116f94a67d66e41bb",
+        "go.sum": "5a930bad6574a39bdf87f094fb2e557fb5615b8df10e86f0833cd1f542bf5ffb"
+      },
+      "native_compiler": "go1.26.9",
+      "license_scope": "Third-party upstream terms, separate from first-party MIT"
+    },
+    "tempo": {
+      "local_image_tag": "opspilot-tempo:2.10.8-security-20261014",
+      "context": "deploy/images/tempo-security",
+      "immutable_parent": "grafana/tempo:2.10.8@sha256:f0561deb1c68ec44d6e6e7e4487f30106c4e5e768642077695b37958b105812a",
+      "version": "2.10.8",
+      "verified_local_linux_arm64_image_id": "sha256:6b66ede64bcf30c2b03f3572b6e161d1abdbfe9087f5caba72ccbd26d6edaf8d",
+      "lock_sha256": {
+        "go.mod": "7da36745bda2cc5241ebc440baba9763de99cb4b63042387e4dd65aadcd3f58f",
+        "go.sum": "bd3efdbd44e063f95bce966651a35b722242b444c1ffb0a2536dd377109f706a"
+      },
+      "native_compiler": "go1.26.9",
+      "license_scope": "Third-party upstream terms, separate from first-party MIT"
+    },
+    "prometheus": {
+      "local_image_tag": "opspilot-prometheus:3.15.0-security-20261014",
+      "context": "deploy/images/prometheus-security",
+      "immutable_parent": "prom/prometheus:v3.15.0@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e",
+      "version": "3.15.0",
+      "verified_local_linux_arm64_image_id": "sha256:06bd6cc46bce2a325675c6e09804b1684aaa6c315f3eb59d3230c6879e971a60",
+      "lock_sha256": {
+        "go.mod": "d85af091d5bf9ba19f98e4d92e24b368d3e5537af086521ef10c7dd669695fd7",
+        "go.sum": "eaeb5e4f16a9edcab1aeeb2b1a90a0f85decbd0065b3bf63e03729d324f7fc1f"
+      },
+      "native_compiler": "go1.27.2",
+      "license_scope": "Third-party upstream terms, separate from first-party MIT"
+    },
+    "loki": {
+      "local_image_tag": "opspilot-loki:3.7.8-security-20261014",
+      "context": "deploy/images/loki-security",
+      "immutable_parent": "grafana/loki:3.7.8@sha256:1107dd5274e0ada47e42472b7a7e71f3b2a2fe878878108f3e2f9e51528f0193",
+      "version": "3.7.8",
+      "verified_local_linux_arm64_image_id": "sha256:bb4c86a5746a6865cd71a2660808c4208f483a30d4561e1124210cd8fd036b20",
+      "lock_sha256": {
+        "go.mod": "ede0678aab73dc43e810b1112ae2fd3960363394b1eec64f48fb4f96925f14e6",
+        "go.sum": "7df86b4b54b6a8f9532d9ad3035681e5bc8548f83fc1c14fe9ae5a23b021a881"
+      },
+      "native_compiler": "go1.26.9",
+      "license_scope": "Third-party upstream terms, separate from first-party MIT"
+    }
+  },
+  "grafana_security_derivative": {
+    "local_image_tag": "opspilot-grafana:12.4.13-security-20261014",
+    "context": "deploy/images/grafana-security",
+    "immutable_parent": "grafana/grafana:12.4.13@sha256:41bbc1b5e04416f81891806076db2a2ff60a5d4da5f78d36a88b033a8c199185",
+    "version": "12.4.13",
+    "zlib_version": "1.3.2-r1",
+    "verified_local_linux_arm64_image_id": "sha256:4d65f19d24dee13d160effc33d991e442f7d5a746c775fdea3ec778d8321a0ab",
+    "same_upstream_elf_sha256": "770ae442d2f86cc06787b114e04248d6a465a28cf36ec1882b42b15fdb7a3122",
+    "license_scope": "Upstream AGPL, separate from first-party MIT"
+  }
+}

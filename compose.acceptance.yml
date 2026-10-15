@@ -1,0 +1,40 @@
+# Final overlay for the isolated, model-free Compose acceptance runner.
+# Never launch directly against an existing project.
+services:
+  orchestrator:
+    image: ${ACCEPTANCE_ORCHESTRATOR_IMAGE:?Resolve a local image ID}
+    ports: !reset []
+    environment:
+      OPENAI_API_KEY: ""
+      OPENAI_MODEL: ""
+      ORCHESTRATOR_AUTH_MODE: required
+  mcp-server:
+    image: ${ACCEPTANCE_MCP_IMAGE:?Resolve a local image ID}
+    ports: !reset []
+  telemetry-gateway:
+    image: ${ACCEPTANCE_GATEWAY_IMAGE:?Resolve a local image ID}
+    ports: !reset []
+  checkout-api:
+    image: ${ACCEPTANCE_LAB_IMAGE:?Resolve a local image ID}
+    ports: !reset []
+  payment-service:
+    image: ${ACCEPTANCE_LAB_IMAGE:?Resolve a local image ID}
+    ports: !reset []
+  ledger-service:
+    image: ${ACCEPTANCE_LAB_IMAGE:?Resolve a local image ID}
+    ports: !reset []
+  risk-engine:
+    image: ${ACCEPTANCE_LAB_IMAGE:?Resolve a local image ID}
+    ports: !reset []
+  traffic-generator:
+    image: ${ACCEPTANCE_LAB_IMAGE:?Resolve a local image ID}
+  prometheus:
+    ports: !reset []
+  loki:
+    ports: !reset []
+  tempo:
+    ports: !reset []
+  otel-collector:
+    ports: !reset []
+  grafana:
+    ports: !reset []

@@ -1,0 +1,32 @@
+{
+  "component": "prometheus",
+  "upstream_repo": "prometheus/prometheus",
+  "version": "v3.15.0",
+  "commit": "5241a27fe3c6983549fccc32f6e65917408c63cd",
+  "source_url": "https://api.github.com/repos/prometheus/prometheus/tarball/5241a27fe3c6983549fccc32f6e65917408c63cd",
+  "source_sha256": "86915195a800d177ed905100e1e9da642ca625dcecbd7d9806f34ba94485ab3b",
+  "archive_bytes": 6160519,
+  "verified_at": "2026-10-13T20:31:44.876135+00:00",
+  "authentication_scope": "official GitHub TLS + immutable commit/SHA pin, no independent cryptographic signature claim",
+  "compiler_image": "golang:1.27.2-alpine@sha256:f92b6ef800e499660581efdabdf25d9d817a9d124eaf900924f0504e7e27e12d",
+  "parent_image": "prom/prometheus:v3.15.0@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e",
+  "security_module_pins": [
+    "golang.org/x/net@v0.60.0"
+  ],
+  "status": "PREPARED NOT BUILT",
+  "ui_asset": {
+    "version": "3.15.0",
+    "release_url": "https://github.com/prometheus/prometheus/releases/tag/v3.15.0",
+    "url": "https://github.com/prometheus/prometheus/releases/download/v3.15.0/prometheus-web-ui-3.15.0.tar.gz",
+    "sha256": "fa8c918ed05e3f89e232e9b69eccd6ed074602cd9e8a2cab7a92bec9651974ae",
+    "bytes": 3343738,
+    "checksum_url": "https://github.com/prometheus/prometheus/releases/download/v3.15.0/sha256sums.txt",
+    "checksum_list_sha256": "023cab1e6b275ee1b8f5f64215a01d74bbb1b19c45183b7296ced4aa4532707b",
+    "contains": [
+      "mantine-ui",
+      "react-app"
+    ],
+    "scope": "Official published asset+upstream checksum+GitHub API asset digest; no independent signature claim",
+    "verified_at_utc": "2026-10-14T12:57:15.296821+00:00"
+  }
+}

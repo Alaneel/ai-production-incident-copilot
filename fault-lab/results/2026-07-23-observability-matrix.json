@@ -1,0 +1,20 @@
+{
+  "run_at": "2026-07-23T08:56:00Z",
+  "stack": {
+    "prometheus": "3.12.0",
+    "loki": "3.7.0",
+    "tempo": "2.10.5",
+    "grafana": "12.4.0",
+    "otel_collector": "0.147.0"
+  },
+  "results": [
+    {"scenario": "db-pool-exhaustion", "service": "payment-service", "metric": "request_latency_p95", "metric_points": 49, "log_events": 50, "passed": true},
+    {"scenario": "downstream-timeout", "service": "ledger-service", "metric": "request_latency_p95", "metric_points": 53, "log_events": 8, "passed": true},
+    {"scenario": "cpu-spike", "service": "risk-engine", "metric": "cpu_load", "metric_points": 13, "log_events": 0, "passed": true},
+    {"scenario": "memory-leak", "service": "payment-service", "metric": "request_latency_p95", "metric_points": 55, "log_events": 50, "passed": true},
+    {"scenario": "deployment-regression", "service": "payment-service", "metric": "error_rate", "metric_points": 54, "log_events": 12, "passed": true},
+    {"scenario": "kafka-consumer-lag", "service": "ledger-service", "metric": "kafka_consumer_lag", "metric_points": 20, "log_events": 18, "passed": true},
+    {"scenario": "retry-storm", "service": "checkout-api", "metric": "request_latency_p95", "metric_points": 58, "log_events": 50, "passed": true},
+    {"scenario": "cache-penetration", "service": "payment-service", "metric": "db_pool_utilization", "metric_points": 63, "log_events": 50, "passed": true}
+  ]
+}

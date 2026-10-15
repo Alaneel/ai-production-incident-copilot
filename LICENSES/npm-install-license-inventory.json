@@ -1,0 +1,3002 @@
+[
+  {
+    "name": "@alloc/quick-lru",
+    "version": "5.3.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/code-frame",
+    "version": "7.29.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/compat-data",
+    "version": "7.29.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/core",
+    "version": "7.29.6",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/generator",
+    "version": "7.29.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/helper-compilation-targets",
+    "version": "7.29.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/helper-globals",
+    "version": "7.29.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/helper-module-imports",
+    "version": "7.29.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/helper-module-transforms",
+    "version": "7.29.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/helper-string-parser",
+    "version": "7.29.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/helper-validator-identifier",
+    "version": "7.29.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/helper-validator-option",
+    "version": "7.29.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/helpers",
+    "version": "7.29.10",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/parser",
+    "version": "7.29.9",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/template",
+    "version": "7.29.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/traverse",
+    "version": "7.29.10",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@babel/types",
+    "version": "7.29.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@cloudflare/kv-asset-handler",
+    "version": "0.5.0",
+    "license": "MIT OR Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@cloudflare/unenv-preset",
+    "version": "2.16.2",
+    "license": "MIT OR Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@cloudflare/vite-plugin",
+    "version": "1.63.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@cloudflare/workerd-darwin-arm64",
+    "version": "1.20261006.1",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@cspotcode/source-map-support",
+    "version": "0.8.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@drizzle-team/brocli",
+    "version": "0.10.2",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@emnapi/core",
+    "version": "1.10.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@emnapi/runtime",
+    "version": "1.11.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@emnapi/wasi-threads",
+    "version": "1.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@esbuild-kit/core-utils",
+    "version": "3.3.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@esbuild-kit/esm-loader",
+    "version": "2.6.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@esbuild/darwin-arm64",
+    "version": "0.28.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@eslint-community/eslint-utils",
+    "version": "4.10.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@eslint-community/eslint-utils",
+    "version": "4.9.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@eslint-community/regexpp",
+    "version": "4.12.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@eslint/config-array",
+    "version": "0.21.2",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@eslint/config-helpers",
+    "version": "0.4.2",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@eslint/core",
+    "version": "0.17.0",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@eslint/eslintrc",
+    "version": "3.3.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@eslint/js",
+    "version": "9.39.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@eslint/object-schema",
+    "version": "2.1.7",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@eslint/plugin-kit",
+    "version": "0.4.1",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@humanfs/core",
+    "version": "0.19.2",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@humanfs/node",
+    "version": "0.16.8",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@humanfs/types",
+    "version": "0.15.0",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@humanwhocodes/module-importer",
+    "version": "1.0.1",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@humanwhocodes/retry",
+    "version": "0.4.3",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@img/colour",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@img/sharp-darwin-arm64",
+    "version": "0.35.5",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@img/sharp-libvips-darwin-arm64",
+    "version": "1.3.4",
+    "license": "LGPL-3.0-or-later",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@img/sharp-wasm32",
+    "version": "0.35.5",
+    "license": "Apache-2.0 AND LGPL-3.0-or-later AND MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@jridgewell/gen-mapping",
+    "version": "0.3.13",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@jridgewell/remapping",
+    "version": "2.3.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@jridgewell/resolve-uri",
+    "version": "3.1.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@jridgewell/source-map",
+    "version": "0.3.11",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@jridgewell/sourcemap-codec",
+    "version": "1.6.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@jridgewell/trace-mapping",
+    "version": "0.3.31",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@jridgewell/trace-mapping",
+    "version": "0.3.9",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@napi-rs/wasm-runtime",
+    "version": "1.2.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@next/env",
+    "version": "16.4.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@next/eslint-plugin-next",
+    "version": "16.4.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@next/swc-darwin-arm64",
+    "version": "16.4.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@nodelib/fs.scandir",
+    "version": "2.1.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@nodelib/fs.stat",
+    "version": "2.0.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@nodelib/fs.walk",
+    "version": "1.2.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@nolyfill/is-core-module",
+    "version": "1.0.39",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@oxc-project/types",
+    "version": "0.153.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@poppinss/colors",
+    "version": "4.1.6",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@poppinss/dumper",
+    "version": "0.6.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@poppinss/exception",
+    "version": "1.2.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@resvg/resvg-wasm",
+    "version": "2.4.1",
+    "license": "MPL-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@rolldown/binding-darwin-arm64",
+    "version": "1.2.13",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@rolldown/pluginutils",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@rtsao/scc",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@shuding/opentype.js",
+    "version": "1.4.0-beta.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@sindresorhus/is",
+    "version": "7.2.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@speed-highlight/core",
+    "version": "1.2.24",
+    "license": "CC0-1.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@swc/helpers",
+    "version": "0.5.23",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@tailwindcss/node",
+    "version": "4.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@tailwindcss/oxide",
+    "version": "4.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@tailwindcss/oxide-darwin-arm64",
+    "version": "4.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@tailwindcss/postcss",
+    "version": "4.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@tybys/wasm-util",
+    "version": "0.10.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@types/estree",
+    "version": "1.0.9",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@types/json-schema",
+    "version": "7.0.15",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@types/json5",
+    "version": "0.0.29",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@types/node",
+    "version": "22.19.19",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@types/react",
+    "version": "19.2.14",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@types/react-dom",
+    "version": "19.2.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@typescript-eslint/eslint-plugin",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@typescript-eslint/parser",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@typescript-eslint/project-service",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@typescript-eslint/scope-manager",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@typescript-eslint/tsconfig-utils",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@typescript-eslint/type-utils",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@typescript-eslint/types",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@typescript-eslint/typescript-estree",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@typescript-eslint/utils",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@typescript-eslint/visitor-keys",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@unpic/core",
+    "version": "1.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@unpic/react",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@unrs/resolver-binding-darwin-arm64",
+    "version": "1.12.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@vercel/og",
+    "version": "1.0.3",
+    "license": "MPL-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@vinext/types",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@vitejs/plugin-react",
+    "version": "6.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@vitejs/plugin-rsc",
+    "version": "0.5.37",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/ast",
+    "version": "1.14.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/floating-point-hex-parser",
+    "version": "1.13.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/helper-api-error",
+    "version": "1.13.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/helper-buffer",
+    "version": "1.14.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/helper-numbers",
+    "version": "1.13.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/helper-wasm-bytecode",
+    "version": "1.13.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/helper-wasm-section",
+    "version": "1.14.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/ieee754",
+    "version": "1.13.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/leb128",
+    "version": "1.13.2",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/utf8",
+    "version": "1.13.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/wasm-edit",
+    "version": "1.14.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/wasm-gen",
+    "version": "1.14.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/wasm-opt",
+    "version": "1.14.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/wasm-parser",
+    "version": "1.14.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@webassemblyjs/wast-printer",
+    "version": "1.14.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@xtuc/ieee754",
+    "version": "1.2.0",
+    "license": "BSD-3-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "@xtuc/long",
+    "version": "4.2.2",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "acorn",
+    "version": "8.19.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "acorn-jsx",
+    "version": "5.3.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "acorn-loose",
+    "version": "8.5.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ajv",
+    "version": "6.15.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ajv",
+    "version": "8.20.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ajv",
+    "version": "8.20.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ajv-formats",
+    "version": "3.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ajv-keywords",
+    "version": "5.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ansi-styles",
+    "version": "4.3.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "argparse",
+    "version": "2.0.1",
+    "license": "Python-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "aria-query",
+    "version": "5.3.2",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "array-buffer-byte-length",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "array-includes",
+    "version": "3.2.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "array.prototype.findlast",
+    "version": "1.2.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "array.prototype.findlastindex",
+    "version": "1.2.6",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "array.prototype.flat",
+    "version": "1.3.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "array.prototype.flatmap",
+    "version": "1.3.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "array.prototype.tosorted",
+    "version": "1.1.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "arraybuffer.prototype.slice",
+    "version": "1.0.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ast-types-flow",
+    "version": "0.0.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "async-function",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "available-typed-arrays",
+    "version": "1.0.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "axe-core",
+    "version": "4.14.0",
+    "license": "MPL-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "axobject-query",
+    "version": "4.1.0",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "balanced-match",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "balanced-match",
+    "version": "4.0.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "base64-js",
+    "version": "0.0.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "baseline-browser-mapping",
+    "version": "2.11.28",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "blake3-wasm",
+    "version": "2.1.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "brace-expansion",
+    "version": "1.1.21",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "brace-expansion",
+    "version": "5.0.12",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "braces",
+    "version": "3.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "browserslist",
+    "version": "4.29.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "buffer-from",
+    "version": "1.1.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "call-bind",
+    "version": "1.0.9",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "call-bind-apply-helpers",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "call-bound",
+    "version": "1.0.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "callsites",
+    "version": "3.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "camelize",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "caniuse-lite",
+    "version": "1.0.30001816",
+    "license": "CC-BY-4.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "chalk",
+    "version": "4.1.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "chrome-trace-event",
+    "version": "1.0.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "client-only",
+    "version": "0.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "color-convert",
+    "version": "2.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "color-name",
+    "version": "1.1.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "commander",
+    "version": "2.20.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "concat-map",
+    "version": "0.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "convert-source-map",
+    "version": "2.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "cookie",
+    "version": "1.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "cross-spawn",
+    "version": "7.0.6",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "css-background-parser",
+    "version": "0.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "css-box-shadow",
+    "version": "1.0.0-3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "css-color-keywords",
+    "version": "1.0.0",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "css-gradient-parser",
+    "version": "0.0.17",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "css-to-react-native",
+    "version": "3.2.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "csstype",
+    "version": "3.2.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "damerau-levenshtein",
+    "version": "1.0.8",
+    "license": "BSD-2-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "data-view-buffer",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "data-view-byte-length",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "data-view-byte-offset",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "debug",
+    "version": "3.2.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "debug",
+    "version": "3.2.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "debug",
+    "version": "3.2.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "debug",
+    "version": "4.4.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "deep-is",
+    "version": "0.1.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "define-data-property",
+    "version": "1.1.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "define-properties",
+    "version": "1.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "detect-libc",
+    "version": "2.1.2",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "doctrine",
+    "version": "2.1.0",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "drizzle-kit",
+    "version": "0.31.11",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "drizzle-orm",
+    "version": "0.45.2",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "dunder-proto",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "electron-to-chromium",
+    "version": "1.5.453",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "emoji-regex",
+    "version": "9.2.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "emoji-regex-xs",
+    "version": "2.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "enhanced-resolve",
+    "version": "5.26.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "error-stack-parser-es",
+    "version": "1.0.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-abstract",
+    "version": "1.24.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-abstract-get",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-define-property",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-errors",
+    "version": "1.3.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-iterator-helpers",
+    "version": "1.4.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-module-lexer",
+    "version": "1.7.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-module-lexer",
+    "version": "2.3.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-module-lexer",
+    "version": "3.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-object-atoms",
+    "version": "1.1.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-set-tostringtag",
+    "version": "2.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-shim-unscopables",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "es-to-primitive",
+    "version": "1.3.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "esbuild",
+    "version": "0.28.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "escalade",
+    "version": "3.2.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "escape-html",
+    "version": "1.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "escape-string-regexp",
+    "version": "4.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint",
+    "version": "9.39.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-config-next",
+    "version": "16.4.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-import-resolver-node",
+    "version": "0.3.10",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-import-resolver-typescript",
+    "version": "3.10.1",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-module-utils",
+    "version": "2.14.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-plugin-import",
+    "version": "2.32.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-plugin-jsx-a11y",
+    "version": "6.10.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-plugin-react",
+    "version": "7.37.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-plugin-react-hooks",
+    "version": "7.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-scope",
+    "version": "8.4.0",
+    "license": "BSD-2-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-visitor-keys",
+    "version": "3.4.3",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-visitor-keys",
+    "version": "3.4.3",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-visitor-keys",
+    "version": "4.2.1",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "eslint-visitor-keys",
+    "version": "5.0.1",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "espree",
+    "version": "10.4.0",
+    "license": "BSD-2-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "esquery",
+    "version": "1.7.0",
+    "license": "BSD-3-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "esrecurse",
+    "version": "4.3.0",
+    "license": "BSD-2-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "estraverse",
+    "version": "5.3.0",
+    "license": "BSD-2-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "estree-walker",
+    "version": "3.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "esutils",
+    "version": "2.0.3",
+    "license": "BSD-2-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "events",
+    "version": "3.3.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fast-deep-equal",
+    "version": "3.1.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fast-glob",
+    "version": "3.3.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fast-glob",
+    "version": "3.3.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fast-json-stable-stringify",
+    "version": "2.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fast-levenshtein",
+    "version": "2.0.6",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fast-uri",
+    "version": "3.1.8",
+    "license": "BSD-3-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fastq",
+    "version": "1.20.3",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fdir",
+    "version": "6.5.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fflate",
+    "version": "0.8.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "file-entry-cache",
+    "version": "8.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fill-range",
+    "version": "7.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "find-up",
+    "version": "5.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "flat-cache",
+    "version": "4.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "flatted",
+    "version": "3.4.4",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "for-each",
+    "version": "0.3.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "fsevents",
+    "version": "2.3.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "function-bind",
+    "version": "1.1.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "function.prototype.name",
+    "version": "1.2.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "functions-have-names",
+    "version": "1.2.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "generator-function",
+    "version": "2.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "gensync",
+    "version": "1.0.0-beta.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "get-intrinsic",
+    "version": "1.3.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "get-proto",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "get-symbol-description",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "get-tsconfig",
+    "version": "4.14.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "glob-parent",
+    "version": "5.1.2",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "glob-parent",
+    "version": "5.1.2",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "glob-parent",
+    "version": "6.0.2",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "globals",
+    "version": "14.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "globals",
+    "version": "16.4.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "globalthis",
+    "version": "1.0.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "gopd",
+    "version": "1.2.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "graceful-fs",
+    "version": "4.2.11",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "harfbuzzjs",
+    "version": "0.10.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "has-bigints",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "has-flag",
+    "version": "4.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "has-property-descriptors",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "has-proto",
+    "version": "1.2.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "has-symbols",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "has-tostringtag",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "hasown",
+    "version": "2.0.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "hermes-estree",
+    "version": "0.25.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "hermes-parser",
+    "version": "0.25.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "hex-rgb",
+    "version": "4.3.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ignore",
+    "version": "5.3.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ignore",
+    "version": "7.0.12",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "import-fresh",
+    "version": "3.3.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "imurmurhash",
+    "version": "0.1.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "internal-slot",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ipaddr.js",
+    "version": "2.5.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-array-buffer",
+    "version": "3.0.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-async-function",
+    "version": "2.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-bigint",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-boolean-object",
+    "version": "1.2.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-bun-module",
+    "version": "2.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-callable",
+    "version": "1.2.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-core-module",
+    "version": "2.17.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-data-view",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-date-object",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-document.all",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-extglob",
+    "version": "2.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-finalizationregistry",
+    "version": "1.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-generator-function",
+    "version": "1.1.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-glob",
+    "version": "4.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-map",
+    "version": "2.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-negative-zero",
+    "version": "2.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-number",
+    "version": "7.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-number-object",
+    "version": "1.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-regex",
+    "version": "1.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-set",
+    "version": "2.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-shared-array-buffer",
+    "version": "1.0.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-string",
+    "version": "1.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-symbol",
+    "version": "1.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-typed-array",
+    "version": "1.1.15",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-weakmap",
+    "version": "2.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-weakref",
+    "version": "1.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "is-weakset",
+    "version": "2.0.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "isarray",
+    "version": "2.0.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "isexe",
+    "version": "2.0.0",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "iterator.prototype",
+    "version": "1.1.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "jest-worker",
+    "version": "27.5.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "jiti",
+    "version": "2.7.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "js-tokens",
+    "version": "10.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "js-tokens",
+    "version": "4.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "js-yaml",
+    "version": "4.3.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "jsesc",
+    "version": "3.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "json-buffer",
+    "version": "3.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "json-schema-traverse",
+    "version": "0.4.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "json-schema-traverse",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "json-schema-traverse",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "json-stable-stringify-without-jsonify",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "json5",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "json5",
+    "version": "2.2.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "jsx-ast-utils",
+    "version": "3.3.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "keyv",
+    "version": "4.5.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "kleur",
+    "version": "4.1.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "language-subtag-registry",
+    "version": "0.3.23",
+    "license": "CC0-1.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "language-tags",
+    "version": "1.0.9",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "levn",
+    "version": "0.4.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "lightningcss",
+    "version": "1.31.1",
+    "license": "MPL-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "lightningcss",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "lightningcss-darwin-arm64",
+    "version": "1.31.1",
+    "license": "MPL-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "lightningcss-darwin-arm64",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "linebreak",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "locate-path",
+    "version": "6.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "lodash.merge",
+    "version": "4.6.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "loose-envify",
+    "version": "1.4.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "lru-cache",
+    "version": "5.1.1",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "magic-string",
+    "version": "0.30.21",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "magic-string",
+    "version": "1.4.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "math-intrinsics",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "merge-stream",
+    "version": "2.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "merge2",
+    "version": "1.4.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "micromatch",
+    "version": "4.0.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "mime-db",
+    "version": "1.54.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "miniflare",
+    "version": "5.20261006.2-beta",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "minimatch",
+    "version": "10.2.6",
+    "license": "BlueOak-1.0.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "minimatch",
+    "version": "3.1.5",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "minimist",
+    "version": "1.2.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "minimizer-webpack-plugin",
+    "version": "5.13.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ms",
+    "version": "2.1.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "nanoid",
+    "version": "3.3.18",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "napi-postinstall",
+    "version": "0.3.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "natural-compare",
+    "version": "1.4.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "neo-async",
+    "version": "2.6.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "next",
+    "version": "16.4.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "node-exports-info",
+    "version": "1.6.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "node-releases",
+    "version": "2.0.58",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "object-assign",
+    "version": "4.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "object-inspect",
+    "version": "1.13.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "object-keys",
+    "version": "1.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "object.assign",
+    "version": "4.1.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "object.entries",
+    "version": "1.1.9",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "object.fromentries",
+    "version": "2.0.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "object.groupby",
+    "version": "1.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "object.values",
+    "version": "1.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "obug",
+    "version": "3.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "optionator",
+    "version": "0.9.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "own-keys",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "p-limit",
+    "version": "3.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "p-locate",
+    "version": "5.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "pako",
+    "version": "0.2.9",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "parent-module",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "parse-css-color",
+    "version": "0.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "path-exists",
+    "version": "4.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "path-key",
+    "version": "3.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "path-parse",
+    "version": "1.0.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "path-to-regexp",
+    "version": "6.3.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "pathe",
+    "version": "2.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "picocolors",
+    "version": "1.1.1",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "picomatch",
+    "version": "2.3.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "picomatch",
+    "version": "4.0.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "picomatch",
+    "version": "4.0.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "possible-typed-array-names",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "postcss",
+    "version": "8.5.30",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "postcss-value-parser",
+    "version": "4.2.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "prelude-ls",
+    "version": "1.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "prop-types",
+    "version": "15.8.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "punycode",
+    "version": "2.3.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "queue-microtask",
+    "version": "1.2.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "react",
+    "version": "19.2.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "react-dom",
+    "version": "19.2.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "react-is",
+    "version": "16.13.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "react-server-dom-webpack",
+    "version": "19.2.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "reflect.getprototypeof",
+    "version": "1.0.10",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "regexp.prototype.flags",
+    "version": "1.5.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "require-from-string",
+    "version": "2.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "resolve",
+    "version": "2.0.0-next.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "resolve-from",
+    "version": "4.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "resolve-pkg-maps",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "reusify",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "rolldown",
+    "version": "1.2.13",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "run-parallel",
+    "version": "1.2.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "safe-array-concat",
+    "version": "1.1.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "safe-push-apply",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "safe-regex-test",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "satori",
+    "version": "0.33.5",
+    "license": "MPL-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "scheduler",
+    "version": "0.27.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "schema-utils",
+    "version": "4.5.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "semver",
+    "version": "6.3.1",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "semver",
+    "version": "7.8.5",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "semver",
+    "version": "7.8.5",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "semver",
+    "version": "7.8.5",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "set-function-length",
+    "version": "1.2.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "set-function-name",
+    "version": "2.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "set-proto",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "sharp",
+    "version": "0.35.5",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "shebang-command",
+    "version": "2.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "shebang-regex",
+    "version": "3.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "side-channel",
+    "version": "1.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "side-channel-list",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "side-channel-map",
+    "version": "1.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "side-channel-weakmap",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "source-map",
+    "version": "0.6.1",
+    "license": "BSD-3-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "source-map-js",
+    "version": "1.2.2",
+    "license": "BSD-3-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "source-map-support",
+    "version": "0.5.21",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "srvx",
+    "version": "1.0.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "stable-hash",
+    "version": "0.0.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "stop-iteration-iterator",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "string.prototype.codepointat",
+    "version": "0.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "string.prototype.includes",
+    "version": "2.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "string.prototype.matchall",
+    "version": "4.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "string.prototype.repeat",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "string.prototype.trim",
+    "version": "1.2.11",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "string.prototype.trimend",
+    "version": "1.0.10",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "string.prototype.trimstart",
+    "version": "1.0.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "strip-bom",
+    "version": "3.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "strip-json-comments",
+    "version": "3.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "strip-literal",
+    "version": "4.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "styled-jsx",
+    "version": "5.1.6",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "supports-color",
+    "version": "10.2.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "supports-color",
+    "version": "7.2.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "supports-color",
+    "version": "8.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "supports-preserve-symlinks-flag",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "tailwindcss",
+    "version": "4.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "tapable",
+    "version": "2.3.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "terser",
+    "version": "5.51.2",
+    "license": "BSD-2-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "tiny-inflate",
+    "version": "1.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "tinyglobby",
+    "version": "0.2.17",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "to-regex-range",
+    "version": "5.0.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ts-api-utils",
+    "version": "2.5.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "tsconfig-paths",
+    "version": "3.15.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "tslib",
+    "version": "2.8.1",
+    "license": "0BSD",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "tsx",
+    "version": "4.23.15",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "turbo-stream",
+    "version": "3.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "type-check",
+    "version": "0.4.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "typed-array-buffer",
+    "version": "1.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "typed-array-byte-length",
+    "version": "1.0.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "typed-array-byte-offset",
+    "version": "1.0.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "typed-array-length",
+    "version": "1.0.8",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "typescript",
+    "version": "5.9.3",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "typescript-eslint",
+    "version": "8.71.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "unbox-primitive",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "undici",
+    "version": "7.29.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "undici-types",
+    "version": "6.21.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "unenv",
+    "version": "2.0.0-rc.24",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "unicode-trie",
+    "version": "2.0.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "unpic",
+    "version": "4.2.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "unrs-resolver",
+    "version": "1.12.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "update-browserslist-db",
+    "version": "1.3.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "uri-js",
+    "version": "4.4.1",
+    "license": "BSD-2-Clause",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "vinext",
+    "version": "1.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "vite",
+    "version": "8.3.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "vite-plugin-commonjs",
+    "version": "0.10.4",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "vite-plugin-dynamic-import",
+    "version": "1.6.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "vitefu",
+    "version": "1.1.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "watchpack",
+    "version": "2.5.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "web-vitals",
+    "version": "4.2.4",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "webpack",
+    "version": "5.111.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "webpack-sources",
+    "version": "3.6.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "which",
+    "version": "2.0.2",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "which-boxed-primitive",
+    "version": "1.1.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "which-builtin-type",
+    "version": "1.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "which-collection",
+    "version": "1.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "which-typed-array",
+    "version": "1.1.24",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "word-wrap",
+    "version": "1.2.5",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "workerd",
+    "version": "1.20261006.1",
+    "license": "Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "wrangler",
+    "version": "4.150.0",
+    "license": "MIT OR Apache-2.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "ws",
+    "version": "8.22.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "yallist",
+    "version": "3.1.1",
+    "license": "ISC",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "yocto-queue",
+    "version": "0.1.0",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "yoga-layout",
+    "version": "3.2.1",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "youch",
+    "version": "4.1.0-beta.10",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "youch-core",
+    "version": "0.3.3",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "zod",
+    "version": "4.6.7",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
+    "name": "zod-validation-error",
+    "version": "4.0.2",
+    "license": "MIT",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  }
+]

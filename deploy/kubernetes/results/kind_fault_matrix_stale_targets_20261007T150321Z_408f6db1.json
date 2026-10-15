@@ -1,0 +1,147 @@
+{
+  "contract": "kind-fault-matrix-consistency-v1",
+  "accepted": false,
+  "full_fault_matrix": false,
+  "created_at": "2026-10-07T15:03:29.118261+00:00",
+  "aggregator_sha256": "80b4002e0fba8320d19175fb59e57185958a650d78136cf5031fe87b73651a5c",
+  "cases": [
+    {
+      "path": "deploy/kubernetes/results/kind_live_cpu-spike_20261007T142832Z_a2e80b10.json",
+      "accepted": false,
+      "report_sha256": "1d27d8618b22f2dde1c25358d5977a8cb36152c79a1cb558343ce13e2e302136",
+      "error": "Incomplete or stale current-revision source fingerprints"
+    },
+    {
+      "path": "deploy/kubernetes/results/kind_live_memory-leak_20261007T143215Z_bc3f39b5.json",
+      "accepted": false,
+      "report_sha256": "51ef74e7f8acf4808470263577fa0b56efa161c99d2dd0336e0606832b273d9f",
+      "error": "Incomplete or stale current-revision source fingerprints"
+    },
+    {
+      "path": "deploy/kubernetes/results/kind_live_kafka-consumer-lag_20261007T143715Z_9e605f43.json",
+      "accepted": false,
+      "report_sha256": "54d83c378f4c7df7ede71b4650f29265ff5ff5ae139a6d5dd93f60a6af3e5839",
+      "error": "Incomplete or stale current-revision source fingerprints"
+    }
+  ],
+  "errors": [
+    {
+      "path": "deploy/kubernetes/results/kind_live_cpu-spike_20261007T142832Z_a2e80b10.json",
+      "error": "Incomplete or stale current-revision source fingerprints"
+    },
+    {
+      "path": "deploy/kubernetes/results/kind_live_memory-leak_20261007T143215Z_bc3f39b5.json",
+      "error": "Incomplete or stale current-revision source fingerprints"
+    },
+    {
+      "path": "deploy/kubernetes/results/kind_live_kafka-consumer-lag_20261007T143715Z_9e605f43.json",
+      "error": "Incomplete or stale current-revision source fingerprints"
+    }
+  ],
+  "limitations": [
+    "Offline consistency check of retained reports, not independent attestation of runtime or report honesty.",
+    "Deterministic diagnoses only; no paid model evaluation or semantic root-cause/faithfulness score.",
+    "Faults retain their per-case bounded scope; Kafka/cache/deployment faults are not real infrastructure failures.",
+    "No approved remediation is executed; recovery clears injected faults and does not prove action efficacy.",
+    "Reported auth, rollout, recovery and cleanup assertions cannot be independently re-observed offline.",
+    "Manifest hashes are retained individually, not re-rendered or required equal across unique image tags.",
+    "Source/image bindings are consistency evidence, not signed build provenance or supply-chain attestation."
+  ],
+  "offline_operations": {
+    "model_calls": 0,
+    "production_actions": 0
+  },
+  "source_sha256": {
+    "deploy/kubernetes/verify_live_fault_lab.py": "aed93d5b771deacffbc931abbc09735fc96040402c5d35c96b4772a77ad07747",
+    "deploy/kubernetes/render_fault_lab.py": "c40f404a37de439cf75dd643cf99550872172ab60dbaa8ce06cf48859e71a136",
+    "fault-lab/scenarios.json": "2a4eaa32d5ddb1e9a17d9ec5a7b3b9dcf6732afdd343bb6fa86c9850f74e3135",
+    "deploy/kubernetes/base/kustomization.yaml": "a88ac91fa3fd4c9777e0b4fa79f3322bba452b12f0ee2c955c24622366d3039c",
+    "deploy/kubernetes/base/mcp-server.yaml": "893241ac588183b4a958e1d90f5e7e70185c6dc0a89af142d635accce6cbcac8",
+    "deploy/kubernetes/base/namespace.yaml": "b374f5cde93065e8fb4277af80a7193aaa2c999d2d09413e5bd7b74ea497147e",
+    "deploy/kubernetes/base/networkpolicy.yaml": "cd8c87dc2112d6959cd04843edb6caed8d3c934c2c16795db2536946117a4258",
+    "deploy/kubernetes/base/orchestrator.yaml": "73df444491fae7c76c3afbdd01b5b1ec33928038f53ffe90a849b8d81386c688",
+    "deploy/kubernetes/base/postgres.yaml": "13b14f09d83faf44ed15e3c8a24e125ed2b7c789c34d4ef5487d4766b3fc4681",
+    "deploy/kubernetes/base/redis.yaml": "9170a58de49d75dee5032a85d0c54c1f87dd51edbc6b5d6532a1c537a913490c",
+    "deploy/kubernetes/base/serviceaccounts-rbac.yaml": "6f39e08ce7b47f036450639265bee8de5db8fc485e444910d05f4db4cce9da1f",
+    "deploy/kubernetes/base/telemetry-gateway.yaml": "3d88a1982def9c11f89466c53e140f2f7687cf5bf79bab353b63b37daa4d1fd7",
+    "deploy/kubernetes/experiments/real-pool/payment.yaml": "74f8c885903e97bfd33a9602723dcdbf1f82923f348934563298af2c694102f2",
+    "fault-lab/observability/loki.yml": "77a8cf98eed2151b4f1529afd6dcca00b056dfb0148d86bf557df3535e5d2ef7",
+    "fault-lab/observability/otel-collector.yml": "b8d64cebdbf3f4dda076f425e8315116dbdc75de3f424c00e1028b6739c034a3",
+    "fault-lab/observability/prometheus-native.yml": "ca71ea9eb435ce0c3de0949a02078bf1c23e45a1ba7cb48556c82564dfb7b7fd",
+    "fault-lab/observability/prometheus.yml": "56c91b3eadd20d26c1c2556f2085972ae6ead2f043802020dfa800f6fa852c6a",
+    "fault-lab/observability/tempo.yml": "9d7576e98afdc38d9ad4cc782e2a79dbf16a3ec1580ce65a7f377c42febe293a",
+    "services/telemetry-gateway/cmd/gateway/main.go": "8d7298c61dce93844249acade0ff0a14042e1d0ea3429ab9e12e2d9f8aeffd0d",
+    "services/telemetry-gateway/internal/gateway/fixture.go": "19dca73c86e39a6543bd5ebfb7091bb6700c616c4ab7a8a445b388358c26890f",
+    "services/telemetry-gateway/internal/gateway/models.go": "74b1d0857b9d74512d7c11627e3ff5141ae272b3ef1f8ee3b435c6b3375e759d",
+    "services/telemetry-gateway/internal/gateway/observability.go": "63af6e92842ad1f6411bfd352a91919fdba18ba8521121b09619c597e644e2fd",
+    "services/telemetry-gateway/internal/gateway/observability_test.go": "de7596e14dd847fb80aa895b9b077116d0be1306fabcef32db227337b947c6c5",
+    "services/telemetry-gateway/internal/gateway/ratelimit.go": "272394e1d2641f0e860612d48d8bfa2330b7e9c108224fa2105c28136760e3d1",
+    "services/telemetry-gateway/internal/gateway/server.go": "0db0d03a415404026387098b77ce69ee93384cc6992ec30c9f8f6404d9018ede",
+    "services/telemetry-gateway/internal/gateway/server_test.go": "de9e99840c1b59f6a801a292d85a503f909c69d58d5d2cf80454ffd0dc4a37ca",
+    "services/telemetry-gateway/internal/gateway/trace_topology.go": "53c63e61201ffd32597e9a6042366be3b5e35eb069cc60b4de9998c37a1d22c2",
+    "services/telemetry-gateway/internal/gateway/trace_topology_test.go": "09ab23eac53efb593585024efa104effc28cd7ebcd280878c45de691c7a4d6a1",
+    "services/telemetry-gateway/go.mod": "e618c9f89059e30aa9122f9bf13cf089143786cebe3a59868e067ee8b524e18b",
+    "services/telemetry-gateway/Dockerfile": "3675c9d95d6a8c77fc9291aa17a67135626b7bb1e394438c8529d5d333ffcf00",
+    "services/orchestrator/incident_copilot/__init__.py": "db2c62f8b6f42f4133010561099be7cd6feebd525a7d1708c5be0348c360fe90",
+    "services/orchestrator/incident_copilot/action_applicability.py": "1ba47ed000072f655d3f826622839db5aa249fb23599aed41838421bc81b8723",
+    "services/orchestrator/incident_copilot/action_signal_time.py": "b5ef4aa29f3d06559e88b349573ffc8632fa83274d0d3f14a3520835a41b61dd",
+    "services/orchestrator/incident_copilot/anomaly_windows.py": "510b499e6dc5ff63349dd7122bb36bd91957b754e78cc068adabda7d4bc35c70",
+    "services/orchestrator/incident_copilot/api.py": "bfdc6465902489420d3c5822c24e5f90c34705d642a772146b0765dea89e9657",
+    "services/orchestrator/incident_copilot/api_auth.py": "9f701c1594e6d9726ab1d43aa9c6a907ef92bffec9a7982c4f19f5c6a7687e72",
+    "services/orchestrator/incident_copilot/approval.py": "a9f23c0cc9e91410db922bf05792301736829df9396e550bea01f867152b81cb",
+    "services/orchestrator/incident_copilot/cause_family.py": "f9132d622fa3ba4bd5e9193213a48c820b1da47bf5e936ac29df111c30920d9f",
+    "services/orchestrator/incident_copilot/dependency_topology.py": "9eca089423fbce99eeb7eb1db041b06d2193935e43571a528d640fd240bd91e0",
+    "services/orchestrator/incident_copilot/deployment_timeline.py": "f19e1305bf650bcac2fc4475cb534dded59526dee68ef6e443a797c36d034a8f",
+    "services/orchestrator/incident_copilot/guardrails.py": "eb6dce213c0218202479378aa5d1aace88f459c35339e6f0bce40d5463abaf48",
+    "services/orchestrator/incident_copilot/incident_profiles.py": "6fdc96ea5267bc972bdb3addea35f539f41c69bd58490fb0086c471aa47fa687",
+    "services/orchestrator/incident_copilot/langgraph_workflow.py": "49c4935f3e23c3cd1b4668f7214e675c34e5e521f6b25ad6ec5458b8aa05c053",
+    "services/orchestrator/incident_copilot/mcp_client.py": "51e9df587eaaae58378c711a13bf3d19a0e881192a0c4f8cda3d7a582363b281",
+    "services/orchestrator/incident_copilot/models.py": "1745b50b0d1f4cd2cc7944ef2b0835328b41a68dd95101adef945fe2c0004ca2",
+    "services/orchestrator/incident_copilot/operation_status.py": "dab777b0485e901b75481dc4edd08118403352c51991544343193e8e578bc8c4",
+    "services/orchestrator/incident_copilot/reasoning.py": "fdee76682105aca5bf3fa603fea7983ff5253a5d6e70394ffec3b5fac91e0ac9",
+    "services/orchestrator/incident_copilot/signal_thresholds.py": "ec734646e8f4aeffac7b64809b16b96eaa5aaa70dc450a925a61f064902184aa",
+    "services/orchestrator/incident_copilot/store.py": "e4496ae2448820f5c2c9061cf99a415826d24985e784b4386d525c5b2aeeb691",
+    "services/orchestrator/incident_copilot/task_state.py": "0dcf8b320d73fc33c71f275a5f6ae94c539ede7b13b419c11e5c6ae570abd25a",
+    "services/orchestrator/incident_copilot/tools.py": "65805525cb8a4551ed9ecfdf76042fe085a3f053bbf79bf285463558ec5d55fe",
+    "services/orchestrator/Dockerfile": "f1aaf32a59ddcee15cb676e26c2008755b435f2b4f091004c7a5564ef70b99cd",
+    "services/orchestrator/pyproject.toml": "13c6e4760b20b8c94499a53e33485267bc63ca44718811f6a203966a79f49fda",
+    "services/mcp-server/incident_mcp/__init__.py": "a4e5e43678312b7a0ee85e09f92245d46f92a17182e30aadd3b9d7916fb01b2c",
+    "services/mcp-server/incident_mcp/deployment_events.py": "faee2eb869f9ec298b32c46bc1f54d5fc3dc6bd6cb08f98490ba1346a962b947",
+    "services/mcp-server/incident_mcp/deployments.py": "222c177b852e21d9d4d215bc708d0859f67dd022037cd7749caeb1856f1ed93f",
+    "services/mcp-server/incident_mcp/gateway.py": "faa3364f405ff705e259e75972cc93d9634a1a37c8671fe29ea8dac87a065981",
+    "services/mcp-server/incident_mcp/knowledge.py": "8951de3d0c4222177c865da4720bd9291f7d64d7db94c39f633f98a685a7cb57",
+    "services/mcp-server/incident_mcp/kubernetes.py": "a7c34897781602c4a27489808a70eabdf2435ca7d28219fa69866fbaf33a44cc",
+    "services/mcp-server/incident_mcp/schemas.py": "94a4d580c5b50856e6bb2819e72d6caf65d7478a64ecfdb166cc2064bd881c64",
+    "services/mcp-server/incident_mcp/security.py": "207612005ed86b36ae467d93fb05ec1e30cdfe4a18721d333835936c751b793b",
+    "services/mcp-server/incident_mcp/server.py": "6e573df25e0f29a767bf0b10ac0ac670f18581d0c07bc6a6ee2a08b2a8d3a06a",
+    "services/mcp-server/incident_mcp/target_context.py": "89faab2a142bb4c6db855cccf031262915c77df8e7b719545f3e1b32ae47050a",
+    "services/mcp-server/incident_mcp/tools.py": "a0056cab8f88a87569dd3be5307bc31cc5d6e51ab12c6e7f694a579e9940abf7",
+    "services/mcp-server/Dockerfile": "71fe81753dd05e4dcead01871c687992e8179963d373e574a1decb33acfa03d4",
+    "services/mcp-server/pyproject.toml": "31ee2b2d521aba26129c3ff8869b420b26cfa2f46b92292e89620c14ea5673cd",
+    "fault-lab/app/incident_lab/__init__.py": "08488714589bd386b34fb9e04062bfbcfcfa5475008323862f94d5c6ab59596d",
+    "fault-lab/app/incident_lab/app.py": "995bb2412a86a46f87d99713e30d6a0bb23aba416eb2d20152ce4b5bc9b2e3c3",
+    "fault-lab/app/incident_lab/postgres_pool.py": "e2513e139e783cd0139c121547620dd84a81900131dfd96d11bb7d4026b7427f",
+    "fault-lab/app/incident_lab/start.py": "371a9e9f7fe227378016c7c332657197f926dab935c82e5add93dd3696c4b077",
+    "fault-lab/app/incident_lab/traffic.py": "c24971c67985918d8db794ed4a47f46efd234d02c78aaae786d3c602bfd62c95",
+    "fault-lab/app/Dockerfile": "c3939a4ee2464fcff6cbd45732167e6fbb4f5158f5a7c67e8c3deec104e74dc4",
+    "fault-lab/app/pyproject.toml": "1da639757da7e1e0b59d95823857d86e89598604d7dacd14a62072495bb9ab15",
+    "services/mcp-server/incident_mcp/knowledge_corpus.json": "5d75f3185bac37a93914078aace1851485098a64a36336ea2bd2d5ee704b5a50"
+  },
+  "knowledge_corpus_sha256": "5d75f3185bac37a93914078aace1851485098a64a36336ea2bd2d5ee704b5a50",
+  "images": null,
+  "coverage": {
+    "accepted_scenarios": [],
+    "missing_scenarios": [
+      "cache-penetration",
+      "cpu-spike",
+      "db-pool-exhaustion",
+      "deployment-regression",
+      "downstream-timeout",
+      "kafka-consumer-lag",
+      "memory-leak",
+      "retry-storm"
+    ],
+    "accepted_count": 0,
+    "canonical_count": 8
+  }
+}

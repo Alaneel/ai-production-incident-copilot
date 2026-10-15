@@ -1,0 +1,2421 @@
+{
+  "ok": true,
+  "checks": {
+    "no_causal_upgrade": true,
+    "stopped_before_execution": true,
+    "baseline_parentage_verified": true,
+    "checkpoint_observations_retained": true,
+    "live_metrics": true,
+    "live_logs": true,
+    "live_traces": true,
+    "service_identification": true,
+    "incident_classification": true,
+    "hypothesis_present": true,
+    "remediation_selection": true,
+    "approval_boundary": true
+  },
+  "run_at": "2026-10-02T17:30:02.906357+00:00",
+  "duration_seconds": 89.672,
+  "scope": "actual native fault-lab HTTP services -> live Prometheus/Loki/Tempo -> actual Go gateway -> actual MCP HTTP -> deterministic LangGraph memory checkpoint",
+  "limitations": [
+    "No PostgreSQL recovery, model, or real remediation",
+    "Sampled synchronous call parentage is not incident causation",
+    "Fault-lab CPU gauge reports configured fault intensity, not measured host CPU utilization",
+    "Catalog/deployment metadata and knowledge remain fixture-backed"
+  ],
+  "live_metrics_logs": true,
+  "fault_injected": "db_pool_exhaustion",
+  "scenario": "db-pool-exhaustion",
+  "primary_service": "payment-service",
+  "fault_injected_at": "2026-10-02T17:29:32.669675+00:00",
+  "workload_status_counts": {
+    "200": 15
+  },
+  "diagnostic_seconds": 0.104,
+  "trace_id": "4e02ab496e318b224b4ff49059552516",
+  "retrieval_attempts": 15,
+  "topology": {
+    "service": "payment-service",
+    "edges": [
+      {
+        "source": "checkout-api",
+        "target": "payment-service"
+      },
+      {
+        "source": "payment-service",
+        "target": "ledger-service"
+      },
+      {
+        "source": "payment-service",
+        "target": "risk-engine"
+      }
+    ],
+    "dependencies": [
+      "checkout-api",
+      "ledger-service",
+      "risk-engine"
+    ],
+    "source": "service-catalog-via-telemetry-gateway",
+    "topology_kind": "static_fixture_catalog",
+    "observed": {
+      "status": "available",
+      "source": "tempo_client_server_parentage",
+      "calls": [
+        {
+          "source": "checkout-api",
+          "target": "payment-service",
+          "trace_id": "4e02ab496e318b224b4ff49059552516",
+          "client_span_id": "387ddb0bb8e34544",
+          "server_span_id": "131e53c65bcba2dd",
+          "observed_at": "2026-10-02T17:29:06.351392Z"
+        },
+        {
+          "source": "payment-service",
+          "target": "ledger-service",
+          "trace_id": "4e02ab496e318b224b4ff49059552516",
+          "client_span_id": "eae5674e1881f41d",
+          "server_span_id": "c47be98a3aded362",
+          "observed_at": "2026-10-02T17:29:06.353452Z"
+        }
+      ],
+      "start": "2026-10-02T16:59:20.529285Z",
+      "end": "2026-10-02T17:29:20.529285Z",
+      "coverage": "sampled_not_exhaustive",
+      "traces_read": 1,
+      "traces_failed": 0,
+      "calls_omitted": 0,
+      "calls_discarded": 0
+    },
+    "catalog_status": "available"
+  },
+  "topology_phase": "baseline",
+  "incident": {
+    "incident_id": "INC-7BF496",
+    "trace_id": "tr_e7b4ea09702f44a0b9802ac7caa52486",
+    "question": "Why is payment-service slow today?",
+    "environment": "prod-sg",
+    "status": "waiting_approval",
+    "current_step": "human_approval",
+    "incident_type": "database_connection_pool_exhaustion",
+    "candidate_incident_types": [
+      "database_connection_pool_exhaustion"
+    ],
+    "service_impacts": [
+      {
+        "service": "ledger-service",
+        "relation": "downstream_observed_call",
+        "topology_kind": "static_fixture_catalog",
+        "observed_call_count": 8,
+        "status": "unconfirmed",
+        "evidence_ids": [
+          "ev_3dd43ae21842",
+          "ev_d34bd72493a6"
+        ],
+        "anomaly_windows": [],
+        "overlaps_primary_window": null,
+        "causal_direction_verified": false
+      },
+      {
+        "service": "checkout-api",
+        "relation": "upstream_observed_call",
+        "topology_kind": "static_fixture_catalog",
+        "observed_call_count": 8,
+        "status": "observed_anomaly",
+        "evidence_ids": [
+          "ev_0e60201126db",
+          "ev_0c7810eaf983"
+        ],
+        "anomaly_windows": [
+          {
+            "evidence_id": "ev_0e60201126db",
+            "metric": "request_latency_p95",
+            "start": "2026-10-02T17:29:47.881999+00:00",
+            "end": "2026-10-02T17:30:02.881999+00:00",
+            "sample_count": 2,
+            "peak": 1910.0,
+            "criterion": "threshold",
+            "threshold": 1000.0,
+            "left_censored": false
+          }
+        ],
+        "overlaps_primary_window": true,
+        "causal_direction_verified": false
+      },
+      {
+        "service": "risk-engine",
+        "relation": "downstream_catalog_dependency",
+        "topology_kind": "static_fixture_catalog",
+        "observed_call_count": 0,
+        "status": "unconfirmed",
+        "evidence_ids": [
+          "ev_6baf616d9c63",
+          "ev_a2b7e8203943"
+        ],
+        "anomaly_windows": [],
+        "overlaps_primary_window": null,
+        "causal_direction_verified": false
+      }
+    ],
+    "service_topology": {
+      "service": "payment-service",
+      "edges": [
+        {
+          "source": "checkout-api",
+          "target": "payment-service"
+        },
+        {
+          "source": "payment-service",
+          "target": "ledger-service"
+        },
+        {
+          "source": "payment-service",
+          "target": "risk-engine"
+        }
+      ],
+      "dependencies": [
+        "ledger-service",
+        "checkout-api",
+        "risk-engine"
+      ],
+      "source": "service-catalog-via-telemetry-gateway",
+      "topology_kind": "static_fixture_catalog",
+      "observed": {
+        "status": "available",
+        "source": "tempo_client_server_parentage",
+        "calls": [
+          {
+            "source": "payment-service",
+            "target": "ledger-service",
+            "trace_id": "4da05ae3c067386f4ede9423614a27cd",
+            "client_span_id": "652c2c28f0968442",
+            "server_span_id": "4a1177b73ff9cfaa",
+            "observed_at": "2026-10-02T17:29:28.637480Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "4da05ae3c067386f4ede9423614a27cd",
+            "client_span_id": "77b31b4c0f337adc",
+            "server_span_id": "b6d7d01a12caaf32",
+            "observed_at": "2026-10-02T17:29:28.636790Z"
+          },
+          {
+            "source": "payment-service",
+            "target": "ledger-service",
+            "trace_id": "ae36a389418fdb4051b9ecdc66e83742",
+            "client_span_id": "daaad2eca2f667d3",
+            "server_span_id": "2438cb2629852a70",
+            "observed_at": "2026-10-02T17:29:27.628078Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "ae36a389418fdb4051b9ecdc66e83742",
+            "client_span_id": "13283492b768bcc3",
+            "server_span_id": "2ae9fa790a58f472",
+            "observed_at": "2026-10-02T17:29:27.626395Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "27a73343d1927b312896a7716139b07a",
+            "client_span_id": "bd97c68993c4c0f9",
+            "server_span_id": "4701e080bd6b88e2",
+            "observed_at": "2026-10-02T17:29:26.617080Z"
+          },
+          {
+            "source": "payment-service",
+            "target": "ledger-service",
+            "trace_id": "27a73343d1927b312896a7716139b07a",
+            "client_span_id": "4f861c49f70b90cd",
+            "server_span_id": "84eca85220e0fa54",
+            "observed_at": "2026-10-02T17:29:26.618196Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "593906543bc936bba282411898c1f5c8",
+            "client_span_id": "1cd77210d7236250",
+            "server_span_id": "3b7d3fb38d075a64",
+            "observed_at": "2026-10-02T17:29:25.602705Z"
+          },
+          {
+            "source": "payment-service",
+            "target": "ledger-service",
+            "trace_id": "593906543bc936bba282411898c1f5c8",
+            "client_span_id": "4dcd75a9e9a9e745",
+            "server_span_id": "46c8b81ef167d02c",
+            "observed_at": "2026-10-02T17:29:25.605883Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "4cf2d3b44a008612ba94cc75f768d26a",
+            "client_span_id": "87468bb6fb8a0d6c",
+            "server_span_id": "1df161598539bca4",
+            "observed_at": "2026-10-02T17:29:22.577142Z"
+          },
+          {
+            "source": "payment-service",
+            "target": "ledger-service",
+            "trace_id": "4cf2d3b44a008612ba94cc75f768d26a",
+            "client_span_id": "cf12c9f726cb23cb",
+            "server_span_id": "fee483bc898e0b68",
+            "observed_at": "2026-10-02T17:29:22.577851Z"
+          },
+          {
+            "source": "payment-service",
+            "target": "ledger-service",
+            "trace_id": "9fb42cbf9e491e73bea2c7e5865f9a8d",
+            "client_span_id": "ad3892c049c2f383",
+            "server_span_id": "09c0396a07f79860",
+            "observed_at": "2026-10-02T17:29:21.569816Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "9fb42cbf9e491e73bea2c7e5865f9a8d",
+            "client_span_id": "15f31b9812c6d1b3",
+            "server_span_id": "c0b38d3230246034",
+            "observed_at": "2026-10-02T17:29:21.568075Z"
+          },
+          {
+            "source": "payment-service",
+            "target": "ledger-service",
+            "trace_id": "e0955185a84c0dccaca44655323a4dea",
+            "client_span_id": "b032f7872c32b60f",
+            "server_span_id": "7d057bf2f0499dd0",
+            "observed_at": "2026-10-02T17:29:20.560432Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "e0955185a84c0dccaca44655323a4dea",
+            "client_span_id": "40b533ece7312ce1",
+            "server_span_id": "97951e4d1713308f",
+            "observed_at": "2026-10-02T17:29:20.559247Z"
+          },
+          {
+            "source": "checkout-api",
+            "target": "payment-service",
+            "trace_id": "4e02ab496e318b224b4ff49059552516",
+            "client_span_id": "387ddb0bb8e34544",
+            "server_span_id": "131e53c65bcba2dd",
+            "observed_at": "2026-10-02T17:29:06.351392Z"
+          },
+          {
+            "source": "payment-service",
+            "target": "ledger-service",
+            "trace_id": "4e02ab496e318b224b4ff49059552516",
+            "client_span_id": "eae5674e1881f41d",
+            "server_span_id": "c47be98a3aded362",
+            "observed_at": "2026-10-02T17:29:06.353452Z"
+          }
+        ],
+        "start": "2026-10-02T17:00:02.807605Z",
+        "end": "2026-10-02T17:30:02.807605Z",
+        "coverage": "sampled_not_exhaustive",
+        "traces_read": 8,
+        "traces_failed": 0,
+        "calls_omitted": 0,
+        "calls_discarded": 0
+      },
+      "catalog_status": "available"
+    },
+    "severity": "SEV-2",
+    "services": [
+      "payment-service",
+      "ledger-service",
+      "checkout-api",
+      "risk-engine"
+    ],
+    "anomalous_window": [
+      "2026-10-02T17:29:47.859000Z",
+      "2026-10-02T17:30:02.859000Z"
+    ],
+    "evidence": [
+      {
+        "id": "ev_332ad54e2b2d",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_latency_p95 samples",
+        "observation": "request_latency_p95 peaked at 1.91e+03 milliseconds in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.859000Z",
+        "service": "payment-service",
+        "score": 0.95,
+        "query": "request_latency_p95",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:32.859000+00:00",
+              "value": 9.5
+            },
+            {
+              "timestamp": "2026-10-02T17:29:47.859000+00:00",
+              "value": 1864.285714285714
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.859000+00:00",
+              "value": 1910.0
+            }
+          ],
+          "unit": "milliseconds",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.859821+00:00",
+          "query_end": "2026-10-02T17:30:02.859821+00:00"
+        }
+      },
+      {
+        "id": "ev_7a450a59e64d",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_error_rate samples",
+        "observation": "request_error_rate peaked at 0.544 ratio in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.859000Z",
+        "service": "payment-service",
+        "score": 0.9099999999999999,
+        "query": "request_error_rate",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:47.859000+00:00",
+              "value": 0.3482761610341859
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.859000+00:00",
+              "value": 0.5442177885457569
+            }
+          ],
+          "unit": "ratio",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.859821+00:00",
+          "query_end": "2026-10-02T17:30:02.859821+00:00"
+        }
+      },
+      {
+        "id": "ev_ff4cab48e379",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "db_pool_active_ratio samples",
+        "observation": "db_pool_active_ratio peaked at 1 ratio in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.859000Z",
+        "service": "payment-service",
+        "score": 0.87,
+        "query": "db_pool_active_ratio",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:17.859000+00:00",
+              "value": 0.16
+            },
+            {
+              "timestamp": "2026-10-02T17:29:32.859000+00:00",
+              "value": 0.16
+            },
+            {
+              "timestamp": "2026-10-02T17:29:47.859000+00:00",
+              "value": 1.0
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.859000+00:00",
+              "value": 1.0
+            }
+          ],
+          "unit": "ratio",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.859821+00:00",
+          "query_end": "2026-10-02T17:30:02.859821+00:00"
+        }
+      },
+      {
+        "id": "ev_027aa4e4f0e1",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "cpu_utilization samples",
+        "observation": "cpu_utilization peaked at 0 ratio in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.859000Z",
+        "service": "payment-service",
+        "score": 0.83,
+        "query": "cpu_utilization",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:47.859000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.859000+00:00",
+              "value": 0.0
+            }
+          ],
+          "unit": "ratio",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.859821+00:00",
+          "query_end": "2026-10-02T17:30:02.859821+00:00"
+        }
+      },
+      {
+        "id": "ev_018d26962681",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "memory_working_set samples",
+        "observation": "memory_working_set peaked at 0 bytes in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.859000Z",
+        "service": "payment-service",
+        "score": 0.7899999999999999,
+        "query": "memory_working_set",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:37.859000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T17:29:42.859000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T17:29:47.859000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T17:29:52.859000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T17:29:57.859000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.859000+00:00",
+              "value": 0.0
+            }
+          ],
+          "unit": "bytes",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:25:02.859821+00:00",
+          "query_end": "2026-10-02T17:30:02.859821+00:00"
+        }
+      },
+      {
+        "id": "ev_3f319402f85d",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "kafka_consumer_lag samples",
+        "observation": "kafka_consumer_lag peaked at 0 messages in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.859000Z",
+        "service": "payment-service",
+        "score": 0.75,
+        "query": "kafka_consumer_lag",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:47.859000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.859000+00:00",
+              "value": 0.0
+            }
+          ],
+          "unit": "messages",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.859821+00:00",
+          "query_end": "2026-10-02T17:30:02.859821+00:00"
+        }
+      },
+      {
+        "id": "ev_24176d91baac",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "retry_rate samples",
+        "observation": "retry_rate peaked at 0 retries_per_second in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.859000Z",
+        "service": "payment-service",
+        "score": 0.71,
+        "query": "retry_rate",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:47.859000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.859000+00:00",
+              "value": 0.0
+            }
+          ],
+          "unit": "retries_per_second",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.859821+00:00",
+          "query_end": "2026-10-02T17:30:02.859821+00:00"
+        }
+      },
+      {
+        "id": "ev_dffdf7b66c16",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "cache_miss_rate samples",
+        "observation": "cache_miss_rate peaked at 0 misses_per_second in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.859000Z",
+        "service": "payment-service",
+        "score": 0.6699999999999999,
+        "query": "cache_miss_rate",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:47.859000+00:00",
+              "value": 0.0
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.859000+00:00",
+              "value": 0.0
+            }
+          ],
+          "unit": "misses_per_second",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.859821+00:00",
+          "query_end": "2026-10-02T17:30:02.859821+00:00"
+        }
+      },
+      {
+        "id": "ev_c5410fe616fa",
+        "kind": "log",
+        "source": "loki-via-telemetry-gateway",
+        "title": "Log matches for service events",
+        "observation": "45 valid retained events in the query window; 15 sampled events show a saturated pool",
+        "observed_at": "2026-10-02T17:30:01.784543Z",
+        "service": "payment-service",
+        "score": 0.94,
+        "query": "service events",
+        "attributes": {
+          "events": [
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "af19960c3bb55bd2",
+              "timestamp": "2026-10-02T17:29:06.358511+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "c854216f52c8c816",
+              "timestamp": "2026-10-02T17:29:20.563075+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "c410494609fdbd50",
+              "timestamp": "2026-10-02T17:29:21.573462+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "2de1f29e64b39312",
+              "timestamp": "2026-10-02T17:29:22.580070+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "137917410f50691c",
+              "timestamp": "2026-10-02T17:29:23.591048+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "079ec8252a46ca9c",
+              "timestamp": "2026-10-02T17:29:24.597516+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "6c8060cd30766fd2",
+              "timestamp": "2026-10-02T17:29:25.609890+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "2a4e9faa3bf7e02c",
+              "timestamp": "2026-10-02T17:29:26.620675+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "169ece3657ae03bb",
+              "timestamp": "2026-10-02T17:29:27.633278+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "a2320cb69dbcc0f6",
+              "timestamp": "2026-10-02T17:29:28.640157+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "eb0dd26243709f49",
+              "timestamp": "2026-10-02T17:29:29.650704+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "4e602272691b0c7f",
+              "timestamp": "2026-10-02T17:29:30.662102+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "b1bb7b8067ba955c",
+              "timestamp": "2026-10-02T17:29:31.668536+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "fault injected",
+              "level": "WARNING",
+              "timestamp": "2026-10-02T17:29:32.676295+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "9be028602589eebf",
+              "timestamp": "2026-10-02T17:29:32.676601+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "6ac7a6775c825cbb",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:33.678863+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "6ac7a6775c825cbb",
+              "timestamp": "2026-10-02T17:29:33.679152+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "b0a33f72d70cf4fd",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:35.687307+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "b0a33f72d70cf4fd",
+              "timestamp": "2026-10-02T17:29:35.687671+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "b670b1accc630af3",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:37.697594+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "b670b1accc630af3",
+              "timestamp": "2026-10-02T17:29:37.697998+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "ebe3d61ed35843c1",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:39.707850+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "ebe3d61ed35843c1",
+              "timestamp": "2026-10-02T17:29:39.708400+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "b687a6e903c53961",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:41.717099+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "b687a6e903c53961",
+              "timestamp": "2026-10-02T17:29:41.717451+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "af23a4ecaaad54b9",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:43.724328+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "af23a4ecaaad54b9",
+              "timestamp": "2026-10-02T17:29:43.724560+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "2145a9d356db4e60",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:45.733178+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "2145a9d356db4e60",
+              "timestamp": "2026-10-02T17:29:45.733316+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "09dc56b3e1aae1c3",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:47.741669+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "09dc56b3e1aae1c3",
+              "timestamp": "2026-10-02T17:29:47.741877+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "e7a161d0dbd750dc",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:49.746659+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "e7a161d0dbd750dc",
+              "timestamp": "2026-10-02T17:29:49.746897+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "ab51027e176c6c62",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:51.752759+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "ab51027e176c6c62",
+              "timestamp": "2026-10-02T17:29:51.753085+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "74fcf366c1a3a16c",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:53.760318+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "74fcf366c1a3a16c",
+              "timestamp": "2026-10-02T17:29:53.760597+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "7e20c710f77a17ea",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:55.767213+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "7e20c710f77a17ea",
+              "timestamp": "2026-10-02T17:29:55.767368+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "b290c0a01f87cc75",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:57.773621+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "b290c0a01f87cc75",
+              "timestamp": "2026-10-02T17:29:57.773764+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "15fdab6aa619424c",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:29:59.778826+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "15fdab6aa619424c",
+              "timestamp": "2026-10-02T17:29:59.779117+00:00",
+              "active": 0,
+              "max": 0
+            },
+            {
+              "message": "database connection acquisition timed out",
+              "level": "ERROR",
+              "trace_id": "551486031d5396f1",
+              "pool": "ledger-primary",
+              "timestamp": "2026-10-02T17:30:01.784389+00:00",
+              "active": 50,
+              "max": 50
+            },
+            {
+              "message": "request completed",
+              "level": "INFO",
+              "trace_id": "551486031d5396f1",
+              "timestamp": "2026-10-02T17:30:01.784543+00:00",
+              "active": 0,
+              "max": 0
+            }
+          ],
+          "discarded_events": 0,
+          "query_start": "2026-10-02T17:00:02.859864+00:00",
+          "query_end": "2026-10-02T17:30:02.859864+00:00"
+        }
+      },
+      {
+        "id": "ev_dad7a2170cca",
+        "kind": "trace",
+        "source": "tempo-via-telemetry-gateway",
+        "title": "Distributed traces for payment-service",
+        "observation": "20 traces retained; longest sampled trace was 1007 ms",
+        "observed_at": "2026-10-02T17:30:02.860076Z",
+        "service": "payment-service",
+        "score": 0.93,
+        "query": "service trace search",
+        "attributes": {
+          "traces": [
+            {
+              "trace_id": "5153e84e2c883bfe045bdde921be38bc",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:46.737269Z",
+              "duration_ms": 1005
+            },
+            {
+              "trace_id": "858222eddadfc21d69e9128cff729987",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:42.721963Z",
+              "duration_ms": 1003
+            },
+            {
+              "trace_id": "ad4f85d7949da2a2c25f1ec175d52f66",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:38.702873Z",
+              "duration_ms": 1007
+            },
+            {
+              "trace_id": "8a1911062165ba78ac2d6689deecec0c",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:36.694472Z",
+              "duration_ms": 1005
+            },
+            {
+              "trace_id": "6a404aa7a01e8896bf986a4cbb70e71f",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:34.683874Z",
+              "duration_ms": 1006
+            },
+            {
+              "trace_id": "3c145e2f218be272c494c70c3e5d7698",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:32.677716Z",
+              "duration_ms": 1003
+            },
+            {
+              "trace_id": "4e92e657af2ab617e441fa8c9313f3f4",
+              "root_service_name": "payment-service",
+              "root_trace_name": "POST /admin/fault",
+              "started_at": "2026-10-02T17:29:32.674596Z",
+              "duration_ms": 2
+            },
+            {
+              "trace_id": "8836134080f02cdd2914195b3659662e",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:31.664977Z",
+              "duration_ms": 4
+            },
+            {
+              "trace_id": "e2de00e9b7c3504260999258c899f340",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:30.654437Z",
+              "duration_ms": 8
+            },
+            {
+              "trace_id": "f3a1356cb006e1adeea01434932b7905",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:29.643826Z",
+              "duration_ms": 7
+            },
+            {
+              "trace_id": "4da05ae3c067386f4ede9423614a27cd",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:28.636064Z",
+              "duration_ms": 4
+            },
+            {
+              "trace_id": "ae36a389418fdb4051b9ecdc66e83742",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:27.624481Z",
+              "duration_ms": 9
+            },
+            {
+              "trace_id": "27a73343d1927b312896a7716139b07a",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:26.615547Z",
+              "duration_ms": 6
+            },
+            {
+              "trace_id": "593906543bc936bba282411898c1f5c8",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:25.601116Z",
+              "duration_ms": 9
+            },
+            {
+              "trace_id": "f4245da563babd961dc9a8bf0e5c7061",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:24.59397Z",
+              "duration_ms": 4
+            },
+            {
+              "trace_id": "f032f84abf806846367f2615616cadec",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:23.583549Z",
+              "duration_ms": 8
+            },
+            {
+              "trace_id": "4cf2d3b44a008612ba94cc75f768d26a",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:22.576313Z",
+              "duration_ms": 4
+            },
+            {
+              "trace_id": "9fb42cbf9e491e73bea2c7e5865f9a8d",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:21.566592Z",
+              "duration_ms": 7
+            },
+            {
+              "trace_id": "e0955185a84c0dccaca44655323a4dea",
+              "root_service_name": "checkout-api",
+              "root_trace_name": "POST /v1/work",
+              "started_at": "2026-10-02T17:29:20.558073Z",
+              "duration_ms": 5
+            },
+            {
+              "trace_id": "4e02ab496e318b224b4ff49059552516",
+              "root_service_name": "<root span not yet received>",
+              "root_trace_name": "",
+              "started_at": "2026-10-02T17:29:06.348661Z",
+              "duration_ms": 10
+            }
+          ]
+        }
+      },
+      {
+        "id": "ev_3dd43ae21842",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_latency_p95 samples",
+        "observation": "request_latency_p95 peaked at 9.5 milliseconds in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.881999Z",
+        "service": "ledger-service",
+        "score": 0.95,
+        "query": "request_latency_p95",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:32.881999+00:00",
+              "value": 9.5
+            },
+            {
+              "timestamp": "2026-10-02T17:29:47.881999+00:00",
+              "value": 9.5
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.881999+00:00",
+              "value": 9.5
+            }
+          ],
+          "unit": "milliseconds",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.882302+00:00",
+          "query_end": "2026-10-02T17:30:02.882302+00:00"
+        }
+      },
+      {
+        "id": "ev_d34bd72493a6",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_error_rate unavailable",
+        "observation": "No valid samples returned for request_error_rate in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.882302Z",
+        "service": "ledger-service",
+        "score": 0.0,
+        "query": "request_error_rate",
+        "attributes": {
+          "series": [],
+          "unit": "ratio",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.882302+00:00",
+          "query_end": "2026-10-02T17:30:02.882302+00:00"
+        }
+      },
+      {
+        "id": "ev_0e60201126db",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_latency_p95 samples",
+        "observation": "request_latency_p95 peaked at 1.91e+03 milliseconds in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.881999Z",
+        "service": "checkout-api",
+        "score": 0.95,
+        "query": "request_latency_p95",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:32.881999+00:00",
+              "value": 9.685307085999687
+            },
+            {
+              "timestamp": "2026-10-02T17:29:47.881999+00:00",
+              "value": 1864.2857142857142
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.881999+00:00",
+              "value": 1910.0
+            }
+          ],
+          "unit": "milliseconds",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.882322+00:00",
+          "query_end": "2026-10-02T17:30:02.882322+00:00"
+        }
+      },
+      {
+        "id": "ev_0c7810eaf983",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_error_rate unavailable",
+        "observation": "No valid samples returned for request_error_rate in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.882322Z",
+        "service": "checkout-api",
+        "score": 0.0,
+        "query": "request_error_rate",
+        "attributes": {
+          "series": [],
+          "unit": "ratio",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.882322+00:00",
+          "query_end": "2026-10-02T17:30:02.882322+00:00"
+        }
+      },
+      {
+        "id": "ev_6baf616d9c63",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_latency_p95 samples",
+        "observation": "request_latency_p95 peaked at 9.5 milliseconds in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.881999Z",
+        "service": "risk-engine",
+        "score": 0.95,
+        "query": "request_latency_p95",
+        "attributes": {
+          "series": [
+            {
+              "timestamp": "2026-10-02T17:29:32.881999+00:00",
+              "value": 9.5
+            },
+            {
+              "timestamp": "2026-10-02T17:29:47.881999+00:00",
+              "value": 9.5
+            },
+            {
+              "timestamp": "2026-10-02T17:30:02.881999+00:00",
+              "value": 9.5
+            }
+          ],
+          "unit": "milliseconds",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.882335+00:00",
+          "query_end": "2026-10-02T17:30:02.882335+00:00"
+        }
+      },
+      {
+        "id": "ev_a2b7e8203943",
+        "kind": "metric",
+        "source": "prometheus-via-telemetry-gateway",
+        "title": "request_error_rate unavailable",
+        "observation": "No valid samples returned for request_error_rate in the bounded query window",
+        "observed_at": "2026-10-02T17:30:02.882335Z",
+        "service": "risk-engine",
+        "score": 0.0,
+        "query": "request_error_rate",
+        "attributes": {
+          "series": [],
+          "unit": "ratio",
+          "discarded_samples": 0,
+          "query_start": "2026-10-02T17:00:02.882335+00:00",
+          "query_end": "2026-10-02T17:30:02.882335+00:00"
+        }
+      },
+      {
+        "id": "ev_92ead7ccab29",
+        "kind": "technical_doc",
+        "source": "doc://platform/database-pool-capacity",
+        "title": "Database connection pool capacity model",
+        "observation": "Application pool size multiplied by replica count must remain below the database connection budget.",
+        "observed_at": "2026-05-02T08:00:00Z",
+        "service": "payment-service",
+        "score": 1.0,
+        "query": null,
+        "attributes": {
+          "section": "Operational constraints",
+          "document_type": "technical_doc",
+          "updated_at": "2026-05-02T08:00:00Z",
+          "content_hash": "335a907a0e8eea3d39e7c686a8acdd5663b1c4f6e70d3f0273fe17ebf3ca63fd",
+          "matched_terms": [
+            "acquisition",
+            "database",
+            "is",
+            "payment",
+            "payment-service",
+            "pool",
+            "saturation",
+            "service",
+            "timeout"
+          ]
+        }
+      },
+      {
+        "id": "ev_2e05309adda8",
+        "kind": "runbook",
+        "source": "runbook://payments/db-pool-saturation",
+        "title": "Payment database pool saturation",
+        "observation": "Confirm db_pool_active_ratio is near one and correlate database acquisition timeouts with the latency window.",
+        "observed_at": "2026-06-18T09:00:00Z",
+        "service": "payment-service",
+        "score": 0.9386,
+        "query": null,
+        "attributes": {
+          "section": "Diagnosis and mitigation",
+          "document_type": "runbook",
+          "updated_at": "2026-06-18T09:00:00Z",
+          "content_hash": "c74fa8f2c1b3d23918789dada6482ed999471d81fde63ce406e52e6b7148e70d",
+          "matched_terms": [
+            "acquisition",
+            "database",
+            "is",
+            "payment",
+            "payment-service",
+            "pool",
+            "saturation",
+            "service"
+          ]
+        }
+      },
+      {
+        "id": "ev_66f10d4901d5",
+        "kind": "past_incident",
+        "source": "incident://INC-2026-041/payment-pool-exhaustion",
+        "title": "Payment v142 ledger fan-out exhausted the connection pool",
+        "observation": "Active database connections reached 50 of 50, acquisition timeouts increased, and payment p95 latency regressed.",
+        "observed_at": "2026-07-11T16:40:00Z",
+        "service": "payment-service",
+        "score": 0.8198,
+        "query": null,
+        "attributes": {
+          "section": "Root cause and resolution",
+          "document_type": "past_incident",
+          "updated_at": "2026-07-11T16:40:00Z",
+          "content_hash": "cb9aeaa620b278b1737eb65dee336a3948d7ca7fa9d4db75be06ce886fbfde13",
+          "matched_terms": [
+            "acquisition",
+            "database",
+            "payment",
+            "payment-service",
+            "pool",
+            "service",
+            "timeout"
+          ]
+        }
+      },
+      {
+        "id": "ev_73222b9ab660",
+        "kind": "runbook",
+        "source": "runbook://platform/downstream-timeouts",
+        "title": "Downstream timeout isolation",
+        "observation": "Compare dependency p95 latency and timeout rate by edge.",
+        "observed_at": "2026-06-03T10:00:00Z",
+        "service": "payment-service",
+        "score": 0.5569,
+        "query": null,
+        "attributes": {
+          "section": "Triage",
+          "document_type": "runbook",
+          "updated_at": "2026-06-03T10:00:00Z",
+          "content_hash": "26df7c1a89ace1e091c1d7d24106ce5a977317581027ab4dd586641d256da6e7",
+          "matched_terms": [
+            "payment",
+            "payment-service",
+            "service",
+            "timeout"
+          ]
+        }
+      },
+      {
+        "id": "ev_0f476caa3d39",
+        "kind": "technical_doc",
+        "source": "doc://platform/evidence-correlation",
+        "title": "Incident evidence correlation standard",
+        "observation": "Temporal correlation alone is insufficient; include a causal mechanism, conflicting evidence, and a stable source URI for every retrieved document.",
+        "observed_at": "2026-07-01T00:00:00Z",
+        "service": "payment-service",
+        "score": 0.4668,
+        "query": null,
+        "attributes": {
+          "section": "Grounding requirements",
+          "document_type": "technical_doc",
+          "updated_at": "2026-07-01T00:00:00Z",
+          "content_hash": "8ab3a97446b114f4bb5fff91d6debbc7ccb020298c288d45fdaef99446ff3bc7",
+          "matched_terms": [
+            "is",
+            "payment",
+            "payment-service",
+            "service"
+          ]
+        }
+      },
+      {
+        "id": "ev_bfcf656373c1",
+        "kind": "runbook",
+        "source": "runbook://resilience/retry-storm",
+        "title": "Retry storm containment",
+        "observation": "Measure retry amplification against original request volume and dependency error rate. Apply retry budgets, exponential backoff, and circuit breaking before increasing downstream capacity.",
+        "observed_at": "2026-05-19T14:00:00Z",
+        "service": "payment-service",
+        "score": 0.4142,
+        "query": null,
+        "attributes": {
+          "section": "Containment",
+          "document_type": "runbook",
+          "updated_at": "2026-05-19T14:00:00Z",
+          "content_hash": "00769a65929c972a7c7e9c7e971edbdb8e6f0ac1b0a8d798ecc9f6df8e7dfefe",
+          "matched_terms": [
+            "payment",
+            "payment-service",
+            "service"
+          ]
+        }
+      },
+      {
+        "id": "ev_e7d6c5aee9d2",
+        "kind": "runbook",
+        "source": "runbook://delivery/deployment-regression",
+        "title": "Deployment regression correlation",
+        "observation": "Production rollback requires approval tied to the exact service and revision.",
+        "observed_at": "2026-06-22T06:30:00Z",
+        "service": "payment-service",
+        "score": 0.3937,
+        "query": null,
+        "attributes": {
+          "section": "Validation",
+          "document_type": "runbook",
+          "updated_at": "2026-06-22T06:30:00Z",
+          "content_hash": "9d28c1d2b2a29e4db92deea035eb608e512d67b8bca7c67993d0fc24b6775bd9",
+          "matched_terms": [
+            "payment",
+            "payment-service",
+            "service"
+          ]
+        }
+      },
+      {
+        "id": "ev_d311f401ac0a",
+        "kind": "runbook",
+        "source": "runbook://caching/cache-penetration",
+        "title": "Cache penetration and missing-key protection",
+        "observation": "Correlate cache hit-ratio collapse with database QPS and repeated missing keys.",
+        "observed_at": "2026-05-30T03:30:00Z",
+        "service": "payment-service",
+        "score": 0.1673,
+        "query": null,
+        "attributes": {
+          "section": "Diagnosis and mitigation",
+          "document_type": "runbook",
+          "updated_at": "2026-05-30T03:30:00Z",
+          "content_hash": "2a9878baada56588c3bd6475c3d82601632320a967c429f0722f0f1ff8d8f9ce",
+          "matched_terms": [
+            "database",
+            "service"
+          ]
+        }
+      },
+      {
+        "id": "ev_231e79abae7b",
+        "kind": "deployment",
+        "source": "kubernetes-via-telemetry-gateway",
+        "title": "Release 142",
+        "observation": "Parallelize ledger balance lookups",
+        "observed_at": "2026-10-03T01:01:02.898184+08:00",
+        "service": "payment-service",
+        "score": 0.9,
+        "query": null,
+        "attributes": {
+          "service": "payment-service",
+          "revision": "142",
+          "previous_revision": "141",
+          "deployed_at": "2026-10-03T01:01:02.898184+08:00",
+          "commit_sha": "7b4d23e",
+          "summary": "Parallelize ledger balance lookups"
+        }
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "hyp_f8f903c962",
+        "rank": 1,
+        "cause": "Database connection pool exhaustion",
+        "confidence": 0.87,
+        "evidence_ids": [
+          "ev_ff4cab48e379",
+          "ev_c5410fe616fa",
+          "ev_2e05309adda8",
+          "ev_66f10d4901d5"
+        ],
+        "conflicting_evidence_ids": [],
+        "validation_notes": [
+          "Citations are selected by failure-profile metric priority, then evidence score.",
+          "Operational knowledge provides context, not independent proof of causation.",
+          "This is a deterministic profile hypothesis, not a validated causal conclusion."
+        ]
+      },
+      {
+        "id": "hyp_026276a679",
+        "rank": 2,
+        "cause": "Database resource contention",
+        "confidence": 0.31,
+        "evidence_ids": [
+          "ev_ff4cab48e379",
+          "ev_c5410fe616fa"
+        ],
+        "conflicting_evidence_ids": [],
+        "validation_notes": [
+          "This alternative has less corroborating evidence."
+        ]
+      }
+    ],
+    "remediation": {
+      "id": "rem_cea44568b2",
+      "title": "Rollback payment-service to revision 141",
+      "tool": "rollback_release",
+      "arguments": {
+        "service": "payment-service",
+        "namespace": "prod-sg",
+        "revision": "141"
+      },
+      "command_preview": "kubectl rollout undo deploy/payment-service --to-revision=141",
+      "risk": "high",
+      "requires_approval": true,
+      "dry_run_passed": true,
+      "expected_result": "Restore the previous query pattern and drain pool waiters."
+    },
+    "approval_decision": null,
+    "approval_actor": null,
+    "approval_reason": null,
+    "trace": [
+      {
+        "sequence": 1,
+        "step": "classify_incident",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T17:30:02.804503Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 2,
+        "step": "classify_incident",
+        "event": "incident_classified",
+        "occurred_at": "2026-10-02T17:30:02.804532Z",
+        "duration_ms": null,
+        "payload": {
+          "incident_type": "database_connection_pool_exhaustion"
+        }
+      },
+      {
+        "sequence": 3,
+        "step": "classify_incident",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T17:30:02.804537Z",
+        "duration_ms": 0,
+        "payload": {}
+      },
+      {
+        "sequence": 4,
+        "step": "select_services",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T17:30:02.804960Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 5,
+        "step": "select_services",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T17:30:02.804972Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "get_service_dependencies",
+          "arguments": {
+            "service": "payment-service"
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 6,
+        "step": "select_services",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T17:30:02.859083Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "get_service_dependencies",
+          "dependencies": [
+            "ledger-service",
+            "checkout-api",
+            "risk-engine"
+          ],
+          "topology": {
+            "service": "payment-service",
+            "edges": [
+              {
+                "source": "checkout-api",
+                "target": "payment-service"
+              },
+              {
+                "source": "payment-service",
+                "target": "ledger-service"
+              },
+              {
+                "source": "payment-service",
+                "target": "risk-engine"
+              }
+            ],
+            "dependencies": [
+              "ledger-service",
+              "checkout-api",
+              "risk-engine"
+            ],
+            "source": "service-catalog-via-telemetry-gateway",
+            "topology_kind": "static_fixture_catalog",
+            "observed": {
+              "status": "available",
+              "source": "tempo_client_server_parentage",
+              "calls": [
+                {
+                  "source": "payment-service",
+                  "target": "ledger-service",
+                  "trace_id": "4da05ae3c067386f4ede9423614a27cd",
+                  "client_span_id": "652c2c28f0968442",
+                  "server_span_id": "4a1177b73ff9cfaa",
+                  "observed_at": "2026-10-02T17:29:28.637480Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "4da05ae3c067386f4ede9423614a27cd",
+                  "client_span_id": "77b31b4c0f337adc",
+                  "server_span_id": "b6d7d01a12caaf32",
+                  "observed_at": "2026-10-02T17:29:28.636790Z"
+                },
+                {
+                  "source": "payment-service",
+                  "target": "ledger-service",
+                  "trace_id": "ae36a389418fdb4051b9ecdc66e83742",
+                  "client_span_id": "daaad2eca2f667d3",
+                  "server_span_id": "2438cb2629852a70",
+                  "observed_at": "2026-10-02T17:29:27.628078Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "ae36a389418fdb4051b9ecdc66e83742",
+                  "client_span_id": "13283492b768bcc3",
+                  "server_span_id": "2ae9fa790a58f472",
+                  "observed_at": "2026-10-02T17:29:27.626395Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "27a73343d1927b312896a7716139b07a",
+                  "client_span_id": "bd97c68993c4c0f9",
+                  "server_span_id": "4701e080bd6b88e2",
+                  "observed_at": "2026-10-02T17:29:26.617080Z"
+                },
+                {
+                  "source": "payment-service",
+                  "target": "ledger-service",
+                  "trace_id": "27a73343d1927b312896a7716139b07a",
+                  "client_span_id": "4f861c49f70b90cd",
+                  "server_span_id": "84eca85220e0fa54",
+                  "observed_at": "2026-10-02T17:29:26.618196Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "593906543bc936bba282411898c1f5c8",
+                  "client_span_id": "1cd77210d7236250",
+                  "server_span_id": "3b7d3fb38d075a64",
+                  "observed_at": "2026-10-02T17:29:25.602705Z"
+                },
+                {
+                  "source": "payment-service",
+                  "target": "ledger-service",
+                  "trace_id": "593906543bc936bba282411898c1f5c8",
+                  "client_span_id": "4dcd75a9e9a9e745",
+                  "server_span_id": "46c8b81ef167d02c",
+                  "observed_at": "2026-10-02T17:29:25.605883Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "4cf2d3b44a008612ba94cc75f768d26a",
+                  "client_span_id": "87468bb6fb8a0d6c",
+                  "server_span_id": "1df161598539bca4",
+                  "observed_at": "2026-10-02T17:29:22.577142Z"
+                },
+                {
+                  "source": "payment-service",
+                  "target": "ledger-service",
+                  "trace_id": "4cf2d3b44a008612ba94cc75f768d26a",
+                  "client_span_id": "cf12c9f726cb23cb",
+                  "server_span_id": "fee483bc898e0b68",
+                  "observed_at": "2026-10-02T17:29:22.577851Z"
+                },
+                {
+                  "source": "payment-service",
+                  "target": "ledger-service",
+                  "trace_id": "9fb42cbf9e491e73bea2c7e5865f9a8d",
+                  "client_span_id": "ad3892c049c2f383",
+                  "server_span_id": "09c0396a07f79860",
+                  "observed_at": "2026-10-02T17:29:21.569816Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "9fb42cbf9e491e73bea2c7e5865f9a8d",
+                  "client_span_id": "15f31b9812c6d1b3",
+                  "server_span_id": "c0b38d3230246034",
+                  "observed_at": "2026-10-02T17:29:21.568075Z"
+                },
+                {
+                  "source": "payment-service",
+                  "target": "ledger-service",
+                  "trace_id": "e0955185a84c0dccaca44655323a4dea",
+                  "client_span_id": "b032f7872c32b60f",
+                  "server_span_id": "7d057bf2f0499dd0",
+                  "observed_at": "2026-10-02T17:29:20.560432Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "e0955185a84c0dccaca44655323a4dea",
+                  "client_span_id": "40b533ece7312ce1",
+                  "server_span_id": "97951e4d1713308f",
+                  "observed_at": "2026-10-02T17:29:20.559247Z"
+                },
+                {
+                  "source": "checkout-api",
+                  "target": "payment-service",
+                  "trace_id": "4e02ab496e318b224b4ff49059552516",
+                  "client_span_id": "387ddb0bb8e34544",
+                  "server_span_id": "131e53c65bcba2dd",
+                  "observed_at": "2026-10-02T17:29:06.351392Z"
+                },
+                {
+                  "source": "payment-service",
+                  "target": "ledger-service",
+                  "trace_id": "4e02ab496e318b224b4ff49059552516",
+                  "client_span_id": "eae5674e1881f41d",
+                  "server_span_id": "c47be98a3aded362",
+                  "observed_at": "2026-10-02T17:29:06.353452Z"
+                }
+              ],
+              "start": "2026-10-02T17:00:02.807605Z",
+              "end": "2026-10-02T17:30:02.807605Z",
+              "coverage": "sampled_not_exhaustive",
+              "traces_read": 8,
+              "traces_failed": 0,
+              "calls_omitted": 0,
+              "calls_discarded": 0
+            },
+            "catalog_status": "available"
+          },
+          "causal_direction_verified": false
+        }
+      },
+      {
+        "sequence": 7,
+        "step": "select_services",
+        "event": "services_selected",
+        "occurred_at": "2026-10-02T17:30:02.859092Z",
+        "duration_ms": null,
+        "payload": {
+          "primary": "payment-service",
+          "dependencies": [
+            "ledger-service",
+            "checkout-api",
+            "risk-engine"
+          ]
+        }
+      },
+      {
+        "sequence": 8,
+        "step": "select_services",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T17:30:02.859096Z",
+        "duration_ms": 54,
+        "payload": {}
+      },
+      {
+        "sequence": 9,
+        "step": "query_telemetry",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T17:30:02.859766Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 10,
+        "step": "query_telemetry",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T17:30:02.859770Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "arguments": {
+            "service": "payment-service",
+            "metrics": [
+              "request_latency_p95",
+              "request_error_rate",
+              "db_pool_active_ratio",
+              "cpu_utilization",
+              "memory_working_set",
+              "kafka_consumer_lag",
+              "retry_rate",
+              "cache_miss_rate"
+            ],
+            "window": "last_30_minutes",
+            "step_seconds": 15,
+            "metric_overrides": {
+              "memory_working_set": {
+                "window": "last_5_minutes",
+                "step_seconds": 5
+              }
+            }
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 11,
+        "step": "query_telemetry",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T17:30:02.859772Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "search_logs",
+          "arguments": {
+            "service": "payment-service",
+            "query": "",
+            "window": "last_30_minutes"
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 12,
+        "step": "query_telemetry",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T17:30:02.859773Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_traces",
+          "arguments": {
+            "service": "payment-service",
+            "window": "last_30_minutes",
+            "limit": 20
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 13,
+        "step": "query_telemetry",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T17:30:02.882064Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "service": "payment-service",
+          "evidence_ids": [
+            "ev_332ad54e2b2d",
+            "ev_7a450a59e64d",
+            "ev_ff4cab48e379",
+            "ev_027aa4e4f0e1",
+            "ev_018d26962681",
+            "ev_3f319402f85d",
+            "ev_24176d91baac",
+            "ev_dffdf7b66c16"
+          ],
+          "sources": [
+            "prometheus-via-telemetry-gateway"
+          ]
+        }
+      },
+      {
+        "sequence": 14,
+        "step": "query_telemetry",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T17:30:02.882071Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "search_logs",
+          "service": "payment-service",
+          "evidence_ids": [
+            "ev_c5410fe616fa"
+          ],
+          "sources": [
+            "loki-via-telemetry-gateway"
+          ]
+        }
+      },
+      {
+        "sequence": 15,
+        "step": "query_telemetry",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T17:30:02.882073Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_traces",
+          "service": "payment-service",
+          "evidence_ids": [
+            "ev_dad7a2170cca"
+          ],
+          "sources": [
+            "tempo-via-telemetry-gateway"
+          ]
+        }
+      },
+      {
+        "sequence": 16,
+        "step": "query_telemetry",
+        "event": "anomaly_windows_detected",
+        "occurred_at": "2026-10-02T17:30:02.882165Z",
+        "duration_ms": null,
+        "payload": {
+          "windows": [
+            {
+              "evidence_id": "ev_332ad54e2b2d",
+              "metric": "request_latency_p95",
+              "start": "2026-10-02T17:29:47.859000+00:00",
+              "end": "2026-10-02T17:30:02.859000+00:00",
+              "sample_count": 2,
+              "peak": 1910.0,
+              "criterion": "threshold",
+              "threshold": 1000.0,
+              "left_censored": false
+            },
+            {
+              "evidence_id": "ev_7a450a59e64d",
+              "metric": "request_error_rate",
+              "start": "2026-10-02T17:29:47.859000+00:00",
+              "end": "2026-10-02T17:30:02.859000+00:00",
+              "sample_count": 2,
+              "peak": 0.5442177885457569,
+              "criterion": "threshold",
+              "threshold": 0.05,
+              "left_censored": true
+            },
+            {
+              "evidence_id": "ev_ff4cab48e379",
+              "metric": "db_pool_active_ratio",
+              "start": "2026-10-02T17:29:47.859000+00:00",
+              "end": "2026-10-02T17:30:02.859000+00:00",
+              "sample_count": 2,
+              "peak": 1.0,
+              "criterion": "threshold",
+              "threshold": 0.9,
+              "left_censored": false
+            }
+          ],
+          "method": "bounded_fault_lab_thresholds_and_memory_trend"
+        }
+      },
+      {
+        "sequence": 17,
+        "step": "query_telemetry",
+        "event": "signals_classified",
+        "occurred_at": "2026-10-02T17:30:02.882232Z",
+        "duration_ms": null,
+        "payload": {
+          "initial_type": "database_connection_pool_exhaustion",
+          "inferred_type": "database_connection_pool_exhaustion",
+          "candidate_types": [
+            "database_connection_pool_exhaustion"
+          ],
+          "ambiguous": false,
+          "metric_count": 8,
+          "log_evidence_count": 1,
+          "trace_evidence_count": 1
+        }
+      },
+      {
+        "sequence": 18,
+        "step": "query_telemetry",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T17:30:02.882241Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "arguments": {
+            "service": "ledger-service",
+            "metrics": [
+              "request_latency_p95",
+              "request_error_rate"
+            ]
+          },
+          "read_only": true,
+          "purpose": "dependency_impact",
+          "timeout_seconds": 10
+        }
+      },
+      {
+        "sequence": 19,
+        "step": "query_telemetry",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T17:30:02.882243Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "arguments": {
+            "service": "checkout-api",
+            "metrics": [
+              "request_latency_p95",
+              "request_error_rate"
+            ]
+          },
+          "read_only": true,
+          "purpose": "dependency_impact",
+          "timeout_seconds": 10
+        }
+      },
+      {
+        "sequence": 20,
+        "step": "query_telemetry",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T17:30:02.882244Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "arguments": {
+            "service": "risk-engine",
+            "metrics": [
+              "request_latency_p95",
+              "request_error_rate"
+            ]
+          },
+          "read_only": true,
+          "purpose": "dependency_impact",
+          "timeout_seconds": 10
+        }
+      },
+      {
+        "sequence": 21,
+        "step": "query_telemetry",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T17:30:02.894596Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "service": "ledger-service",
+          "purpose": "dependency_impact",
+          "evidence_ids": [
+            "ev_3dd43ae21842",
+            "ev_d34bd72493a6"
+          ],
+          "error_type": null
+        }
+      },
+      {
+        "sequence": 22,
+        "step": "query_telemetry",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T17:30:02.894622Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "service": "checkout-api",
+          "purpose": "dependency_impact",
+          "evidence_ids": [
+            "ev_0e60201126db",
+            "ev_0c7810eaf983"
+          ],
+          "error_type": null
+        }
+      },
+      {
+        "sequence": 23,
+        "step": "query_telemetry",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T17:30:02.894636Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "query_metrics",
+          "service": "risk-engine",
+          "purpose": "dependency_impact",
+          "evidence_ids": [
+            "ev_6baf616d9c63",
+            "ev_a2b7e8203943"
+          ],
+          "error_type": null
+        }
+      },
+      {
+        "sequence": 24,
+        "step": "query_telemetry",
+        "event": "dependency_impacts_assessed",
+        "occurred_at": "2026-10-02T17:30:02.894638Z",
+        "duration_ms": null,
+        "payload": {
+          "impacts": [
+            {
+              "service": "ledger-service",
+              "relation": "downstream_observed_call",
+              "topology_kind": "static_fixture_catalog",
+              "observed_call_count": 8,
+              "status": "unconfirmed",
+              "evidence_ids": [
+                "ev_3dd43ae21842",
+                "ev_d34bd72493a6"
+              ],
+              "anomaly_windows": [],
+              "overlaps_primary_window": null,
+              "causal_direction_verified": false
+            },
+            {
+              "service": "checkout-api",
+              "relation": "upstream_observed_call",
+              "topology_kind": "static_fixture_catalog",
+              "observed_call_count": 8,
+              "status": "observed_anomaly",
+              "evidence_ids": [
+                "ev_0e60201126db",
+                "ev_0c7810eaf983"
+              ],
+              "anomaly_windows": [
+                {
+                  "evidence_id": "ev_0e60201126db",
+                  "metric": "request_latency_p95",
+                  "start": "2026-10-02T17:29:47.881999+00:00",
+                  "end": "2026-10-02T17:30:02.881999+00:00",
+                  "sample_count": 2,
+                  "peak": 1910.0,
+                  "criterion": "threshold",
+                  "threshold": 1000.0,
+                  "left_censored": false
+                }
+              ],
+              "overlaps_primary_window": true,
+              "causal_direction_verified": false
+            },
+            {
+              "service": "risk-engine",
+              "relation": "downstream_catalog_dependency",
+              "topology_kind": "static_fixture_catalog",
+              "observed_call_count": 0,
+              "status": "unconfirmed",
+              "evidence_ids": [
+                "ev_6baf616d9c63",
+                "ev_a2b7e8203943"
+              ],
+              "anomaly_windows": [],
+              "overlaps_primary_window": null,
+              "causal_direction_verified": false
+            }
+          ],
+          "omitted_services": [],
+          "max_services": 8,
+          "max_concurrency": 4,
+          "method": "timestamped_latency_error_thresholds_not_causal_proof"
+        }
+      },
+      {
+        "sequence": 25,
+        "step": "query_telemetry",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T17:30:02.894643Z",
+        "duration_ms": 35,
+        "payload": {}
+      },
+      {
+        "sequence": 26,
+        "step": "retrieve_context",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T17:30:02.895585Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 27,
+        "step": "retrieve_context",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T17:30:02.895592Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "search_incident_knowledge",
+          "arguments": {
+            "service": "payment-service",
+            "query": "Why is payment-service slow today? database pool saturation acquisition timeout",
+            "content_types": [
+              "runbook",
+              "past_incident",
+              "technical_doc"
+            ]
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 28,
+        "step": "retrieve_context",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T17:30:02.895594Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "get_recent_deployments",
+          "arguments": {
+            "service": "payment-service"
+          },
+          "read_only": true
+        }
+      },
+      {
+        "sequence": 29,
+        "step": "retrieve_context",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T17:30:02.899163Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "search_incident_knowledge",
+          "evidence_ids": [
+            "ev_92ead7ccab29",
+            "ev_2e05309adda8",
+            "ev_66f10d4901d5",
+            "ev_73222b9ab660",
+            "ev_0f476caa3d39",
+            "ev_bfcf656373c1",
+            "ev_e7d6c5aee9d2",
+            "ev_d311f401ac0a"
+          ],
+          "sources": [
+            "doc://platform/database-pool-capacity",
+            "runbook://payments/db-pool-saturation",
+            "incident://INC-2026-041/payment-pool-exhaustion",
+            "runbook://platform/downstream-timeouts",
+            "doc://platform/evidence-correlation",
+            "runbook://resilience/retry-storm",
+            "runbook://delivery/deployment-regression",
+            "runbook://caching/cache-penetration"
+          ]
+        }
+      },
+      {
+        "sequence": 30,
+        "step": "retrieve_context",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T17:30:02.899167Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "get_recent_deployments",
+          "evidence_ids": [
+            "ev_231e79abae7b"
+          ],
+          "sources": [
+            "kubernetes-via-telemetry-gateway"
+          ]
+        }
+      },
+      {
+        "sequence": 31,
+        "step": "retrieve_context",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T17:30:02.899175Z",
+        "duration_ms": 4,
+        "payload": {}
+      },
+      {
+        "sequence": 32,
+        "step": "generate_hypotheses",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T17:30:02.900480Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 33,
+        "step": "generate_hypotheses",
+        "event": "evidence_selection",
+        "occurred_at": "2026-10-02T17:30:02.900546Z",
+        "duration_ms": null,
+        "payload": {
+          "policy": "profile_metric_priority_then_score",
+          "profile": "database_connection_pool_exhaustion",
+          "primary_service": "payment-service",
+          "preferred_metrics": [
+            "db_pool_active_ratio",
+            "request_latency_p95"
+          ],
+          "selected_ids": [
+            "ev_ff4cab48e379",
+            "ev_c5410fe616fa",
+            "ev_2e05309adda8",
+            "ev_66f10d4901d5"
+          ]
+        }
+      },
+      {
+        "sequence": 34,
+        "step": "generate_hypotheses",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T17:30:02.900578Z",
+        "duration_ms": 0,
+        "payload": {}
+      },
+      {
+        "sequence": 35,
+        "step": "validate_evidence",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T17:30:02.901381Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 36,
+        "step": "validate_evidence",
+        "event": "hypothesis_citations_validated",
+        "occurred_at": "2026-10-02T17:30:02.901407Z",
+        "duration_ms": null,
+        "payload": {
+          "checks": [
+            "retained_unique_ids",
+            "usable_observations",
+            "metric_or_log",
+            "distinct_kinds"
+          ],
+          "hypotheses": [
+            {
+              "rank": 1,
+              "evidence_ids": [
+                "ev_ff4cab48e379",
+                "ev_c5410fe616fa",
+                "ev_2e05309adda8",
+                "ev_66f10d4901d5"
+              ]
+            },
+            {
+              "rank": 2,
+              "evidence_ids": [
+                "ev_ff4cab48e379",
+                "ev_c5410fe616fa"
+              ]
+            }
+          ],
+          "semantic_entailment_verified": false
+        }
+      },
+      {
+        "sequence": 37,
+        "step": "validate_evidence",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T17:30:02.901409Z",
+        "duration_ms": 0,
+        "payload": {}
+      },
+      {
+        "sequence": 38,
+        "step": "propose_remediation",
+        "event": "step_started",
+        "occurred_at": "2026-10-02T17:30:02.902547Z",
+        "duration_ms": null,
+        "payload": {}
+      },
+      {
+        "sequence": 39,
+        "step": "propose_remediation",
+        "event": "tool_call",
+        "occurred_at": "2026-10-02T17:30:02.902644Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "rollback_release",
+          "arguments": {
+            "service": "payment-service",
+            "namespace": "prod-sg",
+            "revision": "141",
+            "dry_run": true,
+            "idempotency_key": "INC-7BF496:rollback_release:141:dry-run"
+          },
+          "read_only": false
+        }
+      },
+      {
+        "sequence": 40,
+        "step": "propose_remediation",
+        "event": "tool_result",
+        "occurred_at": "2026-10-02T17:30:02.903963Z",
+        "duration_ms": null,
+        "payload": {
+          "tool": "rollback_release",
+          "dry_run": true,
+          "accepted": true
+        }
+      },
+      {
+        "sequence": 41,
+        "step": "propose_remediation",
+        "event": "step_completed",
+        "occurred_at": "2026-10-02T17:30:02.903992Z",
+        "duration_ms": 1,
+        "payload": {}
+      },
+      {
+        "sequence": 42,
+        "step": "human_approval",
+        "event": "workflow_interrupted",
+        "occurred_at": "2026-10-02T17:30:02.904338Z",
+        "duration_ms": null,
+        "payload": {
+          "reason": "human_approval",
+          "dry_run_key": "INC-7BF496:rollback_release:141:dry-run"
+        }
+      }
+    ],
+    "created_at": "2026-10-02T17:30:02.801748Z",
+    "updated_at": "2026-10-02T17:30:02.904340Z"
+  },
+  "model_calls": 0,
+  "production_actions_executed": false
+}

@@ -1,0 +1,77 @@
+{
+  "contract": "packaged-real-pool-acceptance-v1",
+  "started_at": "2026-10-07T13:11:34.947375+00:00",
+  "images": {
+    "payment": "sha256:2399890479d0215b97cb88dc41896905045406c1e78b3a197e4abd7e28a6ddef",
+    "postgres": "sha256:8ee7c900f4de054e8f0a3b42b8f5da38b8fba57c3ccd7c1a02be28cb0b06494f"
+  },
+  "checks": {
+    "postgres_backend": true,
+    "non_root_identity": true,
+    "read_only_filesystem": true,
+    "socket_read_only": true,
+    "no_host_ports": true,
+    "image_source_matches_worktree": true,
+    "database_data_ephemeral": true,
+    "database_no_host_ports": true,
+    "database_has_no_tcp_listener": true,
+    "pool_initially_unleased": true,
+    "four_actual_sessions": true,
+    "healthy_request": true,
+    "unauthorized_injection_rejected": true,
+    "fault_accepted": true,
+    "four_leases_reserved": true,
+    "actual_acquisition_timeout": true,
+    "sessions_retained_during_fault": true,
+    "fault_cleared": true,
+    "recovered_request": true,
+    "all_leases_released": true,
+    "same_sessions_after_recovery": true,
+    "shutdown_closes_all_pool_sessions": true
+  },
+  "model_calls": 0,
+  "production_actions": 0,
+  "full_platform_acceptance": false,
+  "kubernetes_acceptance": false,
+  "source_sha256": {
+    "fault-lab/verify_packaged_pool.py": "ae714d56d7899bce215985bf87d772364c8d80925617a73ec692ce5e25babe92",
+    "fault-lab/app/Dockerfile": "c3939a4ee2464fcff6cbd45732167e6fbb4f5158f5a7c67e8c3deec104e74dc4",
+    "fault-lab/app/pyproject.toml": "1da639757da7e1e0b59d95823857d86e89598604d7dacd14a62072495bb9ab15",
+    "fault-lab/app/incident_lab/__init__.py": "08488714589bd386b34fb9e04062bfbcfcfa5475008323862f94d5c6ab59596d",
+    "fault-lab/app/incident_lab/app.py": "bfe1cf303da56b25f0928a9c33bdd3e3b4b24ba86e4718b6ab3df78601f63fd1",
+    "fault-lab/app/incident_lab/postgres_pool.py": "e2513e139e783cd0139c121547620dd84a81900131dfd96d11bb7d4026b7427f",
+    "fault-lab/app/incident_lab/start.py": "371a9e9f7fe227378016c7c332657197f926dab935c82e5add93dd3696c4b077",
+    "fault-lab/app/incident_lab/traffic.py": "c24971c67985918d8db794ed4a47f46efd234d02c78aaae786d3c602bfd62c95"
+  },
+  "postgres_backend_pids": [
+    75,
+    76,
+    77,
+    78
+  ],
+  "cleanup": [
+    {
+      "kind": "container",
+      "name": "copilot-packaged-pool-1f0c6810986f4df28b1100adf036e642-payment",
+      "absent": true
+    },
+    {
+      "kind": "container",
+      "name": "copilot-packaged-pool-1f0c6810986f4df28b1100adf036e642-db",
+      "absent": true
+    },
+    {
+      "kind": "volume",
+      "name": "copilot-packaged-pool-1f0c6810986f4df28b1100adf036e642-socket",
+      "absent": true
+    },
+    {
+      "kind": "network",
+      "name": "copilot-packaged-pool-1f0c6810986f4df28b1100adf036e642",
+      "absent": true
+    }
+  ],
+  "cleanup_complete": true,
+  "elapsed_seconds": 8.884,
+  "ok": true
+}

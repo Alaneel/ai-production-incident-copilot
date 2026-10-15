@@ -1,0 +1,130 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orchestrator
+spec:
+  selector:
+    app.kubernetes.io/name: orchestrator
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestrator
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orchestrator
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: orchestrator
+    spec:
+      serviceAccountName: orchestrator
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: orchestrator
+          image: incident-copilot/orchestrator
+          env:
+            - name: ORCHESTRATOR_AUTH_MODE
+              value: required
+            - name: ORCHESTRATOR_READ_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: incident-copilot-secrets
+                  key: orchestrator-read-token
+            - name: ORCHESTRATOR_OPERATOR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: incident-copilot-secrets
+                  key: orchestrator-operator-token
+            - name: ORCHESTRATOR_OPERATOR_ACTOR
+              valueFrom:
+                secretKeyRef:
+                  name: incident-copilot-secrets
+                  key: orchestrator-operator-actor
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: incident-copilot-secrets
+                  key: database-url
+            - name: REDIS_URL
+              value: redis://redis:6379/0
+            - name: MCP_SERVER_URL
+              value: http://mcp-server:8082/mcp
+            - name: MCP_READ_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: incident-copilot-secrets
+                  key: mcp-read-token
+            - name: MCP_OPERATOR_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: incident-copilot-secrets
+                  key: mcp-operator-token
+            - name: MCP_APPROVAL_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: incident-copilot-secrets
+                  key: mcp-approval-secret
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: incident-copilot-secrets
+                  key: openai-api-key
+                  optional: true
+            - name: OPENAI_MODEL
+              value: ""
+            - name: CORS_ALLOWED_ORIGINS
+              value: https://incident-copilot.example.com
+            - name: LANGGRAPH_STRICT_MSGPACK
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "2"
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: orchestrator
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orchestrator

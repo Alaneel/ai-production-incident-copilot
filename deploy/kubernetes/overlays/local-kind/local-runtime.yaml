@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestrator
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: orchestrator
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: CORS_ALLOWED_ORIGINS
+              value: http://localhost:3000,http://127.0.0.1:3000

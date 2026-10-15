@@ -1,0 +1,233 @@
+x-lab-service: &lab-service
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  read_only: true
+  tmpfs: ["/tmp:rw,noexec,nosuid,size=16m,mode=1777"]
+  build:
+    context: .
+    dockerfile: fault-lab/app/Dockerfile
+  environment: &lab-environment
+    FAULT_INJECTION_TOKEN: ${FAULT_INJECTION_TOKEN:-local-fault-token}
+    LOKI_PUSH_URL: http://loki:3100/loki/api/v1/push
+    OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+    RELEASE_REVISION: "142"
+  depends_on:
+    loki:
+      condition: service_healthy
+    otel-collector:
+      condition: service_started
+
+services:
+  telemetry-gateway:
+    environment:
+      PROMETHEUS_URL: http://prometheus:9090
+      LOKI_URL: http://loki:3100
+      TEMPO_URL: http://tempo:3200
+    depends_on:
+      prometheus:
+        condition: service_healthy
+      loki:
+        condition: service_healthy
+      tempo:
+        condition: service_started
+
+  checkout-api:
+    <<: *lab-service
+    environment:
+      <<: *lab-environment
+      SERVICE_NAME: checkout-api
+      DOWNSTREAM_URL: http://payment-service:8090
+      RELEASE_REVISION: "87"
+    ports:
+      - "127.0.0.1:8090:8090"
+    depends_on:
+      payment-service:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8090/health')",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  payment-service:
+    <<: *lab-service
+    environment:
+      <<: *lab-environment
+      SERVICE_NAME: payment-service
+      DOWNSTREAM_URL: http://ledger-service:8090
+      RELEASE_REVISION: "142"
+    ports:
+      - "127.0.0.1:8091:8090"
+    depends_on:
+      ledger-service:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8090/health')",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  ledger-service:
+    <<: *lab-service
+    environment:
+      <<: *lab-environment
+      SERVICE_NAME: ledger-service
+      RELEASE_REVISION: "64"
+    ports:
+      - "127.0.0.1:8092:8090"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8090/health')",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  risk-engine:
+    <<: *lab-service
+    environment:
+      <<: *lab-environment
+      SERVICE_NAME: risk-engine
+      RELEASE_REVISION: "31"
+    ports:
+      - "127.0.0.1:8093:8090"
+
+  traffic-generator:
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=16m,mode=1777"]
+    build:
+      context: .
+      dockerfile: fault-lab/app/Dockerfile
+    command: ["python", "-m", "incident_lab.traffic"]
+    environment:
+      TRAFFIC_TARGET: http://checkout-api:8090/v1/work
+      TRAFFIC_RPS: ${FAULT_LAB_RPS:-2}
+    depends_on:
+      checkout-api:
+        condition: service_healthy
+
+  prometheus:
+    build:
+      context: deploy/images/prometheus-security
+    image: opspilot-prometheus:3.15.0-security-20261014
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=6h
+      - --web.enable-lifecycle
+    volumes:
+      - ./fault-lab/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - fault-lab-prometheus:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--spider",
+          "-q",
+          "http://localhost:9090/-/ready",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  loki:
+    build:
+      context: deploy/images/loki-security
+    image: opspilot-loki:3.7.8-security-20261014
+    command: ["-config.file=/etc/loki/local-config.yaml"]
+    volumes:
+      - ./fault-lab/observability/loki.yml:/etc/loki/local-config.yaml:ro
+    tmpfs:
+      - /tmp/loki:uid=10001,gid=10001,mode=0770
+    ports:
+      - "127.0.0.1:3100:3100"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/usr/bin/loki",
+          "-config.file=/etc/loki/local-config.yaml",
+          "-verify-config=true",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  tempo:
+    build:
+      context: deploy/images/tempo-security
+    image: opspilot-tempo:2.10.8-security-20261014
+    command: ["-config.file=/etc/tempo.yml"]
+    volumes:
+      - ./fault-lab/observability/tempo.yml:/etc/tempo.yml:ro
+    tmpfs:
+      - /var/tempo:uid=10001,gid=10001,mode=0770
+    ports:
+      - "127.0.0.1:3200:3200"
+
+  otel-collector:
+    build:
+      context: deploy/images/collector-security
+    image: opspilot-collector:0.162.0-security-20261014
+    command: ["--config=/etc/otelcol/config.yml"]
+    volumes:
+      - ./fault-lab/observability/otel-collector.yml:/etc/otelcol/config.yml:ro
+    ports:
+      - "127.0.0.1:4317:4317"
+      - "127.0.0.1:4318:4318"
+    depends_on:
+      tempo:
+        condition: service_started
+
+  grafana:
+    build:
+      context: deploy/images/grafana-security
+    image: opspilot-grafana:12.4.13-security-20261014
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
+    volumes:
+      - ./fault-lab/observability/grafana:/etc/grafana/provisioning:ro
+      - fault-lab-grafana:/var/lib/grafana
+    ports:
+      - "127.0.0.1:3001:3000"
+    depends_on:
+      prometheus:
+        condition: service_healthy
+      loki:
+        condition: service_healthy
+      tempo:
+        condition: service_started
+
+volumes:
+  fault-lab-prometheus:
+  fault-lab-grafana:

@@ -1,0 +1,135 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+spec:
+  selector:
+    app.kubernetes.io/name: payment-pool-experiment
+  ports:
+    - name: http
+      port: 8090
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: payment-pool-experiment
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: payment-pool-experiment
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 70
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: payment-service
+          image: incident-copilot/fault-lab:real-pool
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "incident_lab.start"]
+          env:
+            - name: SERVICE_NAME
+              value: payment-service
+            - name: DOWNSTREAM_URL
+              value: ""
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: ""
+            - name: LOKI_PUSH_URL
+              value: ""
+            - name: INCIDENT_LAB_DB_POOL_BACKEND
+              value: postgres
+            - name: INCIDENT_LAB_POSTGRES_URL
+              value: "postgresql:///incident_pool_lab?host=/tmp/incident-lab-postgres&user=incident_lab"
+            - name: FAULT_INJECTION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: incident-pool-lab-secrets
+                  key: fault-token
+          ports:
+            - name: http
+              containerPort: 8090
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 2
+            failureThreshold: 40
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: "1"
+              memory: 256Mi
+          securityContext:
+            runAsUser: 10001
+            runAsGroup: 70
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: socket
+              mountPath: /tmp/incident-lab-postgres
+              readOnly: true
+            - name: app-tmp
+              mountPath: /tmp
+        - name: pool-postgres
+          image: opspilot-postgres:17.11-security-20261013
+          args: ["postgres", "-c", "listen_addresses=", "-c", "unix_socket_directories=/var/run/postgresql", "-c", "unix_socket_permissions=0770"]
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: POSTGRES_DB
+              value: incident_pool_lab
+            - name: POSTGRES_USER
+              value: incident_lab
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: incident-pool-lab-secrets
+                  key: postgres-password
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-h", "/var/run/postgresql", "-U", "incident_lab", "-d", "incident_pool_lab"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: "1"
+              memory: 256Mi
+          securityContext:
+            runAsUser: 70
+            runAsGroup: 70
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: socket
+              mountPath: /var/run/postgresql
+            - name: data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: socket
+          emptyDir: {}
+        - name: data
+          emptyDir:
+            sizeLimit: 256Mi
+        - name: app-tmp
+          emptyDir:
+            sizeLimit: 32Mi

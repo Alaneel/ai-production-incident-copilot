@@ -1,0 +1,39 @@
+# Explicit opt-in overlay: append after docker-compose.yml and compose.fault-lab.yml.
+# The application experiment never uses the orchestrator's postgres service.
+services:
+  lab-pool-postgres:
+    build:
+      context: deploy/images/postgres-security
+    image: opspilot-postgres:17.11-security-20261013
+    command: ["postgres", "-c", "listen_addresses=", "-c", "unix_socket_directories=/var/run/postgresql", "-c", "unix_socket_permissions=0770"]
+    environment:
+      POSTGRES_DB: incident_pool_lab
+      POSTGRES_USER: incident_lab
+      POSTGRES_PASSWORD: ${INCIDENT_LAB_POSTGRES_PASSWORD:?Set a dedicated experiment password}
+    # Only this experiment's socket volume is shared; no TCP listener or ports.
+    volumes:
+      - lab-pool-socket:/var/run/postgresql
+    tmpfs:
+      - /var/lib/postgresql/data:uid=70,gid=70,mode=0700
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "/var/run/postgresql", "-U", "incident_lab", "-d", "incident_pool_lab"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  payment-service:
+    image: incident-copilot/fault-lab:real-pool
+    command: ["python", "-m", "incident_lab.start"]
+    user: "10001:70"
+    environment:
+      FAULT_INJECTION_TOKEN: ${FAULT_INJECTION_TOKEN:?Set a non-default fault token}
+      INCIDENT_LAB_DB_POOL_BACKEND: postgres
+      INCIDENT_LAB_POSTGRES_URL: "postgresql:///incident_pool_lab?host=/tmp/incident-lab-postgres&user=incident_lab"
+    volumes:
+      - lab-pool-socket:/tmp/incident-lab-postgres:ro
+    depends_on:
+      lab-pool-postgres:
+        condition: service_healthy
+
+volumes:
+  lab-pool-socket:

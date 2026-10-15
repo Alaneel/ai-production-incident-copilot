@@ -1,0 +1,7 @@
+# architecture | package | version | exact Alpine3.21 public URL | SHA256
+aarch64|libcrypto3|3.3.7-r2|https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/libcrypto3-3.3.7-r2.apk|2303cca13dc8bba5798744a68abd07530abb35ab339d9cc4640fc53276049af0
+aarch64|libssl3|3.3.7-r2|https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/libssl3-3.3.7-r2.apk|d494a0a211dd78a8055c24885fc06375eabb79c82ae797f7f694cefbf3653b79
+aarch64|zlib|1.3.2-r1|https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/zlib-1.3.2-r1.apk|47bdb66edfddca8b64438369affabd9debc05159aa1bff5c26027270cb28b3f7
+x86_64|libcrypto3|3.3.7-r2|https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/libcrypto3-3.3.7-r2.apk|3c6fb1c90a974ef0fc83687868712340ca3df3ef5206cfc79fd81ff16f22596a
+x86_64|libssl3|3.3.7-r2|https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/libssl3-3.3.7-r2.apk|00e674d00a80c9808580546dd388093c1c67f21628a9d70e27628bddc86a31e8
+x86_64|zlib|1.3.2-r1|https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/zlib-1.3.2-r1.apk|52ed3729bec11d63313f38ade503d40650bb57a36ec72a0050619391fb6bfd5e

@@ -1,0 +1,23 @@
+{
+  "kind": "synthetic_dependency_actual_langgraph_no_model",
+  "cases": 18,
+  "measured_at": "2026-10-02T16:46:50.903362+00:00",
+  "fixtures_sha256": "a51d8263b7da5ced4e940954805ce3704b42208ff805c37025f23d1789f56d9c",
+  "workflow_sha256": "666942c268560aac4ad705b1f9413b392ac9e57239bf91c0059bd3c580c2164b",
+  "runner_sha256": "2eed3849845305a20ac1ef011407cdaa92ee63260cbecf51db93dae3359e007b",
+  "thresholds_sha256": "ec734646e8f4aeffac7b64809b16b96eaa5aaa70dc450a925a61f064902184aa",
+  "impact_status_accuracy": 1,
+  "window_overlap_accuracy": 1,
+  "primary_classification_preservation_rate": 1,
+  "checkpoint_roundtrip_rate": 1,
+  "mean_snapshot_latency_ms": 8.602884158285129,
+  "execution_attempts": 0,
+  "model_calls": 0,
+  "new_api_cost_usd": 0,
+  "failures": [],
+  "limitations": [
+    "18 synthetic cases: nine observation patterns on two service pairs, not independent production incidents",
+    "No causal direction, root-cause accuracy, live MCP, model reasoning, or PostgreSQL recovery evaluated",
+    "Timeout is a provider-raised fixture, not a measured ten-second cancellation test"
+  ]
+}

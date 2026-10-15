@@ -1,0 +1,10 @@
+{
+  "scope": "Exact metadata exported from successful same-source bootstrap; final readonly build and binary/runtime readback still required",
+  "frozen_at": "2026-10-14T13:55:48.496227+00:00",
+  "bootstrap_image_id": "sha256:5bf62484e3ef7e4ca18849166d2ed8c0bbd1069a86a6e137714c4971a5610dc4",
+  "bootstrap_proof_sha256": "971cd90bad95280cd2d42e04e6113be34952c9bd0c673436ae7a3113a45bae5d",
+  "lock_sha256": {
+    "go.mod": "ede0678aab73dc43e810b1112ae2fd3960363394b1eec64f48fb4f96925f14e6",
+    "go.sum": "7df86b4b54b6a8f9532d9ad3035681e5bc8548f83fc1c14fe9ae5a23b021a881"
+  }
+}

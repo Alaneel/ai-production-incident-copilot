@@ -1,0 +1,19 @@
+{
+  "verified_at": "2026-08-01T13:55:56Z",
+  "cluster": "incident-copilot",
+  "kind_version": "kind v0.32.0 go1.26.3 darwin/arm64",
+  "kubernetes_version": "v1.36.1",
+  "rollouts": "passed",
+  "workloads": [
+    "postgres",
+    "redis",
+    "telemetry-gateway",
+    "mcp-server",
+    "orchestrator"
+  ],
+  "incident_id": "INC-D1A075",
+  "rejected_before_execution": true,
+  "remediation_rbac_in_namespace": "yes",
+  "remediation_rbac_kube_system": "no",
+  "cluster_deleted_after_verification": true
+}

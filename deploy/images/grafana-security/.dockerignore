@@ -1,0 +1,6 @@
+**
+!Dockerfile
+!install-patches.sh
+!packages.lock
+!licenses
+!licenses/**

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+<title id="title">Retained synthetic workflow evidence</title>
+<desc id="desc">2026-10-14 UTC snapshots: 150 single-fault cases, 32 cross-service cases, 75 rejected destructive proposals. No model calls or mutation attempts. Source and case-record hashes verified.</desc>
+<rect width="1200" height="420" rx="22" fill="#111a2b"/>
+<g font-family="Arial, sans-serif">
+<text x="40" y="48" font-size="25" fill="#edf2fa" font-weight="700">Synthetic workflow evidence</text>
+<text x="40" y="78" font-size="16" fill="#b6c6db">2026-10-14 UTC · source, lock, runtime and case-record provenance verified</text>
+<rect x="40" y="106" width="360" height="210" rx="14" fill="#1b2941"/>
+<text x="62" y="169" font-size="50" fill="#82d8cf" font-weight="700">150</text>
+<text x="62" y="210" font-size="20" fill="#edf2fa">single-fault snapshots</text>
+<text x="62" y="244" font-size="16" fill="#b6c6db">120 fault cases + 30 controls</text>
+<text x="62" y="285" font-size="16" fill="#b6c6db">0 contract failures</text>
+<rect x="420" y="106" width="360" height="210" rx="14" fill="#1b2941"/>
+<text x="442" y="169" font-size="50" fill="#82d8cf" font-weight="700">32</text>
+<text x="442" y="210" font-size="20" fill="#edf2fa">cross-service cases</text>
+<text x="442" y="244" font-size="16" fill="#b6c6db">direction, timing and ambiguity</text>
+<text x="442" y="285" font-size="16" fill="#b6c6db">all structural contracts passed</text>
+<rect x="800" y="106" width="360" height="210" rx="14" fill="#1b2941"/>
+<text x="822" y="169" font-size="50" fill="#82d8cf" font-weight="700">75</text>
+<text x="822" y="210" font-size="20" fill="#edf2fa">destructive proposals rejected</text>
+<text x="822" y="244" font-size="16" fill="#b6c6db">explicit rejection at the interrupt</text>
+<text x="822" y="285" font-size="16" fill="#b6c6db">0 mutation attempts</text>
+<text x="40" y="353" font-size="17" fill="#d9e2ef">0 model calls · 0 mutation attempts · in-memory checkpoint round trips</text>
+<text x="40" y="386" font-size="16" fill="#b6c6db">Scope: deterministic contracts. Model quality, live RCA and causal repair efficacy are unmeasured.</text>
+</g></svg>

@@ -1,0 +1,46 @@
+{
+  "recorded_at": "2026-10-02T23:28:22.092542+00:00",
+  "scope": "packaged real application-pool configuration, not container/cluster runtime acceptance",
+  "container_build": {
+    "attempted": true,
+    "exit_code": 1,
+    "failure_stage": "python:3.13-slim base layer registration",
+    "reason": "no_space_left_on_device",
+    "requested_tag": "incident-copilot/fault-lab:real-pool-20261003",
+    "image_built": false
+  },
+  "verification": {
+    "python_tests_passed": 589,
+    "python_tests_skipped": 0,
+    "python_test_seconds": 15.02,
+    "compose_merge_rendered": true,
+    "kustomize_rendered": true,
+    "local_postgres_bootstrap_probe": true,
+    "ruff": true,
+    "whitespace_check": true
+  },
+  "container_runtime_verified": false,
+  "kubernetes_runtime_verified": false,
+  "paid_model_calls": 0,
+  "remediation_executions": 0,
+  "user_docker_resources_deleted": false,
+  "source_sha256": {
+    "compose.real-pool.yml": "cd0ee03e6235367ff98e05c54c41956443aa0d793d31408fd445531294767ec4",
+    "fault-lab/app/Dockerfile": "c3939a4ee2464fcff6cbd45732167e6fbb4f5158f5a7c67e8c3deec104e74dc4",
+    "fault-lab/app/pyproject.toml": "1da639757da7e1e0b59d95823857d86e89598604d7dacd14a62072495bb9ab15",
+    "fault-lab/app/incident_lab/__init__.py": "08488714589bd386b34fb9e04062bfbcfcfa5475008323862f94d5c6ab59596d",
+    "fault-lab/app/incident_lab/app.py": "bfe1cf303da56b25f0928a9c33bdd3e3b4b24ba86e4718b6ab3df78601f63fd1",
+    "fault-lab/app/incident_lab/postgres_pool.py": "e2513e139e783cd0139c121547620dd84a81900131dfd96d11bb7d4026b7427f",
+    "fault-lab/app/incident_lab/start.py": "371a9e9f7fe227378016c7c332657197f926dab935c82e5add93dd3696c4b077",
+    "fault-lab/app/incident_lab/traffic.py": "c24971c67985918d8db794ed4a47f46efd234d02c78aaae786d3c602bfd62c95",
+    "deploy/kubernetes/experiments/real-pool/kustomization.yaml": "4291dbd6203d347c2aa3f5e8eadc0516b521d22d771c6d67173e25b5288356d2",
+    "deploy/kubernetes/experiments/real-pool/namespace.yaml": "d338e2cf3dad514a5eda27d7ffca65c36411350f17865907de0e569d6b54cbd6",
+    "deploy/kubernetes/experiments/real-pool/payment.yaml": "74f8c885903e97bfd33a9602723dcdbf1f82923f348934563298af2c694102f2"
+  },
+  "limitations": [
+    "Evidence records this turn observed commands; not an automated container runtime benchmark",
+    "Shared-socket permissions and non-root execution remain unverified in packaged runtime",
+    "Isolated Kubernetes experiment excludes upstream/downstream and observability/Agent services",
+    "Previous native real-pool report remains revision-bound"
+  ]
+}

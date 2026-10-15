@@ -1,0 +1,313 @@
+{
+  "contract": "kind-live-pool-acceptance-v2",
+  "cluster": "copilot-live-0dfcac6ec9e84bf58a66",
+  "image_tag": "kind-copilot-live-0dfcac6ec9e84bf58a66",
+  "started_at": "2026-10-07T13:49:55.623163+00:00",
+  "images": {
+    "orchestrator": "sha256:bd0e3e77266fe80356e1d91da19d2ec10071e9ba9a48ded157ba869c75bb64e8",
+    "mcp-server": "sha256:aa8d7477c45476f2708e61ebf82c3fa08bbbb8de85776f22214a894e21fd77fa",
+    "telemetry-gateway": "sha256:b2178326968f129233e99cb88277735db0f43ff8fb023bf395d46601c8590cda",
+    "fault-lab": "sha256:2399890479d0215b97cb88dc41896905045406c1e78b3a197e4abd7e28a6ddef"
+  },
+  "checks": {
+    "durable_live_runtime": true,
+    "required_auth": true,
+    "real_four_session_pool": true,
+    "independent_pg_session_identity": true,
+    "orchestrator_image_sources_match": true,
+    "mcp-server_image_sources_match": true,
+    "payment-service_image_sources_match": true,
+    "baseline_checkout_healthy": true,
+    "fault_injected": true,
+    "four_leases_exhausted": true,
+    "real_timeout": true
+  },
+  "model_calls": 0,
+  "production_actions": 0,
+  "full_fault_matrix": false,
+  "cleanup_complete": true,
+  "source_sha256": {
+    "deploy/kubernetes/verify_live_fault_lab.py": "0235e57cae2bddfb5f173d3afc075ea5aa0ddfd80a801e24268b395cd643d41f",
+    "deploy/kubernetes/render_fault_lab.py": "f260cc02c2d5ff6be2f0ba2b1515cab4a8799fa793ac48772a0ffc50c96a58e7",
+    "deploy/kubernetes/base/kustomization.yaml": "a88ac91fa3fd4c9777e0b4fa79f3322bba452b12f0ee2c955c24622366d3039c",
+    "deploy/kubernetes/base/mcp-server.yaml": "893241ac588183b4a958e1d90f5e7e70185c6dc0a89af142d635accce6cbcac8",
+    "deploy/kubernetes/base/namespace.yaml": "b374f5cde93065e8fb4277af80a7193aaa2c999d2d09413e5bd7b74ea497147e",
+    "deploy/kubernetes/base/networkpolicy.yaml": "cd8c87dc2112d6959cd04843edb6caed8d3c934c2c16795db2536946117a4258",
+    "deploy/kubernetes/base/orchestrator.yaml": "73df444491fae7c76c3afbdd01b5b1ec33928038f53ffe90a849b8d81386c688",
+    "deploy/kubernetes/base/postgres.yaml": "13b14f09d83faf44ed15e3c8a24e125ed2b7c789c34d4ef5487d4766b3fc4681",
+    "deploy/kubernetes/base/redis.yaml": "9170a58de49d75dee5032a85d0c54c1f87dd51edbc6b5d6532a1c537a913490c",
+    "deploy/kubernetes/base/serviceaccounts-rbac.yaml": "6f39e08ce7b47f036450639265bee8de5db8fc485e444910d05f4db4cce9da1f",
+    "deploy/kubernetes/base/telemetry-gateway.yaml": "3d88a1982def9c11f89466c53e140f2f7687cf5bf79bab353b63b37daa4d1fd7",
+    "deploy/kubernetes/experiments/real-pool/payment.yaml": "74f8c885903e97bfd33a9602723dcdbf1f82923f348934563298af2c694102f2",
+    "fault-lab/observability/loki.yml": "77a8cf98eed2151b4f1529afd6dcca00b056dfb0148d86bf557df3535e5d2ef7",
+    "fault-lab/observability/otel-collector.yml": "b8d64cebdbf3f4dda076f425e8315116dbdc75de3f424c00e1028b6739c034a3",
+    "fault-lab/observability/prometheus-native.yml": "ca71ea9eb435ce0c3de0949a02078bf1c23e45a1ba7cb48556c82564dfb7b7fd",
+    "fault-lab/observability/prometheus.yml": "56c91b3eadd20d26c1c2556f2085972ae6ead2f043802020dfa800f6fa852c6a",
+    "fault-lab/observability/tempo.yml": "9d7576e98afdc38d9ad4cc782e2a79dbf16a3ec1580ce65a7f377c42febe293a"
+  },
+  "manifest_sha256": "d9e5f9e8cef460b4532d07f49d0884804ae89744119d4f2ea67e56cbf4e0eae1",
+  "runtime_modes": {
+    "status": "ok",
+    "api_auth": "required",
+    "checkpoint": "postgres",
+    "task_state": "redis",
+    "event_cache_startup": "ready",
+    "tools": "mcp",
+    "reasoning": "deterministic"
+  },
+  "pool_baseline": {
+    "backend": "postgres",
+    "active": 0,
+    "maximum": 4,
+    "backend_pids": [
+      73,
+      74,
+      75,
+      76
+    ]
+  },
+  "error_type": "OperationFailure",
+  "operation_error": {
+    "returncode": 1,
+    "stderr": "error: timed out waiting for the condition on pods/traffic-generator-6d84bd67ff-qqjs4\n"
+  },
+  "pod_status": [
+    {
+      "name": "checkout-api-7986b78c69-c5dg8",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "checkout-api",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:17Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ledger-service-58489c77db-gh59s",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "ledger-service",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:18Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "loki-5f767c6889-zhsqf",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "loki",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:19Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mcp-server-76f7dbb68c-9v75z",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "mcp-server",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:18Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "orchestrator-b58494b5-bglzf",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "orchestrator",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:18Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "otel-collector-757b88d99-s45xl",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "otel-collector",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:19Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "payment-service-555fb5848-f9sjh",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "payment-service",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:18Z"
+            }
+          }
+        },
+        {
+          "name": "pool-postgres",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:19Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "postgres-0",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "postgres",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:23Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "prometheus-b4577f999-2c26p",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "prometheus",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:19Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "redis-68c897c654-xdpxn",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "redis",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:24Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "risk-engine-5b8684d497-qzvfm",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "risk-engine",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:18Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "telemetry-gateway-76948bf888-mg7r9",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "telemetry-gateway",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:17Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "tempo-5f476f78cd-njszk",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "tempo",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:19Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "traffic-generator-6d84bd67ff-qqjs4",
+      "phase": "Running",
+      "containers": [
+        {
+          "name": "traffic-generator",
+          "ready": true,
+          "restarts": 0,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-07T13:51:18Z"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "last_phase": "correlate_failure",
+  "elapsed_seconds": 139.675,
+  "ok": false
+}

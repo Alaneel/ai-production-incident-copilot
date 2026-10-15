@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+<title id="title">OpsPilot diagnosis, authorization and recovery architecture</title>
+<desc id="desc">A React console sends authenticated requests to the Python LangGraph orchestrator. Read tools use the guarded MCP server and Go telemetry gateway. PostgreSQL retains checkpoints and audit records; Redis provides task and event state. A human approval interrupt precedes signed, target-bound Kubernetes operations. Recovery requires a separate observation gate. Offline demos use snapshots and memory stores.</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#7893b5"/></marker></defs>
+<rect width="1200" height="680" rx="22" fill="#111a2b"/>
+<g font-family="Arial, sans-serif">
+<text x="40" y="48" fill="#edf2fa" font-size="25" font-weight="700">Evidence before action. Recovery after execution.</text>
+<text x="40" y="79" fill="#b6c6db" font-size="16">Full architecture · the offline demo replaces telemetry and persistent stores with synthetic snapshots</text>
+<rect x="40" y="117" width="255" height="130" rx="14" fill="#1b2941"/>
+<text x="60" y="151" fill="#82d8cf" font-size="19" font-weight="700">React / vinext console</text>
+<text x="60" y="183" fill="#edf2fa" font-size="16">Reader / Operator scope</text>
+<text x="60" y="212" fill="#b6c6db" font-size="16">Authenticated HTTP + SSE</text>
+<rect x="355" y="117" width="480" height="130" rx="14" fill="#1b2941"/>
+<text x="375" y="151" fill="#82d8cf" font-size="19" font-weight="700">Python + compiled LangGraph</text>
+<text x="375" y="183" fill="#edf2fa" font-size="16">Classify → correlate → retrieve → validate</text>
+<text x="375" y="212" fill="#b6c6db" font-size="16">Cited hypotheses · proposals · durable progress</text>
+<rect x="895" y="117" width="265" height="130" rx="14" fill="#1b2941"/>
+<text x="915" y="151" fill="#82d8cf" font-size="19" font-weight="700">PostgreSQL + Redis</text>
+<text x="915" y="183" fill="#edf2fa" font-size="16">Checkpoints / incidents</text>
+<text x="915" y="212" fill="#b6c6db" font-size="16">Audit trace / event state</text>
+<path d="M295 183H345M835 183H885" stroke="#7893b5" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<rect x="40" y="310" width="255" height="130" rx="14" fill="#1b2941"/>
+<text x="60" y="344" fill="#82d8cf" font-size="19" font-weight="700">Go telemetry gateway</text>
+<text x="60" y="376" fill="#edf2fa" font-size="16">Prometheus / Loki / Tempo</text>
+<text x="60" y="405" fill="#b6c6db" font-size="16">Bounded, authenticated reads</text>
+<rect x="355" y="310" width="260" height="130" rx="14" fill="#1b2941"/>
+<text x="375" y="344" fill="#82d8cf" font-size="19" font-weight="700">Guarded MCP server</text>
+<text x="375" y="376" fill="#edf2fa" font-size="16">Tool scopes / signed receipts</text>
+<text x="375" y="405" fill="#b6c6db" font-size="16">Preflight and target checks</text>
+<path d="M485 247V300M355 375H305" stroke="#7893b5" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<rect x="675" y="310" width="485" height="130" rx="14" fill="#312a24" stroke="#ba986a"/>
+<text x="695" y="344" fill="#e6bf8e" font-size="19" font-weight="700">Human approval interrupt</text>
+<text x="695" y="376" fill="#edf2fa" font-size="16">Named actor · exact operation · target identity</text>
+<text x="695" y="405" fill="#d0c3b1" font-size="16">Reject → retain decision; approve → scoped execution</text>
+<path d="M730 247V285H920V300" stroke="#7893b5" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<rect x="355" y="500" width="260" height="110" rx="14" fill="#1b2941"/>
+<text x="375" y="538" fill="#82d8cf" font-size="19" font-weight="700">Kubernetes API</text>
+<text x="375" y="572" fill="#edf2fa" font-size="16">Approved restart / rollback</text>
+<rect x="675" y="500" width="485" height="110" rx="14" fill="#1b2941"/>
+<text x="695" y="538" fill="#82d8cf" font-size="19" font-weight="700">Recovery observation gate</text>
+<text x="695" y="572" fill="#edf2fa" font-size="16">Rollout + SLI evidence before a resolved state</text>
+<path d="M675 422H647V466H485V490M485 440V490M615 555H665" stroke="#7893b5" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="40" y="650" fill="#b6c6db" font-size="16">Simulation is labeled. An execution receipt does not establish recovery or prove causal repair.</text>
+</g></svg>

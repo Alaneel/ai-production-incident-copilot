@@ -1,0 +1,13 @@
+# Only reviewed helper sources, test fixture and upstream license texts enter this build.
+**
+!Dockerfile
+!gosu
+!gosu/**
+!licenses
+!licenses/**
+!user-fixture
+!user-fixture/user_test.go
+**/.env*
+**/*.key
+**/*.pem
+**/__pycache__/**

@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: incident-copilot
+
+resources:
+  - namespace.yaml
+  - serviceaccounts-rbac.yaml
+  - postgres.yaml
+  - redis.yaml
+  - telemetry-gateway.yaml
+  - mcp-server.yaml
+  - orchestrator.yaml
+  - networkpolicy.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: incident-copilot
+
+images:
+  - name: incident-copilot/orchestrator
+    newTag: "0.3.0"
+  - name: incident-copilot/mcp-server
+    newTag: "0.3.0"
+  - name: incident-copilot/telemetry-gateway
+    newTag: "0.3.0"

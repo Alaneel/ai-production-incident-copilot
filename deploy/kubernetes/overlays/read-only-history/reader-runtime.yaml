@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-server
+spec:
+  template:
+    spec:
+      serviceAccountName: mcp-deployment-reader
+      containers:
+        - name: mcp-server
+          env:
+            - name: KUBERNETES_DEPLOYMENT_DISCOVERY_ENABLED
+              value: "true"
+            - name: KUBERNETES_DEPLOYMENT_EVENTS_ENABLED
+              value: "true"
+            - name: KUBERNETES_REMEDIATION_ENABLED
+              value: "false"

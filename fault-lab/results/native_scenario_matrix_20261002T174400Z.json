@@ -1,0 +1,125 @@
+{
+  "ok": false,
+  "run_at": "2026-10-02T17:44:00.061950+00:00",
+  "scenarios": [
+    {
+      "scenario": "db-pool-exhaustion",
+      "ok": true,
+      "checks": {
+        "no_causal_upgrade": true,
+        "stopped_before_execution": true,
+        "baseline_parentage_verified": true,
+        "checkpoint_observations_retained": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "live_traces": true,
+        "service_identification": true,
+        "incident_classification": true,
+        "hypothesis_present": true,
+        "remediation_selection": true,
+        "approval_boundary": true
+      },
+      "report": "fault-lab/results/native_scenario_db-pool-exhaustion_20261002T174532Z.json",
+      "artifact_sha256": "578d10f047afeed1e1b3cf4136253517f4dff3920d8bcb7465a3a45094e73de0",
+      "diagnostic_seconds": 0.11,
+      "duration_seconds": 89.686,
+      "status": "waiting_approval",
+      "exit_code": 0,
+      "cleanup_complete": true
+    },
+    {
+      "scenario": "downstream-timeout",
+      "ok": false,
+      "error_type": "MissingCaseArtifact",
+      "exit_code": 1,
+      "cleanup_complete": true
+    },
+    {
+      "scenario": "cpu-spike",
+      "ok": false,
+      "error_type": "MissingCaseArtifact",
+      "exit_code": 1,
+      "cleanup_complete": true
+    },
+    {
+      "scenario": "memory-leak",
+      "ok": false,
+      "error_type": "MissingCaseArtifact",
+      "exit_code": 1,
+      "cleanup_complete": true
+    },
+    {
+      "scenario": "deployment-regression",
+      "ok": false,
+      "error_type": "MissingCaseArtifact",
+      "exit_code": 1,
+      "cleanup_complete": true
+    },
+    {
+      "scenario": "kafka-consumer-lag",
+      "ok": false,
+      "error_type": "MissingCaseArtifact",
+      "exit_code": 1,
+      "cleanup_complete": true
+    },
+    {
+      "scenario": "retry-storm",
+      "ok": false,
+      "error_type": "MissingCaseArtifact",
+      "exit_code": 1,
+      "cleanup_complete": true
+    },
+    {
+      "scenario": "cache-penetration",
+      "ok": true,
+      "checks": {
+        "no_causal_upgrade": true,
+        "stopped_before_execution": true,
+        "baseline_parentage_verified": true,
+        "checkpoint_observations_retained": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "live_traces": true,
+        "service_identification": true,
+        "incident_classification": true,
+        "hypothesis_present": true,
+        "remediation_selection": true,
+        "approval_boundary": true
+      },
+      "report": "fault-lab/results/native_scenario_cache-penetration_20261002T174806Z.json",
+      "artifact_sha256": "62771af52100f9ac4742101fc3af3686560dde6e0699c61794db313fbeb7c6b6",
+      "diagnostic_seconds": 0.097,
+      "duration_seconds": 90.456,
+      "status": "diagnosed",
+      "exit_code": 0,
+      "cleanup_complete": true
+    }
+  ],
+  "image_ids": {
+    "tempo": "sha256:bbc8358a83041e1b80f170cbf4aa03127b58382823ff92105a523477b6936b95",
+    "prometheus": "sha256:ce22ec1ea0f867f3a4e96d8df33cb671f7e8d5978fb17f0c6b7cbdefcc21037e",
+    "loki": "sha256:a4b861ef48ff1a8ae205f7ff64d6406689da7d9ce47a5d21a99113867e01144d",
+    "collector": "sha256:00c2dc4617fd1ed01aa4934b5ea124034b4622a0a59baf93369b87c8425fb5e5"
+  },
+  "source_sha256": {
+    "fault-lab/verify_native_matrix.py": "17d34d8148c1ac66af8d6c7237d001420122ff8df16dc902f175e80caf635f70",
+    "fault-lab/verify_observed_topology.py": "68163fcdda2feab531e9046e1fe81eba476589ed1ed3062b53b38c10a6f164c3",
+    "fault-lab/scenarios.json": "2a4eaa32d5ddb1e9a17d9ec5a7b3b9dcf6732afdd343bb6fa86c9850f74e3135",
+    "fault-lab/app/incident_lab/app.py": "4263fb9eb04966f90b6ee3b92032e1a2c2128bff630090d8fbdc2c242cb4d978",
+    "services/orchestrator/incident_copilot/langgraph_workflow.py": "ddea9a1061de0ce44ac0211388dcb7f2706b933f9d6afbf40dd785b93dcd1f59",
+    "fault-lab/observability/loki.yml": "77a8cf98eed2151b4f1529afd6dcca00b056dfb0148d86bf557df3535e5d2ef7",
+    "fault-lab/observability/otel-collector.yml": "b8d64cebdbf3f4dda076f425e8315116dbdc75de3f424c00e1028b6739c034a3",
+    "fault-lab/observability/prometheus-native.yml": "ca71ea9eb435ce0c3de0949a02078bf1c23e45a1ba7cb48556c82564dfb7b7fd",
+    "fault-lab/observability/prometheus.yml": "56c91b3eadd20d26c1c2556f2085972ae6ead2f043802020dfa800f6fa852c6a",
+    "fault-lab/observability/tempo.yml": "9d7576e98afdc38d9ad4cc782e2a79dbf16a3ec1580ce65a7f377c42febe293a"
+  },
+  "gateway_sha256": "f43cd7b0c69f6affc4b711f6f5f2b0ec2739826ac0cba35b524f4c0fdd0557f8",
+  "model_calls": 0,
+  "production_actions_executed": false,
+  "limitations": [
+    "Deterministic workflow, in-memory checkpoint; no model or PostgreSQL/Redis recovery",
+    "Bounded simulated faults, fixture catalog/deployments/knowledge; no real database/Kafka exhaustion",
+    "Sampled call parentage and structural citations do not prove semantic faithfulness or production causality"
+  ],
+  "duration_seconds": 226.321
+}

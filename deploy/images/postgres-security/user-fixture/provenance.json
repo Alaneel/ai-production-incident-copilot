@@ -1,0 +1,9 @@
+{
+  "upstream_version": "github.com/moby/sys/user@v0.4.1",
+  "upstream_test_sha256": "5544b3ff5453cfecd2b10eb014755e685f2e2ed41929be6c09bf55b49e920e1b",
+  "corrected_test_sha256": "92ed0c87132f2261a2e025c1ca312ab8fb747adb397b67cd2515ba2782b254c6",
+  "replacement_count": 1,
+  "original_expression": "bytes.Repeat([]byte{0}, tc.padBytes)",
+  "corrected_expression": "bytes.Repeat([]byte{'\\n'}, tc.padBytes)",
+  "reason": "The 1 MiB group-line cap intentionally rejects a single 10 MiB NUL padding line. Replacing padding bytes with newlines leaves exact byte counts and all original success/file-cap refusal assertions unchanged. Tests only; authenticated module cache and runtime parser code remain unchanged."
+}

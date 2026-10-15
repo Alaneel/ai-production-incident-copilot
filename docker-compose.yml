@@ -1,0 +1,104 @@
+services:
+  orchestrator:
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=16m,mode=1777"]
+    build:
+      context: .
+      dockerfile: services/orchestrator/Dockerfile
+    environment:
+      ORCHESTRATOR_AUTH_MODE: ${ORCHESTRATOR_AUTH_MODE:-disabled}
+      ORCHESTRATOR_READ_TOKEN: ${ORCHESTRATOR_READ_TOKEN:-}
+      ORCHESTRATOR_OPERATOR_TOKEN: ${ORCHESTRATOR_OPERATOR_TOKEN:-}
+      ORCHESTRATOR_OPERATOR_ACTOR: ${ORCHESTRATOR_OPERATOR_ACTOR:-}
+      TELEMETRY_GATEWAY_URL: http://telemetry-gateway:8081
+      TELEMETRY_GATEWAY_TOKEN: ${TELEMETRY_GATEWAY_TOKEN:-local-development-token}
+      MCP_SERVER_URL: http://mcp-server:8082/mcp
+      MCP_READ_TOKEN: ${MCP_READ_TOKEN:-local-read-token}
+      MCP_OPERATOR_TOKEN: ${MCP_OPERATOR_TOKEN:-local-operator-token}
+      MCP_APPROVAL_SECRET: ${MCP_APPROVAL_SECRET:-change-this-in-production}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      LANGGRAPH_STRICT_MSGPACK: "true"
+      CORS_ALLOWED_ORIGINS: http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql://incident:${POSTGRES_PASSWORD:-local-incident-password}@postgres:5432/incident_copilot
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      telemetry-gateway:
+        condition: service_started
+      mcp-server:
+        condition: service_started
+
+  telemetry-gateway:
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=16m,mode=1777"]
+    build:
+      context: .
+      dockerfile: services/telemetry-gateway/Dockerfile
+    environment:
+      TELEMETRY_GATEWAY_TOKEN: ${TELEMETRY_GATEWAY_TOKEN:-local-development-token}
+    ports:
+      - "127.0.0.1:8081:8081"
+
+  mcp-server:
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=16m,mode=1777"]
+    build:
+      context: .
+      dockerfile: services/mcp-server/Dockerfile
+    environment:
+      TELEMETRY_GATEWAY_URL: http://telemetry-gateway:8081
+      TELEMETRY_GATEWAY_TOKEN: ${TELEMETRY_GATEWAY_TOKEN:-local-development-token}
+      MCP_READ_TOKEN: ${MCP_READ_TOKEN:-local-read-token}
+      MCP_OPERATOR_TOKEN: ${MCP_OPERATOR_TOKEN:-local-operator-token}
+      MCP_APPROVAL_SECRET: ${MCP_APPROVAL_SECRET:-change-this-in-production}
+      MCP_ALLOWED_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
+    ports:
+      - "127.0.0.1:8082:8082"
+    depends_on:
+      telemetry-gateway:
+        condition: service_started
+
+  postgres:
+    build:
+      context: deploy/images/postgres-security
+    image: opspilot-postgres:17.11-security-20261013
+    environment:
+      POSTGRES_DB: incident_copilot
+      POSTGRES_USER: incident
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-incident-password}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U incident -d incident_copilot"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - incident-postgres:/var/lib/postgresql/data
+
+  redis:
+    build:
+      context: deploy/images/redis-security
+    image: opspilot-redis:7.4.11-security-20261013
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - incident-redis:/data
+
+volumes:
+  incident-postgres:
+  incident-redis:

@@ -1,0 +1,28 @@
+{
+  "run_at": "2026-07-23T08:54:53Z",
+  "incident_id": "INC-68380D",
+  "question": "为什么 payment-service 今天延迟突然升高？",
+  "status_before_decision": "waiting_approval",
+  "status_after_decision": "rejected",
+  "root_cause_top_1": "Database connection pool exhaustion after release v142",
+  "confidence": 0.87,
+  "live_evidence": {
+    "prometheus_source": "prometheus-via-telemetry-gateway",
+    "latency_peak_ms": 940.23,
+    "loki_source": "loki-via-telemetry-gateway",
+    "matching_timeout_events": 41,
+    "saturated_pool_events": 41
+  },
+  "proposed_remediation": "Rollback payment-service to v141",
+  "human_decision": {
+    "decision": "reject",
+    "actor": "verification@local",
+    "executed": false
+  },
+  "trace_events": 19,
+  "distributed_trace_services": [
+    "checkout-api",
+    "payment-service",
+    "ledger-service"
+  ]
+}

@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-server
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: mcp-server
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MCP_ALLOWED_ORIGINS
+              value: http://localhost:3000,http://127.0.0.1:3000

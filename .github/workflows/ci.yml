@@ -1,0 +1,87 @@
+name: release validation
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: release-validation-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+  LANGSMITH_TRACING: "false"
+  LANGCHAIN_TRACING_V2: "false"
+  WRANGLER_SEND_METRICS: "false"
+  OPSPILOT_PUBLIC_BUILD: "1"
+jobs:
+  backend-and-console:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      INCIDENT_TEST_DATABASE_URL: postgresql:///incident_release_tests?host=/private/tmp/opspilot-ci-pg&user=release_tests&password=isolated-ci-fixture-only
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13.16"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22.23.3"
+      - name: Provision exact local rendering and cache test tools
+        run: bash scripts/install-ci-tools.sh
+      - name: Build and start owned patched PostgreSQL fixture
+        run: |
+          docker build --tag opspilot-ci-postgres:17.11-security deploy/images/postgres-security
+          sudo mkdir -p /private/tmp/opspilot-ci-pg
+          docker run --detach --name opspilot-ci-pg-${{ github.run_id }}-${{ github.run_attempt }} --network none --mount type=bind,source=/private/tmp/opspilot-ci-pg,target=/var/run/postgresql --tmpfs /var/lib/postgresql/data:rw,size=512m --env POSTGRES_DB=incident_release_tests --env POSTGRES_USER=release_tests --env POSTGRES_PASSWORD=isolated-ci-fixture-only opspilot-ci-postgres:17.11-security postgres -c listen_addresses=
+          for attempt in $(seq 1 40); do
+            if docker exec opspilot-ci-pg-${{ github.run_id }}-${{ github.run_attempt }} pg_isready -U release_tests -d incident_release_tests; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Install exact artifact-verified Python graph
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --require-hashes -r requirements-test.lock
+          .venv/bin/python -m pip install --no-deps --no-build-isolation -e services/orchestrator -e services/mcp-server -e fault-lab/app
+          .venv/bin/python -m pip check
+      - name: Backend with real isolated PostgreSQL and offline tracing boundary
+        run: .venv/bin/python -B scripts/validate_ci_backend.py
+      - name: Exact frontend build and behavioral suite
+        run: |
+          npm install --global npm@10.9.9 --ignore-scripts --no-audit --no-fund
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm test
+          npm run test:stream-contract
+      - name: Offline entry point and evidence provenance
+        run: |
+          .venv/bin/python -B scripts/portfolio_demo.py
+          .venv/bin/python -B scripts/render_portfolio_evidence.py
+      - name: Remove only this job's fixture
+        if: always()
+        run: docker rm --force opspilot-ci-pg-${{ github.run_id }}-${{ github.run_attempt }} 2>/dev/null || true
+  gateway:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: services/telemetry-gateway
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: "1.26.9"
+          cache: false
+      - name: Exact compiler and gateway validation
+        env:
+          GOTOOLCHAIN: local
+        run: |
+          go version
+          go vet ./...
+          go test -race ./...
+          go mod verify
+          go build -trimpath ./cmd/gateway

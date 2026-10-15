@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: fault-lab-services
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - checkout-api:8090
+          - payment-service:8090
+          - ledger-service:8090
+          - risk-engine:8090

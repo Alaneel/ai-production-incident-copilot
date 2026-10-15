@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telemetry-gateway
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: telemetry-gateway
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PROMETHEUS_URL
+              $patch: delete
+            - name: LOKI_URL
+              $patch: delete

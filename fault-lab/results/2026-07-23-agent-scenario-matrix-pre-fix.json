@@ -1,0 +1,383 @@
+{
+  "revision_status": "pre_fix_failure_evidence",
+  "verified_at": "2026-07-23T09:48:56Z",
+  "workflow": "orchestrator -> MCP -> Go gateway -> Prometheus/Loki",
+  "uses_generic_questions_without_fault_labels": true,
+  "scenarios": [
+    {
+      "scenario": "db-pool-exhaustion",
+      "incident_id": "INC-B65A81",
+      "generic_question": "What is causing the production regression in payment-service?",
+      "service": "payment-service",
+      "incident_type": "database_connection_pool_exhaustion",
+      "leading_cause": "Database connection pool exhaustion",
+      "confidence": 0.87,
+      "action": "rollback_release",
+      "initial_status": "waiting_approval",
+      "final_status": "rejected",
+      "diagnostic_latency_ms": 93.11,
+      "evidence_count": 18,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "trace_events": 18,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "database_connection_pool_exhaustion",
+        "metric_count": 8,
+        "log_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "metric_panel": true,
+        "rejection_prevented_execution": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "downstream-timeout",
+      "incident_id": "INC-D1F54F",
+      "generic_question": "What is causing the production regression in ledger-service?",
+      "service": "ledger-service",
+      "incident_type": "downstream_timeout",
+      "leading_cause": "Downstream dependency timeout",
+      "confidence": 0.84,
+      "action": "none",
+      "initial_status": "diagnosed",
+      "final_status": "diagnosed",
+      "diagnostic_latency_ms": 83.04,
+      "evidence_count": 18,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "trace_events": 20,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "downstream_timeout",
+        "metric_count": 8,
+        "log_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "metric_panel": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "cpu-spike",
+      "passed": false,
+      "error": "RuntimeError: POST http://localhost:8080/v1/incidents failed (502): {\"detail\":\"query_metrics failed (-32602): Expecting value: line 1 column 1 (char 0)\"}"
+    },
+    {
+      "scenario": "memory-leak",
+      "incident_id": "INC-B5F469",
+      "generic_question": "What is causing the production regression in payment-service?",
+      "service": "payment-service",
+      "incident_type": "database_connection_pool_exhaustion",
+      "leading_cause": "Database connection pool exhaustion",
+      "confidence": 0.87,
+      "action": "rollback_release",
+      "initial_status": "waiting_approval",
+      "final_status": "rejected",
+      "diagnostic_latency_ms": 53.12,
+      "evidence_count": 18,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "trace_events": 18,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "database_connection_pool_exhaustion",
+        "metric_count": 8,
+        "log_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": false,
+        "cause": false,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "metric_panel": true,
+        "rejection_prevented_execution": true
+      },
+      "passed": false
+    },
+    {
+      "scenario": "deployment-regression",
+      "incident_id": "INC-8C640A",
+      "generic_question": "What is causing the production regression in payment-service?",
+      "service": "payment-service",
+      "incident_type": "deployment_regression",
+      "leading_cause": "Release regression after deployment",
+      "confidence": 0.9,
+      "action": "rollback_release",
+      "initial_status": "waiting_approval",
+      "final_status": "rejected",
+      "diagnostic_latency_ms": 49.89,
+      "evidence_count": 18,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "trace_events": 18,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "deployment_regression",
+        "metric_count": 8,
+        "log_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "metric_panel": true,
+        "rejection_prevented_execution": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "kafka-consumer-lag",
+      "incident_id": "INC-1E63F7",
+      "generic_question": "What is causing the production regression in ledger-service?",
+      "service": "ledger-service",
+      "incident_type": "kafka_consumer_lag",
+      "leading_cause": "Kafka consumer processing slowdown",
+      "confidence": 0.82,
+      "action": "restart_deployment",
+      "initial_status": "waiting_approval",
+      "final_status": "rejected",
+      "diagnostic_latency_ms": 61.93,
+      "evidence_count": 18,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "trace_events": 18,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "kafka_consumer_lag",
+        "metric_count": 8,
+        "log_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "metric_panel": true,
+        "rejection_prevented_execution": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "retry-storm",
+      "incident_id": "INC-36F9B1",
+      "generic_question": "What is causing the production regression in checkout-api?",
+      "service": "checkout-api",
+      "incident_type": "retry_storm",
+      "leading_cause": "Downstream retry amplification storm",
+      "confidence": 0.86,
+      "action": "none",
+      "initial_status": "diagnosed",
+      "final_status": "diagnosed",
+      "diagnostic_latency_ms": 75.19,
+      "evidence_count": 18,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "trace_events": 20,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "retry_storm",
+        "metric_count": 8,
+        "log_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": true,
+        "cause": true,
+        "action": true,
+        "status": true,
+        "live_metrics": true,
+        "live_logs": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "metric_panel": true
+      },
+      "passed": true
+    },
+    {
+      "scenario": "cache-penetration",
+      "incident_id": "INC-5431C4",
+      "generic_question": "What is causing the production regression in payment-service?",
+      "service": "payment-service",
+      "incident_type": "deployment_regression",
+      "leading_cause": "Release regression after deployment",
+      "confidence": 0.9,
+      "action": "rollback_release",
+      "initial_status": "waiting_approval",
+      "final_status": "rejected",
+      "diagnostic_latency_ms": 86.05,
+      "evidence_count": 18,
+      "evidence_kinds": [
+        "deployment",
+        "log",
+        "metric",
+        "past_incident",
+        "runbook",
+        "technical_doc"
+      ],
+      "metric_queries": [
+        "request_latency_p95",
+        "request_error_rate",
+        "db_pool_active_ratio",
+        "cpu_utilization",
+        "memory_working_set",
+        "kafka_consumer_lag",
+        "retry_rate",
+        "cache_miss_rate"
+      ],
+      "trace_events": 18,
+      "signal_classification": {
+        "initial_type": "database_connection_pool_exhaustion",
+        "inferred_type": "deployment_regression",
+        "metric_count": 8,
+        "log_evidence_count": 1
+      },
+      "checks": {
+        "service": true,
+        "incident_type": false,
+        "cause": false,
+        "action": false,
+        "status": false,
+        "live_metrics": true,
+        "live_logs": true,
+        "retrieval": true,
+        "signal_trace": true,
+        "metric_panel": true,
+        "rejection_prevented_execution": true
+      },
+      "passed": false
+    }
+  ],
+  "passed": false
+}
