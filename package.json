@@ -20,8 +20,8 @@
   "dependencies": {
     "drizzle-orm": "0.45.2",
     "next": "16.4.1",
-    "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react": "19.2.9",
+    "react-dom": "19.2.9"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.63.2",
@@ -35,7 +35,7 @@
     "eslint": "9.39.4",
     "eslint-config-next": "16.4.1",
     "miniflare": "5.20261006.2-beta",
-    "react-server-dom-webpack": "19.2.8",
+    "react-server-dom-webpack": "19.2.9",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "vinext": "1.1.0",
