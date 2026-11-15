@@ -11,9 +11,11 @@
   "compiler_image": "golang:1.27.2-alpine@sha256:f92b6ef800e499660581efdabdf25d9d817a9d124eaf900924f0504e7e27e12d",
   "parent_image": "prom/prometheus:v3.15.0@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e",
   "security_module_pins": [
-    "golang.org/x/net@v0.60.0"
+    "golang.org/x/net@v0.60.0",
+    "go.opentelemetry.io/otel/sdk@v1.47.0",
+    "go.opentelemetry.io/otel/log@v1.47.0"
   ],
-  "status": "PREPARED NOT BUILT",
+  "status": "LOCAL LINUX/ARM64 IMAGE BUILD AND READINESS VERIFIED 2026-11-15; NOT PUBLISHED OR DEPLOYED",
   "ui_asset": {
     "version": "3.15.0",
     "release_url": "https://github.com/prometheus/prometheus/releases/tag/v3.15.0",

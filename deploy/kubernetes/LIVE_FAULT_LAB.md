@@ -237,6 +237,25 @@ the node: PostgreSQL 17 Alpine, Redis 7.4 Alpine, and the exact Prometheus/Loki/
 Tempo/collector images in `STORES`. PostgreSQL/Redis retain the base pull policy;
 the telemetry and pool-sidecar images never pull automatically.
 
+The OpenTelemetry security refresh uses new local image tags. Build the four
+telemetry images from their locked recipe contexts before starting the Compose
+lab or loading a kind node:
+
+```bash
+docker compose -f docker-compose.yml -f compose.fault-lab.yml build prometheus loki tempo otel-collector
+kind load docker-image --name <cluster-name> \
+  opspilot-prometheus:3.15.0-security-20261115 \
+  opspilot-loki:3.7.8-security-20261115 \
+  opspilot-tempo:2.10.8-security-20261115 \
+  opspilot-collector:0.162.0-security-20261115
+```
+
+These are local tags, not published registry references. Load them into each
+owned node before applying the renderer output; `imagePullPolicy: Never` cannot
+fetch a missing image. Local image IDs in `container-images.lock.json` record
+the verified Linux/arm64 builds and are not registry digests or proof of a
+deployment. Building and loading do not update an existing running service.
+
 New workloads include:
 
 - checkout → payment → ledger, plus risk-engine;
