@@ -6,7 +6,7 @@ COPY go.mod go.sum LICENSE ./
 RUN --mount=type=cache,id=opspilot-public-sidecar-modules-20261014,target=/go/pkg/mod --mount=type=cache,id=opspilot-public-sidecar-build-20261014,target=/root/.cache/go-build test "$(go env GOVERSION)" = go1.26.9 \
     && GOFLAGS=-mod=readonly go mod download && GOFLAGS=-mod=readonly go mod verify \
     && go build -p=2 -mod=readonly -buildvcs=false -trimpath -ldflags='-s -w' -o /out/otelcol-opspilot . \
-    && echo '182198eaee3c0fa2594fa55d14cdb3a63ee3b61aeb35498116f94a67d66e41bb  go.mod' | sha256sum -c - && echo '5a930bad6574a39bdf87f094fb2e557fb5615b8df10e86f0833cd1f542bf5ffb  go.sum' | sha256sum -c -
+    && echo '009b6015f932eab5832c635c73ea51c154c56e6f170111d1dec89543362a751c  go.mod' | sha256sum -c - && echo '455fecca85abad21d84236bc5bdb9914c7f3cd50bc3b0e2159daf26327167779  go.sum' | sha256sum -c -
 COPY collect-module-notices.go /tmp/collect-module-notices.go
 RUN --mount=type=cache,id=opspilot-public-sidecar-modules-20261014,target=/go/pkg/mod --mount=type=cache,id=opspilot-public-sidecar-build-20261014,target=/root/.cache/go-build GOFLAGS=-mod=readonly go run /tmp/collect-module-notices.go /out/module-notices /out/otelcol-opspilot
 FROM otel/opentelemetry-collector-contrib:0.162.0@sha256:39923a8e431bd1f57be82411999d389fcfe40857492e4365456d97a4c1f74be6
