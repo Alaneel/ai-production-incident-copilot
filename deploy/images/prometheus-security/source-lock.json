@@ -15,7 +15,7 @@
     "go.opentelemetry.io/otel/sdk@v1.47.0",
     "go.opentelemetry.io/otel/log@v1.47.0"
   ],
-  "status": "PREPARED NOT BUILT",
+  "status": "LOCAL LINUX/ARM64 IMAGE BUILD AND READINESS VERIFIED 2026-11-15; NOT PUBLISHED OR DEPLOYED",
   "ui_asset": {
     "version": "3.15.0",
     "release_url": "https://github.com/prometheus/prometheus/releases/tag/v3.15.0",

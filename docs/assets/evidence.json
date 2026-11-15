@@ -1,7 +1,7 @@
 {
   "measured_at": [
-    "2026-11-15T01:23:26.339218+00:00",
-    "2026-11-15T01:23:28.088802+00:00"
+    "2026-11-15T01:30:52.072304+00:00",
+    "2026-11-15T01:30:53.799127+00:00"
   ],
   "source_scope_verified": true,
   "source_fingerprint_counts": [
@@ -9,8 +9,8 @@
     36
   ],
   "artifacts": [
-    "evals/results/workflow_benchmark_20261115T012326Z_cc7dfb74.json",
-    "evals/results/cross_service_benchmark_20261115T012328Z_5bc6db9cd27d453583d1c54007856cd6.json"
+    "evals/results/workflow_benchmark_20261115T013052Z_e51ce1aa.json",
+    "evals/results/cross_service_benchmark_20261115T013053Z_6ff43c9bed8b4d4ca163ab4d161d7387.json"
   ],
   "single_fault_snapshots": {
     "cases": 150,
@@ -105,7 +105,7 @@
       "zstandard": "0.25.0"
     },
     "release_recipe_sha256": {
-      "container-images.lock.json": "1cb9f1d4dd12a0685065871ee6b89c42d586e516cbc8e79acaf30087291a1ad9",
+      "container-images.lock.json": "2feb100b91177e78cbb686d09c51191c42fdf419545a8505b33ad3fc958075e4",
       "deploy/images/collector-security/.dockerignore": "84d175a2881b936a15811161fb8aa3a9efc7bd81dc4ab7c4b5ff3357f658c702",
       "deploy/images/collector-security/Dockerfile": "1ed868710d70a5d2fb37d725305d9f6d281ba8165f9a94de2e072a779afa7e51",
       "deploy/images/collector-security/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
@@ -130,7 +130,7 @@
       "deploy/images/loki-security/collect-module-notices.go": "aa398786bfa146d39ae98f03ba392f88e92e17f65df0a9460faa99605958e8cf",
       "deploy/images/loki-security/go.mod": "03444bdbbd1d4d24844cf58e1f5727b616ad66c78c6716cec45859542cbfd59a",
       "deploy/images/loki-security/go.sum": "6a36ef92799c8921bdb3e86cd48edc3932bef4e197ebf355c7de8382a1b6eca9",
-      "deploy/images/loki-security/source-lock.json": "1294c81728b60c0432f3cb195ae93cadc1c250d0e9cbb21c83996541952b42fb",
+      "deploy/images/loki-security/source-lock.json": "01729785eda7a2bcf96ddea62246c62e58d43b825252c5ee5e81867b85b5d40c",
       "deploy/images/postgres-security/.dockerignore": "a4d19dcda7f31c0b955cd8feb51ffc5623ad03e488cdb2b2e76b32737300d7fb",
       "deploy/images/postgres-security/Dockerfile": "08aa7f79b6b775edebccf66badbd3cdee4a5cdf1376776fbd7b0de9696510990",
       "deploy/images/postgres-security/gosu/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
@@ -153,7 +153,7 @@
       "deploy/images/prometheus-security/go.mod": "b60a6336aaa752c25634e6fade1f9d93cf1fd2c1a8eb6a4b5f12410fc6706ab1",
       "deploy/images/prometheus-security/go.sum": "da20753930ec782c0118c15b4b3697bd9bc6baf347ed9a8e5b28f45d69d55eef",
       "deploy/images/prometheus-security/prepare-ui.sh": "ea5c2568ce71bc9a0b023ea62fb3ea23964f4234db960cfa053cb769ade98a85",
-      "deploy/images/prometheus-security/source-lock.json": "a46bb7a9c72ec88ca112e3687d805dc3bf3b2556880e36ac763ef3773d3f07dd",
+      "deploy/images/prometheus-security/source-lock.json": "d79bd78c50441e5b86296d18fae52fd6e180ecb20472e690faa2593707d6962e",
       "deploy/images/redis-security/.dockerignore": "b42291f2acfaf84ec05adfab0ef1e489ccf62b7b06163e606abc7dc270b3c618",
       "deploy/images/redis-security/Dockerfile": "ce8675e0538bf10611b5861b06994f84bc0752770e4c813abc5f1874d88bc0b8",
       "deploy/images/redis-security/install-patches.sh": "b7e931d4c4cbdd94fa81c46e0aa43f4ecd2d07ba320172ddf5ac7d803efbe4ef",
@@ -167,7 +167,7 @@
       "deploy/images/tempo-security/collect-module-notices.go": "aa398786bfa146d39ae98f03ba392f88e92e17f65df0a9460faa99605958e8cf",
       "deploy/images/tempo-security/go.mod": "3c2465bd18403d270d6efe92d63de0bbe5d980a1e538088c76d709ac3366bc02",
       "deploy/images/tempo-security/go.sum": "bed85395d2963edc028c6cad023af760746dfa68d72a512ec64f8be3b0afd11d",
-      "deploy/images/tempo-security/source-lock.json": "833224db2d77ba42b570428f9dc22ac69f1f0b62510d994b27d06ba1aaf2adf0"
+      "deploy/images/tempo-security/source-lock.json": "39cd0a2b9c8a690b1ca37613dd6b51ebc5ea832f97e7bcb46e91c0ab9bc9dc2b"
     }
   }
 }

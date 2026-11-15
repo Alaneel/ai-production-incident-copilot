@@ -131,7 +131,7 @@ services:
   prometheus:
     build:
       context: deploy/images/prometheus-security
-    image: opspilot-prometheus:3.15.0-security-20261014
+    image: opspilot-prometheus:3.15.0-security-20261115
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.retention.time=6h
@@ -157,7 +157,7 @@ services:
   loki:
     build:
       context: deploy/images/loki-security
-    image: opspilot-loki:3.7.8-security-20261014
+    image: opspilot-loki:3.7.8-security-20261115
     command: ["-config.file=/etc/loki/local-config.yaml"]
     volumes:
       - ./fault-lab/observability/loki.yml:/etc/loki/local-config.yaml:ro
@@ -180,7 +180,7 @@ services:
   tempo:
     build:
       context: deploy/images/tempo-security
-    image: opspilot-tempo:2.10.8-security-20261014
+    image: opspilot-tempo:2.10.8-security-20261115
     command: ["-config.file=/etc/tempo.yml"]
     volumes:
       - ./fault-lab/observability/tempo.yml:/etc/tempo.yml:ro
@@ -192,7 +192,7 @@ services:
   otel-collector:
     build:
       context: deploy/images/collector-security
-    image: opspilot-collector:0.162.0-security-20261014
+    image: opspilot-collector:0.162.0-security-20261115
     command: ["--config=/etc/otelcol/config.yml"]
     volumes:
       - ./fault-lab/observability/otel-collector.yml:/etc/otelcol/config.yml:ro

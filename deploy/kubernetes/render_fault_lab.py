@@ -13,10 +13,10 @@ import yaml
 ROOT = Path(__file__).resolve().parents[2]
 NAMESPACE = "incident-copilot"
 STORES = {
-    "prometheus": ("opspilot-prometheus:3.15.0-security-20261014", 9090, "prometheus.yml", "/etc/prometheus/prometheus.yml", ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.retention.time=1h"], "/prometheus"),
-    "loki": ("opspilot-loki:3.7.8-security-20261014", 3100, "loki.yml", "/etc/loki/local-config.yaml", ["-config.file=/etc/loki/local-config.yaml"], "/tmp/loki"),
-    "tempo": ("opspilot-tempo:2.10.8-security-20261014", 3200, "tempo.yml", "/etc/tempo.yml", ["-config.file=/etc/tempo.yml"], "/var/tempo"),
-    "otel-collector": ("opspilot-collector:0.162.0-security-20261014", 4318, "otel-collector.yml", "/etc/otelcol/config.yml", ["--config=/etc/otelcol/config.yml"], None),
+    "prometheus": ("opspilot-prometheus:3.15.0-security-20261115", 9090, "prometheus.yml", "/etc/prometheus/prometheus.yml", ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.retention.time=1h"], "/prometheus"),
+    "loki": ("opspilot-loki:3.7.8-security-20261115", 3100, "loki.yml", "/etc/loki/local-config.yaml", ["-config.file=/etc/loki/local-config.yaml"], "/tmp/loki"),
+    "tempo": ("opspilot-tempo:2.10.8-security-20261115", 3200, "tempo.yml", "/etc/tempo.yml", ["-config.file=/etc/tempo.yml"], "/var/tempo"),
+    "otel-collector": ("opspilot-collector:0.162.0-security-20261115", 4318, "otel-collector.yml", "/etc/otelcol/config.yml", ["--config=/etc/otelcol/config.yml"], None),
 }
 
 
