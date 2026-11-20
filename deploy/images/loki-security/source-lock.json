@@ -16,7 +16,8 @@
     "go.opentelemetry.io/otel/sdk/log@v1.47.0",
     "go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp@v0.23.0",
     "go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc@v0.23.0",
-    "go.opentelemetry.io/otel/exporters/stdout/stdoutlog@v0.23.0"
+    "go.opentelemetry.io/otel/exporters/stdout/stdoutlog@v0.23.0",
+    "github.com/containerd/containerd/v2@v2.2.10"
   ],
-  "status": "LOCAL LINUX/ARM64 IMAGE BUILD AND READINESS VERIFIED 2026-11-15; NOT PUBLISHED OR DEPLOYED"
+  "status": "PROPOSED MODULE UPDATE; LINUX IMAGE BUILD, IMAGE ID AND DEPLOYMENT NOT YET VERIFIED"
 }
