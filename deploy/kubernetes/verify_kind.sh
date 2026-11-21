@@ -63,7 +63,7 @@ if grep -Fxq "$cluster_name" <<<"$existing_clusters"; then
 fi
 
 # Inspect cached exact database inputs before allocating the owned cluster.
-docker image inspect opspilot-postgres:17.11-security-20261013 >/dev/null
+docker image inspect opspilot-postgres:17.11-security-20261121 >/dev/null
 docker image inspect opspilot-redis:7.4.11-security-20261013 >/dev/null
 private_kubeconfig_dir="$(mktemp -d /private/tmp/copilot-kind-kubeconfig.XXXXXX)"
 private_kubeconfig="$private_kubeconfig_dir/config"
@@ -78,7 +78,7 @@ kind load docker-image --name "$cluster_name" \
   "incident-copilot/orchestrator:$image_tag" \
   "incident-copilot/mcp-server:$image_tag" \
   "incident-copilot/telemetry-gateway:$image_tag" \
-  opspilot-postgres:17.11-security-20261013 \
+  opspilot-postgres:17.11-security-20261121 \
   opspilot-redis:7.4.11-security-20261013
 
 cluster_kubectl apply -f deploy/kubernetes/base/namespace.yaml

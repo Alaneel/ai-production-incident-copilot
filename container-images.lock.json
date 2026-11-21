@@ -9,7 +9,7 @@
   "note": "Digests bind manifests, not a security guarantee; see release validation.",
   "compose_service_images": {
     "docker-compose.yml": [
-      "opspilot-postgres:17.11-security-20261013",
+      "opspilot-postgres:17.11-security-20261121",
       "opspilot-redis:7.4.11-security-20261013"
     ],
     "compose.fault-lab.yml": [
@@ -20,7 +20,7 @@
       "opspilot-grafana:12.4.13-security-20261014"
     ],
     "compose.real-pool.yml": [
-      "opspilot-postgres:17.11-security-20261013",
+      "opspilot-postgres:17.11-security-20261121",
       "incident-copilot/fault-lab:real-pool"
     ]
   },
@@ -38,14 +38,14 @@
   ],
   "kind_node_image": "kindest/node:v1.36.1@sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5",
   "postgres_security_derivative": {
-    "local_image_tag": "opspilot-postgres:17.11-security-20261013",
+    "local_image_tag": "opspilot-postgres:17.11-security-20261121",
     "context": "deploy/images/postgres-security",
     "immutable_parent": "postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
     "gosu_version": "1.19",
     "gosu_compiler": "go1.26.9",
     "moby_user_version": "0.4.1",
-    "zlib_version": "1.3.2-r1",
-    "verified_local_linux_arm64_image_id": "sha256:dbbcf11a55e5f51d2cde3e5b49b12d98ab7ccc839c5e79cf780d24a2d54bf4bd"
+    "zlib_version": "1.4-r0",
+    "verified_local_linux_arm64_image_id": "sha256:4ab06ae65adc3673eeae34c7fe28301e79966c536e470e3cc86bfef23c85a1d6"
   },
   "redis_security_derivative": {
     "local_image_tag": "opspilot-redis:7.4.11-security-20261013",

@@ -22,15 +22,15 @@ RUN arch="${TARGETARCH:-$(go env GOARCH)}"; \
 FROM postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
 RUN set -eu; \
     case "$(apk --print-arch)" in \
-      aarch64) arch=aarch64; expected=1f77a542ac6634761b9fe38d8bdca19b154071dcfa25432e73f2bc8a0740a33f ;; \
-      x86_64) arch=x86_64; expected=63aeea03c15a2f9018f81805cfc8aa926bdf5cd68921f22149c2fbb5d0ee9f47 ;; \
+      aarch64) arch=aarch64; expected=d3e30d012a3445222b0b4a28f1d4d97ce67387f8b48561921111696da174f0de ;; \
+      x86_64) arch=x86_64; expected=7b05bc778b8b25cd880835b40114182bd4d1581717504d0129c810c0a14291cb ;; \
       *) echo 'Only Linux arm64 and amd64 have reviewed package pins' >&2; exit 1 ;; \
     esac; \
-    wget -O /tmp/zlib.apk "https://dl-cdn.alpinelinux.org/alpine/v3.24/main/$arch/zlib-1.3.2-r1.apk"; \
+    wget -O /tmp/zlib.apk "https://dl-cdn.alpinelinux.org/alpine/v3.24/main/$arch/zlib-1.4-r0.apk"; \
     echo "$expected  /tmp/zlib.apk" | sha256sum -c -; \
     apk add --no-cache --no-network /tmp/zlib.apk; \
     rm /tmp/zlib.apk; \
-    apk info --no-network --exists 'zlib=1.3.2-r1'
+    apk info --no-network --exists 'zlib=1.4-r0'
 COPY --from=gosu-build /out/gosu /usr/local/bin/gosu
 RUN chmod 0755 /usr/local/bin/gosu
 COPY --from=gosu-build /usr/local/go/LICENSE /usr/local/share/licenses/tpp-postgres-helper/go-LICENSE
@@ -41,4 +41,4 @@ LABEL org.opencontainers.image.title="TPP local PostgreSQL 17.11 security deriva
       org.opencontainers.image.base.digest="sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24" \
       dev.tpp.gosu.upstream.commit="6456aaa0f3c854d199d0f037f068eb97515b7513" \
       dev.tpp.gosu.toolchain="go1.26.9" \
-      dev.tpp.zlib.version="1.3.2-r1"
+      dev.tpp.zlib.version="1.4-r0"
