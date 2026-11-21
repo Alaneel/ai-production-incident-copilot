@@ -24,8 +24,8 @@ row=$(awk -F '|' -v a="$arch" '$1 == a && $2 == "zlib" {print}' "$lock")
 IFS='|' read -r recorded_arch name version url checksum <<EOF
 $row
 EOF
-test "$recorded_arch" = "$arch" && test "$name" = zlib && test "$version" = 1.3.2-r1
-test "$url" = "https://dl-cdn.alpinelinux.org/alpine/v3.24/main/$arch/zlib-1.3.2-r1.apk"
+test "$recorded_arch" = "$arch" && test "$name" = zlib && test "$version" = 1.4-r0
+test "$url" = "https://dl-cdn.alpinelinux.org/alpine/v3.24/main/$arch/zlib-1.4-r0.apk"
 test "${#checksum}" -eq 64
 case "$checksum" in *[!0-9a-f]*) echo 'Invalid package digest' >&2; exit 1 ;; esac
 work=$(mktemp -d)
@@ -34,4 +34,4 @@ wget -O "$work/zlib.apk" "$url"
 echo "$checksum  $work/zlib.apk" | sha256sum -c -
 # Inherited official Alpine trust keys verify signatures. No indexes or unsigned bypass.
 apk add --no-cache --no-network --repositories-file /dev/null "$work/zlib.apk"
-package_version 1.3.2-r1
+package_version 1.4-r0

@@ -89,7 +89,7 @@ spec:
             - name: app-tmp
               mountPath: /tmp
         - name: pool-postgres
-          image: opspilot-postgres:17.11-security-20261013
+          image: opspilot-postgres:17.11-security-20261121
           args: ["postgres", "-c", "listen_addresses=", "-c", "unix_socket_directories=/var/run/postgresql", "-c", "unix_socket_permissions=0770"]
           env:
             - name: PGDATA

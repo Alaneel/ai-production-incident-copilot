@@ -1,51 +1,41 @@
 # Grafana 12.4.13: bounded Alpine zlib patch
 
 This build inherits the exact Grafana 12.4.13 image and replaces only Alpine
-3.24's `zlib` package, from `1.3.2-r0` to the signed vendor `1.3.2-r1` package.
-Both reviewed Linux architectures have separate SHA256-pinned package inputs.
-The installer refuses a different Alpine release, package baseline, architecture,
-URL or digest. It uses the parent's official Alpine signing keys and downloads
-no mutable package indexes. No signature bypass or vulnerability suppression is
-used.
+3.24 zlib `1.3.2-r0` with the signed vendor package `1.4-r0`. The former
+`1.3.2-r1` x86_64 package is no longer available at its pinned URL. Both reviewed
+Linux architectures have SHA-256-pinned inputs. The installer checks the parent
+Alpine release and package baseline, architecture, URL, digest and vendor APK
+signature; it does not download mutable indexes or bypass signature verification.
+The official [Alpine recipe](https://github.com/alpinelinux/aports/blob/bdf501c870a92a05c097857401f69c48c4810384/main/zlib/APKBUILD)
+lists the security upgrade, including CVE-2026-85091. Source and package details
+are in `provenance.json`.
 
-The original Grafana program, native helpers, UI, `/run.sh`, default configuration
-and upstream license files are inherited. Root is used only while installing the
-package; the final image restores the parent's exact user `472`. Entrypoint,
-working directory, environment and exposed port are inherited unchanged.
-The added license directory retains the exact upstream AGPLv3 text and zlib
-notice. Grafana is not relicensed under the first-party project's MIT license.
-The exact upstream tag has no root `NOTICE` file (HTTP404, recorded in source
-receipts); all existing notices in the parent remain present.
+An isolated local Linux/arm64 build produced image ID
+`sha256:2dae6fec3de4523079cdb00adce085e1edc4b16396669bc396f437564de8ada8`.
+Package inventory comparison found only the zlib change; runtime config, Grafana
+executable, entrypoint and all 11,551 public UI file hashes matched the pinned
+parent. In a temporary container with no external networking, `/api/health`
+returned database `ok` and version `12.4.13`. The zlib 1.4 source archive matched
+the Alpine recipe SHA-512, and its license matched the retained license file.
+A derived Linux/amd64 image was also built with the pinned parent and signed vendor
+package; its local ID was `sha256:cd6b134b907d4ae796c0e73082833fdc864ee8a71b208552d1c41ad5ba489e23`.
+In a temporary emulated amd64 container with no external networking, `/api/health`
+returned database `ok` and version `12.4.13`; the installed zlib was `1.4-r0`.
+The previous 2026-10-14 image and benchmark results remain historical evidence;
+they do not establish behavior of the new image. No image has been published or
+deployed as part of this local verification.
 
-The primary CNA rates [CVE-2026-85091](https://www.cve.org/CVERecord?id=CVE-2026-85091)
-HIGH (CVSS3.1 7.4 / CVSS4.0 8.3), although the retained Trivy package finding is
-MEDIUM. The Alpine recipe at the recorded package commit explicitly lists the
-fix in `1.3.2-r1`. The underlying Grafana/Tempo package findings remain visible
-and need their separate source, actual ELF and deployed-configuration assessment;
-this patch does not remove or suppress them.
-
-## Current status
-
-The derived Linux arm64 image was built and verified locally: `opspilot-grafana:12.4.13-security-20261014`, ID `sha256:4d65f19d24dee13d160effc33d991e442f7d5a746c775fdea3ec778d8321a0ab`. Only zlib's revision changes; all original startup/config fields, server/CLI/entrypoint/defaults and 11,551 UI file hashes match the exact parent. Applicable upstream/zlib notices were read back. Final Compose acceptance passed 39 checks, including Grafana health/version and actual analytics/update/plugin-preinstall flags.
-
-The fresh exact-ID 14 October scan retains two raw High Tempo version matches and one Unknown OpenPGP record; zlib is fixed. Immutable embedded source and actual ELF functions establish the limited NOT AFFECTED dispositions explained in the main security record, without suppressing findings. Both parent architectures/package inputs are verified; no derived `linux/amd64` execution is claimed. No image was published.
-
-An authorized local build can use this directory as its complete context:
+Build the updated local image before using the Compose or Kind configuration:
 
 ```sh
-docker build -t opspilot-grafana:12.4.13-security-20261014 .
+docker build -t opspilot-grafana:12.4.13-security-20261121 .
 ```
 
-For any future rebuild, retain the actual image ID and context hashes, verify exactly
-one package revision changes, compare the Grafana/server/CLI/entrypoint/defaults
-and UI asset bytes with the pinned parent, and check inherited runtime config
-including user `472`. Start Grafana only in the owned local acceptance stack,
-check health, rendered UI and provisioned data-source/dashboard behavior, and
-confirm analytics/update/plugin-preinstall flags from the running instance.
-Scan that exact image ID against the recorded local advisory snapshot; preserve
-raw findings and the distinct scope of any NOT AFFECTED classifications. Confirm
-cleanup does not touch pre-existing containers, networks or volumes. These conditions must be rechecked for any different build or configuration.
+Build from this directory. In a local Kind cluster, load the resulting image
+into the intended cluster before applying manifests. The resulting local image ID
+is evidence for one build, not a registry digest or a promise that a rebuild is
+bit-for-bit identical. Revalidate deployment in its actual environment.
 
-The Dockerfile uses ordinary `COPY` and a fixed parent image so it also works
-with the classic Docker build API. Public upstream software and fixed package
-URLs are the only build inputs; no credentials or model calls are required.
+The original Grafana program, entrypoint, defaults, UI and upstream notices are
+inherited; Grafana remains subject to its upstream AGPL terms. Existing upstream
+Tempo and OpenPGP findings require their own assessment and are not suppressed.

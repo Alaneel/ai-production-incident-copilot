@@ -1,7 +1,7 @@
 {
   "measured_at": [
-    "2026-11-15T01:30:52.072304+00:00",
-    "2026-11-15T01:30:53.799127+00:00"
+    "2026-11-21T03:20:04.828444+00:00",
+    "2026-11-21T03:20:06.533993+00:00"
   ],
   "source_scope_verified": true,
   "source_fingerprint_counts": [
@@ -9,8 +9,8 @@
     36
   ],
   "artifacts": [
-    "evals/results/workflow_benchmark_20261115T013052Z_e51ce1aa.json",
-    "evals/results/cross_service_benchmark_20261115T013053Z_6ff43c9bed8b4d4ca163ab4d161d7387.json"
+    "evals/results/workflow_benchmark_20261121T032004Z_fddfa7b9.json",
+    "evals/results/cross_service_benchmark_20261121T032006Z_4927049596d04581ae1f92ee87f4b90a.json"
   ],
   "single_fault_snapshots": {
     "cases": 150,
@@ -105,7 +105,7 @@
       "zstandard": "0.25.0"
     },
     "release_recipe_sha256": {
-      "container-images.lock.json": "2feb100b91177e78cbb686d09c51191c42fdf419545a8505b33ad3fc958075e4",
+      "container-images.lock.json": "4255cc6cef16188831b5d00aca279a93181ca34c8418bed8069adfe8ca57c5e7",
       "deploy/images/collector-security/.dockerignore": "84d175a2881b936a15811161fb8aa3a9efc7bd81dc4ab7c4b5ff3357f658c702",
       "deploy/images/collector-security/Dockerfile": "1ed868710d70a5d2fb37d725305d9f6d281ba8165f9a94de2e072a779afa7e51",
       "deploy/images/collector-security/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
@@ -119,20 +119,20 @@
       "deploy/images/collector-security/go.mod": "009b6015f932eab5832c635c73ea51c154c56e6f170111d1dec89543362a751c",
       "deploy/images/collector-security/go.sum": "455fecca85abad21d84236bc5bdb9914c7f3cd50bc3b0e2159daf26327167779",
       "deploy/images/grafana-security/.dockerignore": "53769171b40ef20cb99e35b0100af2334c8299c6a8cc2b57cf6b193af3f5e0ad",
-      "deploy/images/grafana-security/Dockerfile": "0bacea7d3b228c2efba669ee48024befe2bbd31f4822142b3ba4fac33b3beef8",
-      "deploy/images/grafana-security/install-patches.sh": "3414908626499b17ec39027921c5943cfd7be257c80dfbf053dd97cfa75669c0",
+      "deploy/images/grafana-security/Dockerfile": "723d8552326022280b241fed27e3ba8fc3fd52bbf699d22907861bf676be0052",
+      "deploy/images/grafana-security/install-patches.sh": "ab558ac4a01d97e39e293d4f9cbc7f64757164e46fd437554e87d1f8a796524b",
       "deploy/images/grafana-security/licenses/Grafana-LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
       "deploy/images/grafana-security/licenses/zlib-LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
-      "deploy/images/grafana-security/packages.lock": "772e3704cbb44ed1e14d5daf16dd61a9cd1c8a081c5c78d6e7af3d07caea5657",
+      "deploy/images/grafana-security/packages.lock": "fcc2777580c7ead7b5896aeaa9f2eb522189ed18b7adec72f57a234c1ec87ba9",
       "deploy/images/loki-security/.dockerignore": "1293c2472cf341de662cb3855b61516164a319ee6b4641a33f17bd718e8e9cb7",
-      "deploy/images/loki-security/Dockerfile": "29c119d5dc71b06b73caed9425f619dd0979759c0f2da9e8af38ab6dce84c729",
+      "deploy/images/loki-security/Dockerfile": "c93c17fbe06ba8ede6aa57257fc6e3a0a93f5f5699461c312b600283cf37ce18",
       "deploy/images/loki-security/LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
       "deploy/images/loki-security/collect-module-notices.go": "aa398786bfa146d39ae98f03ba392f88e92e17f65df0a9460faa99605958e8cf",
-      "deploy/images/loki-security/go.mod": "03444bdbbd1d4d24844cf58e1f5727b616ad66c78c6716cec45859542cbfd59a",
-      "deploy/images/loki-security/go.sum": "6a36ef92799c8921bdb3e86cd48edc3932bef4e197ebf355c7de8382a1b6eca9",
-      "deploy/images/loki-security/source-lock.json": "01729785eda7a2bcf96ddea62246c62e58d43b825252c5ee5e81867b85b5d40c",
+      "deploy/images/loki-security/go.mod": "9b5cef3891227cdb6b5a6ffb25189d03d96e42b6979339bf8cb0119c8466d9f1",
+      "deploy/images/loki-security/go.sum": "57094b132b83b536d2f5e3804af8c8dbd011cfae4e920a35fc94b13cc9cb9ad6",
+      "deploy/images/loki-security/source-lock.json": "3d249cf700e47840149bf5c4d8ec7432abcc18229266fc2cf73bdd65ec7cac14",
       "deploy/images/postgres-security/.dockerignore": "a4d19dcda7f31c0b955cd8feb51ffc5623ad03e488cdb2b2e76b32737300d7fb",
-      "deploy/images/postgres-security/Dockerfile": "08aa7f79b6b775edebccf66badbd3cdee4a5cdf1376776fbd7b0de9696510990",
+      "deploy/images/postgres-security/Dockerfile": "af3729bd114d5a5e68015fb3051c2deb9a93dc74800058d2c9bd332b38919a2d",
       "deploy/images/postgres-security/gosu/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
       "deploy/images/postgres-security/gosu/go.mod": "2447b9b5daca5823aeaaf296a96f698e29b8d9a23e79265ce1eb292b411b6f0b",
       "deploy/images/postgres-security/gosu/go.sum": "3f4d244f09dc5009ad68d99b2d99815f48fddf693fad8e734bbe820b315f43e7",

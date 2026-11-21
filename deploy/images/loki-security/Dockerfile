@@ -10,7 +10,7 @@ RUN test "$(go env GOVERSION)" = go1.26.9 \
 COPY go.mod go.sum ./
 RUN --mount=type=cache,id=opspilot-public-sidecar-modules-20261014,target=/go/pkg/mod --mount=type=cache,id=opspilot-public-sidecar-build-20261014,target=/root/.cache/go-build GOFLAGS=-mod=readonly go mod download && GOFLAGS=-mod=readonly go mod verify
 RUN --mount=type=cache,id=opspilot-public-sidecar-modules-20261014,target=/go/pkg/mod --mount=type=cache,id=opspilot-public-sidecar-build-20261014,target=/root/.cache/go-build GOWORK=off CGO_ENABLED=0 go build -p=2 -mod=readonly -buildvcs=false -trimpath -tags=netgo -ldflags="-s -w -X github.com/grafana/loki/v3/pkg/util/build.Version=3.7.8 -X github.com/grafana/loki/v3/pkg/util/build.Revision=09e6ce2ff1bdc19763a10265b870c86f51c98655 -X github.com/grafana/loki/v3/pkg/util/build.Branch=opspilot-security" -o /out/loki ./cmd/loki
-RUN echo '03444bdbbd1d4d24844cf58e1f5727b616ad66c78c6716cec45859542cbfd59a  go.mod' | sha256sum -c - && echo '6a36ef92799c8921bdb3e86cd48edc3932bef4e197ebf355c7de8382a1b6eca9  go.sum' | sha256sum -c -
+RUN echo '9b5cef3891227cdb6b5a6ffb25189d03d96e42b6979339bf8cb0119c8466d9f1  go.mod' | sha256sum -c - && echo '57094b132b83b536d2f5e3804af8c8dbd011cfae4e920a35fc94b13cc9cb9ad6  go.sum' | sha256sum -c -
 RUN cp go.mod /out/go.mod && cp go.sum /out/go.sum
 COPY collect-module-notices.go /tmp/collect-module-notices.go
 RUN --mount=type=cache,id=opspilot-public-sidecar-modules-20261014,target=/go/pkg/mod --mount=type=cache,id=opspilot-public-sidecar-build-20261014,target=/root/.cache/go-build GOFLAGS=-mod=readonly go run /tmp/collect-module-notices.go /out/module-notices /out/loki

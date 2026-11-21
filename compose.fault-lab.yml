@@ -157,7 +157,7 @@ services:
   loki:
     build:
       context: deploy/images/loki-security
-    image: opspilot-loki:3.7.8-security-20261115
+    image: opspilot-loki:3.7.8-security-20261121
     command: ["-config.file=/etc/loki/local-config.yaml"]
     volumes:
       - ./fault-lab/observability/loki.yml:/etc/loki/local-config.yaml:ro
@@ -206,7 +206,7 @@ services:
   grafana:
     build:
       context: deploy/images/grafana-security
-    image: opspilot-grafana:12.4.13-security-20261014
+    image: opspilot-grafana:12.4.13-security-20261121
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer

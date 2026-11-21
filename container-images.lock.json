@@ -9,18 +9,18 @@
   "note": "Digests bind manifests, not a security guarantee; see release validation.",
   "compose_service_images": {
     "docker-compose.yml": [
-      "opspilot-postgres:17.11-security-20261013",
+      "opspilot-postgres:17.11-security-20261121",
       "opspilot-redis:7.4.11-security-20261013"
     ],
     "compose.fault-lab.yml": [
       "opspilot-prometheus:3.15.0-security-20261115",
-      "opspilot-loki:3.7.8-security-20261115",
+      "opspilot-loki:3.7.8-security-20261121",
       "opspilot-tempo:2.10.8-security-20261115",
       "opspilot-collector:0.162.0-security-20261115",
-      "opspilot-grafana:12.4.13-security-20261014"
+      "opspilot-grafana:12.4.13-security-20261121"
     ],
     "compose.real-pool.yml": [
-      "opspilot-postgres:17.11-security-20261013",
+      "opspilot-postgres:17.11-security-20261121",
       "incident-copilot/fault-lab:real-pool"
     ]
   },
@@ -38,14 +38,14 @@
   ],
   "kind_node_image": "kindest/node:v1.36.1@sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5",
   "postgres_security_derivative": {
-    "local_image_tag": "opspilot-postgres:17.11-security-20261013",
+    "local_image_tag": "opspilot-postgres:17.11-security-20261121",
     "context": "deploy/images/postgres-security",
     "immutable_parent": "postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
     "gosu_version": "1.19",
     "gosu_compiler": "go1.26.9",
     "moby_user_version": "0.4.1",
-    "zlib_version": "1.3.2-r1",
-    "verified_local_linux_arm64_image_id": "sha256:dbbcf11a55e5f51d2cde3e5b49b12d98ab7ccc839c5e79cf780d24a2d54bf4bd"
+    "zlib_version": "1.4-r0",
+    "verified_local_linux_arm64_image_id": "sha256:4ab06ae65adc3673eeae34c7fe28301e79966c536e470e3cc86bfef23c85a1d6"
   },
   "redis_security_derivative": {
     "local_image_tag": "opspilot-redis:7.4.11-security-20261013",
@@ -100,26 +100,26 @@
       "license_scope": "Third-party upstream terms, separate from first-party MIT"
     },
     "loki": {
-      "local_image_tag": "opspilot-loki:3.7.8-security-20261115",
+      "local_image_tag": "opspilot-loki:3.7.8-security-20261121",
       "context": "deploy/images/loki-security",
       "immutable_parent": "grafana/loki:3.7.8@sha256:1107dd5274e0ada47e42472b7a7e71f3b2a2fe878878108f3e2f9e51528f0193",
       "version": "3.7.8",
-      "verified_local_linux_arm64_image_id": "sha256:8099d7b8281f0f8328cf0c71cb86036deeea4185bbe2a7e099a783f3aa5ee481",
+      "verified_local_linux_arm64_image_id": "sha256:39af3c5278f3aee41bb13bea2a1b80e3328066148bb22b11014fc1cc2a678b3a",
       "lock_sha256": {
-        "go.mod": "03444bdbbd1d4d24844cf58e1f5727b616ad66c78c6716cec45859542cbfd59a",
-        "go.sum": "6a36ef92799c8921bdb3e86cd48edc3932bef4e197ebf355c7de8382a1b6eca9"
+        "go.mod": "9b5cef3891227cdb6b5a6ffb25189d03d96e42b6979339bf8cb0119c8466d9f1",
+        "go.sum": "57094b132b83b536d2f5e3804af8c8dbd011cfae4e920a35fc94b13cc9cb9ad6"
       },
       "native_compiler": "go1.26.9",
       "license_scope": "Third-party upstream terms, separate from first-party MIT"
     }
   },
   "grafana_security_derivative": {
-    "local_image_tag": "opspilot-grafana:12.4.13-security-20261014",
+    "local_image_tag": "opspilot-grafana:12.4.13-security-20261121",
     "context": "deploy/images/grafana-security",
     "immutable_parent": "grafana/grafana:12.4.13@sha256:41bbc1b5e04416f81891806076db2a2ff60a5d4da5f78d36a88b033a8c199185",
     "version": "12.4.13",
-    "zlib_version": "1.3.2-r1",
-    "verified_local_linux_arm64_image_id": "sha256:4d65f19d24dee13d160effc33d991e442f7d5a746c775fdea3ec778d8321a0ab",
+    "zlib_version": "1.4-r0",
+    "verified_local_linux_arm64_image_id": "sha256:2dae6fec3de4523079cdb00adce085e1edc4b16396669bc396f437564de8ada8",
     "same_upstream_elf_sha256": "770ae442d2f86cc06787b114e04248d6a465a28cf36ec1882b42b15fdb7a3122",
     "license_scope": "Upstream AGPL, separate from first-party MIT"
   }
