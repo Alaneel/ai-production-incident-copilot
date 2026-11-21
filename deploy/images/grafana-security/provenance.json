@@ -228,7 +228,7 @@
     "no_network_health_version": "12.4.13",
     "source_tarball_sha512_verified_against_apkbuild": true,
     "zlib_1_4_license_sha256_matches_retained": true,
-    "note": "Local run only; does not establish production deployment or an amd64 build.",
+    "note": "Local runs only; do not establish production deployment or native amd64 validation.",
     "amd64_emulated": {
       "local_image_id": "sha256:cd6b134b907d4ae796c0e73082833fdc864ee8a71b208552d1c41ad5ba489e23",
       "signature_checked_during_build": true,
