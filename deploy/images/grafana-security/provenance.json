@@ -192,8 +192,7 @@
   "upstream_notice_status": "Exact v12.4.13 root NOTICE URL returned HTTP404; existing parent notices remain inherited",
   "not_executed": [
     "independent signed vulnerability scan on derived image",
-    "full Compose or Kind acceptance stack",
-    "derived linux/amd64 build and runtime"
+    "full Compose or Kind acceptance stack"
   ],
   "private_graph_export": false,
   "runtime_or_model_execution_during_preparation": true,
@@ -229,6 +228,14 @@
     "no_network_health_version": "12.4.13",
     "source_tarball_sha512_verified_against_apkbuild": true,
     "zlib_1_4_license_sha256_matches_retained": true,
-    "note": "Local run only; does not establish production deployment or an amd64 build."
+    "note": "Local run only; does not establish production deployment or an amd64 build.",
+    "amd64_emulated": {
+      "local_image_id": "sha256:cd6b134b907d4ae796c0e73082833fdc864ee8a71b208552d1c41ad5ba489e23",
+      "signature_checked_during_build": true,
+      "zlib_version": "1.4-r0",
+      "no_network_health_database": "ok",
+      "no_network_health_version": "12.4.13",
+      "note": "Emulated local run; not native hardware or production deployment."
+    }
   }
 }

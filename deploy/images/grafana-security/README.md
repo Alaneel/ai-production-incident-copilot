@@ -17,7 +17,10 @@ executable, entrypoint and all 11,551 public UI file hashes matched the pinned
 parent. In a temporary container with no external networking, `/api/health`
 returned database `ok` and version `12.4.13`. The zlib 1.4 source archive matched
 the Alpine recipe SHA-512, and its license matched the retained license file.
-The amd64 package hash was verified, but no derived amd64 image was built or run.
+A derived Linux/amd64 image was also built with the pinned parent and signed vendor
+package; its local ID was `sha256:cd6b134b907d4ae796c0e73082833fdc864ee8a71b208552d1c41ad5ba489e23`.
+In a temporary emulated amd64 container with no external networking, `/api/health`
+returned database `ok` and version `12.4.13`; the installed zlib was `1.4-r0`.
 The previous 2026-10-14 image and benchmark results remain historical evidence;
 they do not establish behavior of the new image. No image has been published or
 deployed as part of this local verification.
