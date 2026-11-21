@@ -14,7 +14,7 @@
     ],
     "compose.fault-lab.yml": [
       "opspilot-prometheus:3.15.0-security-20261115",
-      "opspilot-loki:3.7.8-security-20261115",
+      "opspilot-loki:3.7.8-security-20261121",
       "opspilot-tempo:2.10.8-security-20261115",
       "opspilot-collector:0.162.0-security-20261115",
       "opspilot-grafana:12.4.13-security-20261014"
@@ -100,14 +100,14 @@
       "license_scope": "Third-party upstream terms, separate from first-party MIT"
     },
     "loki": {
-      "local_image_tag": "opspilot-loki:3.7.8-security-20261115",
+      "local_image_tag": "opspilot-loki:3.7.8-security-20261121",
       "context": "deploy/images/loki-security",
       "immutable_parent": "grafana/loki:3.7.8@sha256:1107dd5274e0ada47e42472b7a7e71f3b2a2fe878878108f3e2f9e51528f0193",
       "version": "3.7.8",
-      "verified_local_linux_arm64_image_id": "sha256:8099d7b8281f0f8328cf0c71cb86036deeea4185bbe2a7e099a783f3aa5ee481",
+      "verified_local_linux_arm64_image_id": "sha256:39af3c5278f3aee41bb13bea2a1b80e3328066148bb22b11014fc1cc2a678b3a",
       "lock_sha256": {
-        "go.mod": "03444bdbbd1d4d24844cf58e1f5727b616ad66c78c6716cec45859542cbfd59a",
-        "go.sum": "6a36ef92799c8921bdb3e86cd48edc3932bef4e197ebf355c7de8382a1b6eca9"
+        "go.mod": "9b5cef3891227cdb6b5a6ffb25189d03d96e42b6979339bf8cb0119c8466d9f1",
+        "go.sum": "57094b132b83b536d2f5e3804af8c8dbd011cfae4e920a35fc94b13cc9cb9ad6"
       },
       "native_compiler": "go1.26.9",
       "license_scope": "Third-party upstream terms, separate from first-party MIT"

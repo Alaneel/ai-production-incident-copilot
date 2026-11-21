@@ -19,5 +19,5 @@
     "go.opentelemetry.io/otel/exporters/stdout/stdoutlog@v0.23.0",
     "github.com/containerd/containerd/v2@v2.2.10"
   ],
-  "status": "PROPOSED MODULE UPDATE; LINUX IMAGE BUILD, IMAGE ID AND DEPLOYMENT NOT YET VERIFIED"
+  "status": "GO MODULE SECURITY UPDATE; IMAGE VALIDATION RECORDED SEPARATELY; NOT PUBLISHED OR DEPLOYED"
 }
