@@ -31,7 +31,7 @@
   ],
   "proposal_files": {
     "Dockerfile": "af3729bd114d5a5e68015fb3051c2deb9a93dc74800058d2c9bd332b38919a2d",
-    "README.md": "e63ad73f0a633a4089447523f354ea3060ccbd3c743d585a7b173ddefac020c7",
+    "README.md": "b3a4042b8b07caeb61a42d1e8f5265a9634f4b7910a021027935f4137e44ecef",
     "gosu/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
     "gosu/go.mod": "2447b9b5daca5823aeaaf296a96f698e29b8d9a23e79265ce1eb292b411b6f0b",
     "gosu/go.sum": "3f4d244f09dc5009ad68d99b2d99815f48fddf693fad8e734bbe820b315f43e7",
