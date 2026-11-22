@@ -9,7 +9,7 @@ export function DeploymentEventTimeline({ services, evidence, window }: {
   const view = deploymentEventView(services, evidence, window);
   return <section className="panel deployment-event-panel" aria-label="Deployment event observations">
     <div className="panel-title">
-      <div><span className="eyebrow">TEMPORAL CONTEXT · NOT ROOT CAUSE</span><h2>Deployment event observations</h2></div>
+      <div><span className="eyebrow">Temporal context · not root cause</span><h2>Deployment event observations</h2></div>
       <span className="small-status">{view.rows.length} usable observations</span>
     </div>
     <p role="status">{eventStatusLabels[view.status]}</p>

@@ -182,17 +182,26 @@ function MetricChart({
   delta,
   data,
   tone,
-  axis = ["13:45", "deploy 13:56", "14:20"],
+  axis = ["13:45", "13:56", "14:20"],
 }: {
   label: string;
   value: string;
   delta: string;
   data: number[];
-  tone: "cyan" | "amber";
+  tone: "critical" | "warning";
   axis?: string[];
 }) {
+  const gradientId = `metric-fill-${tone}`;
+  const points = data.map((height, index) => {
+    const x = data.length > 1 ? (index / (data.length - 1)) * 100 : 50;
+    const y = 40 - Math.max(0, Math.min(100, height)) * 0.36;
+    return `${x.toFixed(2)},${y.toFixed(2)}`;
+  });
+  const linePath = points.length ? `M${points.join(" L")}` : "";
+  const areaPath = points.length ? `${linePath} L100,40 L0,40 Z` : "";
+  const showMarker = data.length > 0 && axis.length === 3;
   return (
-    <article className="metric-card">
+    <article className={`metric-card ${tone}`}>
       <div className="metric-heading">
         <div>
           <span className="eyebrow">{label}</span>
@@ -200,11 +209,22 @@ function MetricChart({
         </div>
         <span className={`delta ${tone}`}>{delta}</span>
       </div>
-      <div className={`bar-chart ${tone}`} aria-label={`${label} trend`}>
-        {data.map((height, index) => (
-          <span key={index} style={{ height: `${height}%` }} />
-        ))}
-        {data.length > 0 && <i className="incident-marker" />}
+      <div className={`metric-chart ${tone}`} role="img" aria-label={`${label} trend`}>
+        {data.length > 0 ? (
+          <svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor="currentColor" stopOpacity="0.32" />
+                <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d={areaPath} fill={`url(#${gradientId})`} />
+            <path d={linePath} fill="none" stroke="currentColor" strokeWidth="1.6" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+          </svg>
+        ) : (
+          <span className="metric-empty">No timestamped samples retained</span>
+        )}
+        {showMarker && <i className="incident-marker"><b>v142 deployed</b></i>}
       </div>
       <div className="chart-axis">
         {axis.map((label, index) => <span key={index}>{label}</span>)}
@@ -509,7 +529,8 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
     incident?.remediation?.title ?? (showDemo ? "Rollback payment-service to v141" : "No remediation proposed yet");
   const commandPreview =
     incident?.remediation?.command_preview ??
-    "No remediation selected; investigate an incident first.";
+    (showDemo ? "kubectl rollout undo deployment/payment-service --to-revision=141 -n payments"
+      : "No remediation selected; investigate an incident first.");
   const expectedResult =
     incident?.remediation?.expected_result ??
     (showDemo ? "Restore the previous query pattern and drain waiters." : "No final action recommendation is available.");
@@ -542,26 +563,42 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
       <header className="topbar">
         <div className="brand">
           <span className="brand-mark" aria-hidden="true">
-            O
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12h4l2.5-6 5 12 2.5-6H21" />
+            </svg>
           </span>
-          <div>
-            <strong>OpsPilot</strong>
-            <span>INCIDENT INTELLIGENCE</span>
-          </div>
+          <strong>OpsPilot</strong>
         </div>
-        <div className="topbar-center">
-          <span className="live-dot" />
-          {incident ? isAnalyzing ? "DIAGNOSTIC CHECKPOINT" : "RETAINED INCIDENT" : showDemo ? "DEMO INCIDENT" : "DIAGNOSIS UNCONFIRMED"}
+        <nav className="topbar-center" aria-label="Breadcrumb">
+          <span className="sep" aria-hidden="true">/</span>
+          <span className="crumb-root">Incidents</span>
+          <span className="sep" aria-hidden="true">/</span>
           <b>{incident?.incident_id ?? (showDemo ? "INC-2847" : "Waiting for incident reference")}</b>
-        </div>
+          <span className="mode-pill">
+            <span className="live-dot" />
+            {incident ? isAnalyzing ? "Diagnostic checkpoint" : "Retained incident" : showDemo ? "Demo incident" : "Diagnosis unconfirmed"}
+          </span>
+        </nav>
         <div className="topbar-actions">
           <button className="icon-button" aria-label="Search">
-            /
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
+            </svg>
+            <span className="search-label">Search…</span>
+            <kbd>⌘K</kbd>
           </button>
           <button className="env-button">
             <span className="status-dot" />
             prod-sg
-            <span aria-hidden="true">⌄</span>
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+          </button>
+          <button type="button" className="theme-toggle" aria-label="Toggle colour theme" onClick={() => {
+            const root = document.documentElement;
+            const dark = root.dataset.theme ? root.dataset.theme === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+            root.dataset.theme = dark ? "light" : "dark";
+          }}>
+            <svg className="moon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" /></svg>
+            <svg className="sun" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
           </button>
           <button className="avatar" aria-label="Account menu">
             AW
@@ -570,7 +607,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
       </header>
 
       <section className="incident-header">
-        <div>
+        <div className="incident-heading">
           <div className="incident-labels">
             <span className="severity">{incident ? incident.severity ?? "Unclassified" : showDemo ? "SEV-2" : "Unclassified"}</span>
             <span className="investigating">
@@ -587,55 +624,27 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
         </div>
         <div className="header-meta">
           <div>
-            <span>OWNER</span>
+            <span>Owner</span>
             <strong>{incident || !showDemo ? "Unassigned" : <><i className="owner-avatar">JL</i> Jane Liu</>}</strong>
           </div>
           <div>
-            <span>AFFECTED</span>
+            <span>Affected service</span>
             <strong>{primaryService}</strong>
+          </div>
+          <div>
+            <span>Trace</span>
+            <strong className="mono">{incident?.trace_id ?? (showDemo ? "tr_01JAZ8Y3PK7X4N" : "Not received")}</strong>
           </div>
         </div>
       </section>
 
       <div className="workspace">
         <section className="main-column">
-          <section className="panel" aria-label="Local protected API connection">
-            <h2>Local API connection — not SSO</h2>
-            <p>Development integration only. Use a trusted server-side identity gateway for production; never paste production secrets here.</p>
-            <label htmlFor="console-auth-mode">Authorization mode</label>{" "}
-            <select id="console-auth-mode" value={authMode} disabled={isApproving || isRestoring}
-              onChange={event => changeAuthorizationMode(event.target.value as ConsoleCredentials["mode"])}>
-              <option value="protected">Protected API credentials</option>
-              <option value="local-demo" disabled={!isLocalDemoBackend(orchestratorUrl)}>Unauthenticated local demo</option>
-            </select>
-            {authMode === "local-demo" ? <p role="alert">Explicit HTTP loopback demo only. Requests carry no Bearer credential. The backend must have auth disabled; this does not verify human identity or authenticated approval. A 401/403 never switches modes.</p>
-              : <p>The backend must use required authorization. Reader credentials diagnose and read; operator credentials approve and inspect. Credentials are not human SSO.</p>}
-            <p>Configured incident backend: <code>{backendEndpoint ?? "Unavailable or unsafe URL"}</code>. No editable endpoint is accepted.</p>
-            <label><input type="checkbox" checked={backendEndpoint !== null && trustedEndpoint === backendEndpoint}
-              disabled={!backendEndpoint || isApproving || isRestoring}
-              onChange={event => { if (event.target.checked) setTrustedEndpoint(backendEndpoint); else clearCredentials(); }} />
-              I trust this exact backend for these development requests and credentials.</label>
-            {authMode === "protected" && <>
-              <p><label htmlFor="console-read-token">Reader API token</label>{" "}
-                <input id="console-read-token" type="password" autoComplete="off" value={readCredential}
-                  disabled={isApproving || isRestoring} onChange={event => { interruptDiagnosis(); setReadCredential(event.target.value); }} /></p>
-              {operatorToken === undefined && <p><label htmlFor="console-operator-token">Operator API token</label>{" "}
-                <input id="console-operator-token" type="password" autoComplete="off" value={operatorCredential}
-                  disabled={isApproving || isRestoring} onChange={event => { interruptDiagnosis(); setOperatorCredential(event.target.value); }} /></p>}
-            </>}
-            <p><label htmlFor="console-operator-actor">{authMode === "protected" ? "Operator actor configured for this backend" : "Local demo audit actor (unverified)"}</label>{" "}
-              <input id="console-operator-actor" autoComplete="off" value={operatorActor} maxLength={120}
-                disabled={isApproving || isRestoring} onChange={event => { interruptDiagnosis(); setOperatorActor(event.target.value); }} />
-              {" "}{authMode === "protected" ? "The backend validates this binding; entering a name is not identity verification."
-                : "The demo records this supplied name without authenticating a person or binding it to a credential."}</p>
-            <p>Tokens stay only in this page&apos;s memory, never in browser storage, URLs, incident payloads or traces. Reload or clear the connection to remove them.</p>
-            <button type="button" disabled={isApproving || isRestoring} onClick={clearCredentials}>Clear credentials and trust</button>
-            {(incident || restoredIncidentId) && <button type="button" disabled={isAnalyzing || isApproving || isRestoring || Boolean(readAccessError)}
-              onClick={() => void refreshDecision()}>Restore / refresh incident (read-only)</button>}
-            {orchestratorUrl && readAccessError && <p role="status">{readAccessError}</p>}
-          </section>
           <form className="question-box" onSubmit={submitQuestion}>
-            <label htmlFor="incident-question">ASK THE INCIDENT COPILOT</label>
+            <label htmlFor="incident-question">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" /></svg>
+              Ask the incident copilot
+            </label>
             <div>
               <span className="prompt-glyph" aria-hidden="true">›_</span>
               <input
@@ -669,6 +678,66 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
             </div>
           )}
 
+          <details className="connection-panel" aria-label="Local protected API connection" open={restoredIncidentId !== null && !incident ? true : undefined}>
+            <summary>
+              <span className="connection-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
+              </span>
+              <span className="connection-title">
+                <strong>Local API connection — not SSO</strong>
+                <small>{authMode === "local-demo" ? "Unauthenticated local demo" : "Protected API credentials"} · <code>{backendEndpoint ?? "no backend configured"}</code></small>
+              </span>
+              <span className={`connection-state ${!orchestratorUrl ? "idle" : readAccessError ? "warn" : "ok"}`}>
+                {!orchestratorUrl ? "Demo data" : readAccessError ? "Setup required" : "Ready"}
+              </span>
+              <svg className="chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+            </summary>
+            <div className="connection-body">
+              <p className="connection-note">Development integration only. Use a trusted server-side identity gateway for production; never paste production secrets here.</p>
+              <div className="field-grid">
+                <div className="field">
+                  <label htmlFor="console-auth-mode">Authorization mode</label>
+                  <select id="console-auth-mode" value={authMode} disabled={isApproving || isRestoring}
+                    onChange={event => changeAuthorizationMode(event.target.value as ConsoleCredentials["mode"])}>
+                    <option value="protected">Protected API credentials</option>
+                    <option value="local-demo" disabled={!isLocalDemoBackend(orchestratorUrl)}>Unauthenticated local demo</option>
+                  </select>
+                </div>
+                <div className="field">
+                  <span className="field-label">Configured incident backend</span>
+                  <code className="field-value">{backendEndpoint ?? "Unavailable or unsafe URL"}</code>
+                  <small>No editable endpoint is accepted.</small>
+                </div>
+                {authMode === "protected" && <>
+                  <div className="field"><label htmlFor="console-read-token">Reader API token</label>
+                    <input id="console-read-token" type="password" autoComplete="off" value={readCredential}
+                      disabled={isApproving || isRestoring} onChange={event => { interruptDiagnosis(); setReadCredential(event.target.value); }} /></div>
+                  {operatorToken === undefined && <div className="field"><label htmlFor="console-operator-token">Operator API token</label>
+                    <input id="console-operator-token" type="password" autoComplete="off" value={operatorCredential}
+                      disabled={isApproving || isRestoring} onChange={event => { interruptDiagnosis(); setOperatorCredential(event.target.value); }} /></div>}
+                </>}
+                <div className="field field-wide"><label htmlFor="console-operator-actor">{authMode === "protected" ? "Operator actor configured for this backend" : "Local demo audit actor (unverified)"}</label>
+                  <input id="console-operator-actor" autoComplete="off" value={operatorActor} maxLength={120}
+                    disabled={isApproving || isRestoring} onChange={event => { interruptDiagnosis(); setOperatorActor(event.target.value); }} />
+                  <small>{authMode === "protected" ? "The backend validates this binding; entering a name is not identity verification."
+                    : "The demo records this supplied name without authenticating a person or binding it to a credential."}</small></div>
+              </div>
+              {authMode === "local-demo" ? <p className="connection-callout warn" role="alert">Explicit HTTP loopback demo only. Requests carry no Bearer credential. The backend must have auth disabled; this does not verify human identity or authenticated approval. A 401/403 never switches modes.</p>
+                : <p className="connection-callout">The backend must use required authorization. Reader credentials diagnose and read; operator credentials approve and inspect. Credentials are not human SSO.</p>}
+              <label className="trust-check"><input type="checkbox" checked={backendEndpoint !== null && trustedEndpoint === backendEndpoint}
+                disabled={!backendEndpoint || isApproving || isRestoring}
+                onChange={event => { if (event.target.checked) setTrustedEndpoint(backendEndpoint); else clearCredentials(); }} />
+                <span>I trust this exact backend for these development requests and credentials.</span></label>
+              <p className="connection-note">Tokens stay only in this page&apos;s memory, never in browser storage, URLs, incident payloads or traces. Reload or clear the connection to remove them.</p>
+              <div className="connection-actions">
+                <button type="button" className="ghost-button" disabled={isApproving || isRestoring} onClick={clearCredentials}>Clear credentials and trust</button>
+                {(incident || restoredIncidentId) && <button type="button" className="ghost-button" disabled={isAnalyzing || isApproving || isRestoring || Boolean(readAccessError)}
+                  onClick={() => void refreshDecision()}>Restore / refresh incident (read-only)</button>}
+              </div>
+            </div>
+          </details>
+          {orchestratorUrl && readAccessError && <p className="api-notice warn" role="status">{readAccessError}</p>}
+
           <div className="tab-row">
             <button
               className={activeTab === "timeline" ? "active" : ""}
@@ -688,21 +757,21 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
             <>
               <section className="metrics-grid">
                 <MetricChart
-                  label="P95 LATENCY"
+                  label="P95 latency"
                   {...(showDemo ? { value: "2.84s", delta: "+341%", data: bars } : metricView("request_latency_p95"))}
-                  tone="amber"
+                  tone="warning"
                 />
                 <MetricChart
-                  label="ERROR RATE"
+                  label="Error rate"
                   {...(showDemo ? { value: "12.7%", delta: "+11.4pp", data: errors } : metricView("request_error_rate", true))}
-                  tone="cyan"
+                  tone="critical"
                 />
               </section>
 
               <section className="panel dependency-panel">
                 <div className="panel-title">
                   <div>
-                    <span className="eyebrow">SERVICE MAP</span>
+                    <span className="eyebrow">Service map</span>
                     <h2>Dependency blast radius</h2>
                   </div>
                   <span className="small-status">
@@ -710,50 +779,60 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
                   </span>
                 </div>
                 {incident ? <DependencyImpactList services={incident.services} impacts={incident.service_impacts ?? []} evidence={incident.evidence} topology={incident.service_topology} /> : showDemo ? <div className="service-map">
-                  <div className={`service-node ${incident ? "" : "healthy"} checkout-node`}>
-                    <i>C</i>
-                    <div>
-                      <strong>{dependencyServices[0] ?? "upstream"}</strong>
-                      <span>dependency</span>
+                  <div className="map-column">
+                    <div className="service-node healthy">
+                      <i>C</i>
+                      <div>
+                        <strong>{dependencyServices[0] ?? "upstream"}</strong>
+                        <span>upstream · healthy</span>
+                      </div>
                     </div>
                   </div>
-                  <span className="connector connector-one" />
-                  <div className={`service-node ${incident ? "" : "critical"} payment-node`}>
-                    <i>P</i>
-                    <div><strong>{primaryService}</strong><span>{incident ? "selected service" : "primary signal"}</span></div>
-                    <b>{incident ? metricView("request_error_rate", true).value : "12.7%"}</b>
-                  </div>
-                  <span className="connector connector-two" />
-                  <div className={`service-node ${incident ? "" : "warning"} ledger-node`}>
-                    <i>DB</i>
-                    <div>
-                      <strong>{dependencyServices[1] ?? "downstream"}</strong>
-                      <span>dependency</span>
+                  <svg className="map-link" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path className="flow critical" d="M0,50 L100,50" vectorEffect="non-scaling-stroke" />
+                  </svg>
+                  <div className="map-column">
+                    <div className="service-node critical">
+                      <i>P</i>
+                      <div><strong>{primaryService}</strong><span>primary signal</span></div>
+                      <b>12.7%</b>
                     </div>
                   </div>
-                  <span className="connector connector-three" />
-                  <div className={`service-node ${incident ? "" : "healthy"} risk-node`}>
-                    <i>R</i>
-                    <div>
-                      <strong>{dependencyServices[2] ?? "supporting service"}</strong>
-                      <span>dependency</span>
+                  <svg className="map-link" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path className="flow warning" d="M0,50 C50,50 50,22 100,22" vectorEffect="non-scaling-stroke" />
+                    <path className="flow" d="M0,50 C50,50 50,78 100,78" vectorEffect="non-scaling-stroke" />
+                  </svg>
+                  <div className="map-column stacked">
+                    <div className="service-node warning">
+                      <i>DB</i>
+                      <div>
+                        <strong>{dependencyServices[1] ?? "downstream"}</strong>
+                        <span>pool 50/50 saturated</span>
+                      </div>
+                    </div>
+                    <div className="service-node healthy">
+                      <i>R</i>
+                      <div>
+                        <strong>{dependencyServices[2] ?? "supporting service"}</strong>
+                        <span>downstream · healthy</span>
+                      </div>
                     </div>
                   </div>
-                </div> : <p>No service topology checkpoint has been received.</p>}
+                </div> : <p className="empty-state">No service topology checkpoint has been received.</p>}
               </section>
 
               {incident && <RootCauseCandidates incident={incident} />}
 
               <section className="panel hypothesis-panel">
                 <div className="hypothesis-top">
-                  <div className="confidence-ring">
+                  <div className="confidence-ring" style={{ "--p": `${!showDemo && (!incident?.hypotheses.length || (incident.candidate_incident_types?.length ?? 0) > 1) ? 0 : confidence}%` } as React.CSSProperties}>
                     <strong>{!showDemo && (!incident?.hypotheses.length || (incident.candidate_incident_types?.length ?? 0) > 1) ? "—" : confidence}</strong><span>{!showDemo && (!incident?.hypotheses.length || (incident.candidate_incident_types?.length ?? 0) > 1) ? "" : "%"}</span>
                   </div>
                   <div>
-                    <span className="eyebrow">LEADING HYPOTHESIS</span>
+                    <span className="eyebrow">Leading hypothesis</span>
                     <h2>{leadingHypothesis}</h2>
                   </div>
-                  <span className="validated">
+                  <span className={`validated ${incident?.status === "insufficient_evidence" ? "warn" : ""}`}>
                     {incident?.status === "insufficient_evidence" ? "More telemetry needed" : "Evidence retained"}
                   </span>
                 </div>
@@ -773,7 +852,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
                 )}
                 <div className="evidence-list">
                   {displayEvidence.map((item) => (
-                    <article key={item.id}>
+                    <article key={item.id} data-kind={item.icon}>
                       <i>{item.icon}</i>
                       <div>
                         <span>{item.source}</span>
@@ -786,9 +865,9 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
                   ))}
                 </div>
                 {incident && !incident.hypotheses.length && <p>No root-cause citations exist. Retained observations below are context only.</p>}
-                {citationProblem && <p role="alert">Citation integrity failed. Missing IDs: {citations.missing.join(", ") || "none"}; ambiguous IDs: {citations.ambiguous.join(", ") || "none"}. Approval is blocked.</p>}
+                {citationProblem && <p className="inline-alert" role="alert">Citation integrity failed. Missing IDs: {citations.missing.join(", ") || "none"}; ambiguous IDs: {citations.ambiguous.join(", ") || "none"}. Approval is blocked.</p>}
                 {(incident?.candidate_incident_types?.length ?? 0) > 1 && (
-                  <div>
+                  <div className="competing-hypotheses">
                     <h3>Competing hypotheses — causal order unresolved</h3>
                     <p>Several observed failure patterns match. The order below is not a calibrated confidence ranking. No production mutation is proposed.</p>
                     <ul>{incident?.hypotheses.map((hypothesis, index) => <li key={index}>
@@ -804,7 +883,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
 
               <section className="panel remediation-panel">
                 <div className="remediation-copy">
-                  <span className="eyebrow">RECOMMENDED REMEDIATION</span>
+                  <span className="eyebrow">Recommended remediation</span>
                   <h2>{remediationTitle}</h2>
                   <p>{expectedResult}</p>
                   <div className="command-preview">
@@ -850,7 +929,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
                     </div>
                   ) : (
                     <>
-                      <span>⚠ HUMAN APPROVAL REQUIRED</span>
+                      <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3Z" /><path d="M12 10v4M12 17.5v.01" /></svg>HUMAN APPROVAL REQUIRED</span>
                       <p>{preflightReview.mode === "simulation"
                         ? "This is a simulated action. No Kubernetes operation will be submitted."
                         : "This action changes production state and cannot run automatically."}</p>
@@ -891,7 +970,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
             <section className="panel trace-panel">
               <div className="panel-title">
                 <div>
-                  <span className="eyebrow">DURABLE WORKFLOW</span>
+                  <span className="eyebrow">Durable workflow</span>
                   <h2>Agent execution trace</h2>
                 </div>
                 <span className="small-status">{incident ? `${incident.trace.length} retained events` : "checkpoint #12 (demo)"}</span>
@@ -923,7 +1002,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
                 ))}
               </div>
               <div className="trace-footer">
-                <span>TRACE ID</span>
+                <span>Trace ID</span>
                 <code>{incident?.trace_id ?? (showDemo ? "tr_01JAZ8Y3PK7X4N" : "Not received")}</code>
                 <span>All tool inputs, outputs and approval decisions are retained.</span>
               </div>
@@ -934,8 +1013,8 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
         <aside className="side-column">
           <section className="side-panel workflow-panel">
             <div className="side-title">
-              <span>AGENT WORKFLOW</span>
-              <b><i /> {incident ? isAnalyzing ? "DIAGNOSING" : incidentStatus.toUpperCase() : showDemo ? "RUNNING (DEMO)" : diagnosisPhase.toUpperCase()}</b>
+              <span>Agent workflow</span>
+              <b><i /> {incident ? isAnalyzing ? "Diagnosing" : incidentStatus : showDemo ? "Running · demo" : diagnosisPhase}</b>
             </div>
             <div className="workflow-list">
               {retainedSteps.map((step, index) => (
@@ -950,7 +1029,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
 
           <section className="side-panel activity-panel">
             <div className="side-title">
-              <span>LIVE TOOL ACTIVITY</span>
+              <span>Live tool activity</span>
               <button onClick={openTrace}>View trace</button>
             </div>
             <div className="activity-feed">
@@ -986,8 +1065,8 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
 
           <section className="side-panel guardrail-panel">
             <div className="side-title">
-              <span>GUARDRAILS</span>
-              <b className="protected">PROTECTED</b>
+              <span>Guardrails</span>
+              <b className="protected">Protected</b>
             </div>
             <div className="guardrail-row">
               <span>Input policy</span><strong>{incident ? "See audit trace" : showDemo ? "Passed (demo)" : "Unconfirmed"}</strong>
