@@ -1,0 +1,31 @@
+# Connect the local stack to your own Prometheus, Loki and Tempo.
+#
+#   PROMETHEUS_URL=https://prometheus.internal LOKI_URL=https://loki.internal \
+#   TEMPO_URL=https://tempo.internal SIGNAL_PROFILE=opentelemetry-kubernetes \
+#   docker compose -f docker-compose.yml -f compose.connect.yml up --build
+#
+# Check what your telemetry answers before running a diagnosis:
+#
+#   docker compose -f docker-compose.yml -f compose.connect.yml \
+#     run --rm telemetry-gateway check --service checkout
+#
+# See docs/integrate.md. Everything stays read-only until a human approves.
+services:
+  telemetry-gateway:
+    environment:
+      PROMETHEUS_URL: ${PROMETHEUS_URL:?set PROMETHEUS_URL to your Prometheus base URL}
+      LOKI_URL: ${LOKI_URL:?set LOKI_URL to your Loki base URL}
+      TEMPO_URL: ${TEMPO_URL:?set TEMPO_URL to your Tempo base URL}
+      TELEMETRY_SIGNAL_PROFILE: /etc/opspilot/signal-profiles/${SIGNAL_PROFILE:-opentelemetry-kubernetes}.json
+    volumes:
+      - ${SIGNAL_PROFILE_DIR:-./deploy/signal-profiles}:/etc/opspilot/signal-profiles:ro
+
+  orchestrator:
+    environment:
+      # Console base URL used for links in Alertmanager webhook responses.
+      CONSOLE_URL: ${CONSOLE_URL:-http://localhost:3000}
+      ALERT_SERVICE_LABELS: ${ALERT_SERVICE_LABELS:-service,service_name,app_kubernetes_io_name,app,job}
+      ALERT_DEFAULT_ENVIRONMENT: ${ALERT_DEFAULT_ENVIRONMENT:-prod-sg}
+      ALERT_MAX_DIAGNOSES_PER_WEBHOOK: ${ALERT_MAX_DIAGNOSES_PER_WEBHOOK:-5}
+      ALERT_MAX_CONCURRENT_DIAGNOSES: ${ALERT_MAX_CONCURRENT_DIAGNOSES:-2}
+      ALERT_DEDUPE_SECONDS: ${ALERT_DEDUPE_SECONDS:-3600}

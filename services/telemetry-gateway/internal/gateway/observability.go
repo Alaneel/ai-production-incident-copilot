@@ -22,6 +22,7 @@ type ObservabilityStore struct {
 	tempoURL      string
 	client        *http.Client
 	catalog       *FixtureStore
+	profile       *SignalProfile
 }
 
 type metricDefinition struct {
@@ -116,8 +117,24 @@ func NewObservabilityStore(
 		tempoURL:      strings.TrimRight(tempoURL, "/"),
 		client:        client,
 		catalog:       NewFixtureStore(now),
+		profile:       DefaultSignalProfile(),
 	}
 }
+
+// WithSignalProfile maps canonical signals onto one environment's telemetry.
+func (s *ObservabilityStore) WithSignalProfile(profile *SignalProfile) *ObservabilityStore {
+	if profile != nil {
+		s.profile = profile
+	}
+	return s
+}
+
+// Profile returns the active signal profile.
+func (s *ObservabilityStore) Profile() *SignalProfile { return s.profile }
+
+// DeclaresDependencies reports whether dependencies come from an operator
+// catalog rather than the built-in fixture.
+func (s *ObservabilityStore) DeclaresDependencies() bool { return s.profile.DeclaresDependencies() }
 
 func (s *ObservabilityStore) SearchTraces(
 	ctx context.Context,
@@ -125,7 +142,7 @@ func (s *ObservabilityStore) SearchTraces(
 ) ([]TraceSummary, error) {
 	// Tempo otherwise stops at the first matching N traces, not the newest N.
 	// Sorting a truncated response locally cannot recover omitted current faults.
-	traceQL := fmt.Sprintf(`{ resource.service.name = %q } with (most_recent=true)`, query.Service)
+	traceQL := s.profile.traceQuery(query.Service)
 	parameters := url.Values{
 		"q":     {traceQL},
 		"start": {strconv.FormatInt(query.Start.Unix(), 10)},
@@ -170,9 +187,15 @@ func (s *ObservabilityStore) QueryMetrics(
 	ctx context.Context,
 	query MetricQuery,
 ) (MetricResult, error) {
-	definition, ok := allowedMetrics[query.Metric]
-	if !ok {
+	definition, known, configured := s.profile.metric(query.Metric)
+	if !known {
 		return MetricResult{}, fmt.Errorf("metric %q is not allow-listed", query.Metric)
+	}
+	if !configured {
+		// The environment does not expose this signal. Report it as absent,
+		// never as an observed zero, so diagnosis records it as unavailable.
+		return MetricResult{Service: query.Service, Metric: query.Metric, Unit: definition.unit,
+			Points: []MetricPoint{}, DataOrigin: "not_configured"}, nil
 	}
 	parameters := url.Values{
 		"query": {definition.query(query.Service)},
@@ -238,7 +261,7 @@ func (s *ObservabilityStore) SearchLogs(
 	query LogSearch,
 ) ([]LogEvent, error) {
 	logPattern := regexp.QuoteMeta(strings.TrimSpace(query.Query))
-	logQL := fmt.Sprintf(`{service=%q}`, query.Service)
+	logQL := s.profile.logQuery(query.Service)
 	if logPattern != "" {
 		logQL += fmt.Sprintf(` |~ %q`, "(?i)"+logPattern)
 	}
@@ -316,6 +339,9 @@ func (s *ObservabilityStore) SearchLogs(
 }
 
 func (s *ObservabilityStore) Dependencies(service string) []Dependency {
+	if s.profile.declared != nil {
+		return append([]Dependency{}, s.profile.declared[service]...)
+	}
 	return s.catalog.Dependencies(service)
 }
 

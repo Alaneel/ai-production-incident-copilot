@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { refreshApproval, sendApproval } from "./approval-recovery";
 import { consoleApprovalProblem, consoleAuthorizationProblem, consoleBackendEndpoint,
   createConsoleTransport, isLocalDemoBackend, type ConsoleCredentials } from "./console-auth";
@@ -138,11 +139,13 @@ const traceSteps: Array<{
     title: "Validate hypotheses",
     detail: "Cross-checking deploy and pool saturation",
     state: "running",
+    duration: "1.4s",
   },
   {
     title: "Propose remediation",
     detail: "Awaiting validated evidence",
     state: "queued",
+    duration: "0.6s",
   },
 ];
 
@@ -176,6 +179,163 @@ const evidence = [
 const bars = [18, 19, 18, 20, 22, 24, 26, 29, 35, 58, 83, 91, 88, 94, 92, 89];
 const errors = [4, 3, 4, 4, 5, 4, 5, 7, 8, 13, 33, 46, 49, 44, 42, 38];
 
+// Demo sample readouts. The axis is piecewise (13:45 → 13:56 deploy marker at
+// the midpoint → 14:20), so sample times follow the same two segments.
+function demoSampleTime(index: number, count: number) {
+  const mid = (count - 1) / 2;
+  const minutes = index <= mid ? (index / mid) * 11 : 11 + ((index - mid) / mid) * 24;
+  const total = 13 * 60 + 45 + Math.round(minutes);
+  return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
+}
+const demoLatencySamples = bars.map((height, index) => ({ time: demoSampleTime(index, bars.length), value: `${(height / 89 * 2.84).toFixed(2)}s` }));
+const demoErrorSamples = errors.map((height, index) => ({ time: demoSampleTime(index, errors.length), value: `${(height / 38 * 12.7).toFixed(1)}%` }));
+
+// Demo replay: tools are revealed by the workflow step that calls them.
+const demoTools = [
+  { name: "query_metrics", detail: "prometheus · 12 series", step: 2, duration: "218ms" },
+  { name: "search_logs", detail: "loki · 184 matches", step: 2, duration: "641ms" },
+  { name: "get_recent_deployments", detail: "kubernetes · 3 releases", step: 1, duration: "156ms" },
+  { name: "validate_evidence", detail: "cross-source correlation", step: 4, duration: "1.4s" },
+];
+const demoStepDelays = [450, 700, 1100, 650, 1100, 700];
+const DEMO_SNAPSHOT_STAGE = 4;
+
+function toggleTheme() {
+  const root = document.documentElement;
+  const dark = root.dataset.theme ? root.dataset.theme === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+}
+
+type PaletteCommand = { id: string; group: string; label: string; hint?: string; run: () => string | void };
+
+function CommandPalette({ commands }: { commands: PaletteCommand[] }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [active, setActive] = useState(0);
+  const [toast, setToast] = useState<string | null>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const needle = query.trim().toLowerCase();
+  const matches = needle ? commands.filter((command) => `${command.group} ${command.label}`.toLowerCase().includes(needle)) : commands;
+  const selected = Math.min(active, Math.max(matches.length - 1, 0));
+
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        returnFocus.current = document.activeElement as HTMLElement | null;
+        setQuery(""); setActive(0); setOpen((value) => !value);
+        return;
+      }
+      const target = event.target instanceof Element ? event.target : null;
+      const typing = target?.closest("input, textarea, select, [contenteditable='true']");
+      if (event.key === "/" && !typing && !event.metaKey && !event.ctrlKey && !event.altKey) {
+        const field = document.getElementById("incident-question") as HTMLInputElement | null;
+        if (field && !field.disabled) { event.preventDefault(); field.focus(); field.select(); }
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+    };
+  }, []);
+
+  function show() {
+    returnFocus.current = document.activeElement as HTMLElement | null;
+    setQuery(""); setActive(0); setOpen(true);
+  }
+  function close() {
+    setOpen(false);
+    returnFocus.current?.focus?.();
+  }
+  function run(command: PaletteCommand | undefined) {
+    if (!command) return;
+    setOpen(false);
+    const message = command.run();
+    if (message) {
+      setToast(message);
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+      toastTimer.current = setTimeout(() => setToast(null), 1800);
+    }
+  }
+  function onKeyDown(event: React.KeyboardEvent) {
+    if (event.key === "Escape") { event.preventDefault(); close(); }
+    else if (event.key === "ArrowDown") { event.preventDefault(); setActive((selected + 1) % Math.max(matches.length, 1)); }
+    else if (event.key === "ArrowUp") { event.preventDefault(); setActive((selected - 1 + matches.length) % Math.max(matches.length, 1)); }
+    else if (event.key === "Enter") { event.preventDefault(); run(matches[selected]); }
+  }
+
+  return (
+    <>
+      <button type="button" className="icon-button" aria-label="Open command palette" aria-haspopup="dialog" onClick={show}>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
+        </svg>
+        <span className="search-label">Search…</span>
+        <kbd>⌘K</kbd>
+      </button>
+      {open && createPortal(
+        <div className="palette-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>
+          <div className="palette" role="dialog" aria-modal="true" aria-label="Command palette" onKeyDown={onKeyDown}>
+            <div className="palette-input">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
+              </svg>
+              <input autoFocus value={query} placeholder="Go to a section or run a command…" aria-label="Filter commands"
+                role="combobox" aria-expanded="true" aria-controls="palette-list" aria-autocomplete="list"
+                aria-activedescendant={matches[selected] ? `palette-${matches[selected].id}` : undefined}
+                onChange={(event) => { setQuery(event.target.value); setActive(0); }} />
+              <kbd>esc</kbd>
+            </div>
+            <ul id="palette-list" role="listbox" aria-label="Commands">
+              {matches.length === 0 && <li className="palette-empty">No matching command</li>}
+              {matches.map((command, index) => {
+                const heading = index === 0 || matches[index - 1].group !== command.group ? command.group : null;
+                return (
+                  <Fragment key={command.id}>
+                    {heading && <li className="palette-group" role="presentation">{heading}</li>}
+                    <li id={`palette-${command.id}`} role="option" aria-selected={index === selected}
+                      onMouseMove={() => { if (index !== selected) setActive(index); }}
+                      onClick={() => run(command)}>
+                      <span>{command.label}</span>
+                      {command.hint && <kbd>{command.hint}</kbd>}
+                    </li>
+                  </Fragment>
+                );
+              })}
+            </ul>
+            <div className="palette-foot" aria-hidden="true"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> run</span><span><kbd>/</kbd> ask the copilot</span></div>
+          </div>
+        </div>,
+        document.body,
+      )}
+      {toast && createPortal(<div className="palette-toast" role="status">{toast}</div>, document.body)}
+    </>
+  );
+}
+
+function CopyButton({ text, label }: { text: string; label: string }) {
+  const [copied, setCopied] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+  return (
+    <button type="button" className={`copy-button${copied ? " copied" : ""}`} aria-label={label}
+      onClick={() => {
+        void navigator.clipboard?.writeText(text).then(() => {
+          setCopied(true);
+          if (timer.current) clearTimeout(timer.current);
+          timer.current = setTimeout(() => setCopied(false), 1600);
+        }, () => undefined);
+      }}>
+      {copied
+        ? <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10" /></svg>
+        : <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V6a2 2 0 0 1 2-2h9" /></svg>}
+      <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
+    </button>
+  );
+}
+
 function MetricChart({
   label,
   value,
@@ -183,6 +343,7 @@ function MetricChart({
   data,
   tone,
   axis = ["13:45", "13:56", "14:20"],
+  samples = [],
 }: {
   label: string;
   value: string;
@@ -190,16 +351,33 @@ function MetricChart({
   data: number[];
   tone: "critical" | "warning";
   axis?: string[];
+  samples?: Array<{ time: string; value: string }>;
 }) {
+  const [cursor, setCursor] = useState<number | null>(null);
   const gradientId = `metric-fill-${tone}`;
-  const points = data.map((height, index) => {
-    const x = data.length > 1 ? (index / (data.length - 1)) * 100 : 50;
-    const y = 40 - Math.max(0, Math.min(100, height)) * 0.36;
-    return `${x.toFixed(2)},${y.toFixed(2)}`;
-  });
+  const coords = data.map((height, index) => ({
+    x: data.length > 1 ? (index / (data.length - 1)) * 100 : 50,
+    y: 40 - Math.max(0, Math.min(100, height)) * 0.36,
+  }));
+  const points = coords.map(({ x, y }) => `${x.toFixed(2)},${y.toFixed(2)}`);
   const linePath = points.length ? `M${points.join(" L")}` : "";
   const areaPath = points.length ? `${linePath} L100,40 L0,40 Z` : "";
   const showMarker = data.length > 0 && axis.length === 3;
+  const inspectable = samples.length === data.length && data.length > 1;
+  const reading = inspectable && cursor !== null ? samples[cursor] : null;
+  function locate(event: React.PointerEvent<HTMLDivElement>) {
+    const box = event.currentTarget.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (event.clientX - box.left) / box.width));
+    setCursor(Math.round(ratio * (data.length - 1)));
+  }
+  function step(event: React.KeyboardEvent<HTMLDivElement>) {
+    const last = data.length - 1;
+    const next = event.key === "ArrowRight" ? Math.min(last, (cursor ?? -1) + 1)
+      : event.key === "ArrowLeft" ? Math.max(0, (cursor ?? last + 1) - 1)
+        : event.key === "Home" ? 0 : event.key === "End" ? last : event.key === "Escape" ? null : undefined;
+    if (next === undefined) return;
+    event.preventDefault(); setCursor(next);
+  }
   return (
     <article className={`metric-card ${tone}`}>
       <div className="metric-heading">
@@ -209,7 +387,11 @@ function MetricChart({
         </div>
         <span className={`delta ${tone}`}>{delta}</span>
       </div>
-      <div className={`metric-chart ${tone}`} role="img" aria-label={`${label} trend`}>
+      <div className={`metric-chart ${tone}${inspectable ? " inspectable" : ""}`} role="img"
+        aria-label={`${label} trend${inspectable ? ". Use arrow keys to read samples." : ""}`}
+        tabIndex={inspectable ? 0 : undefined}
+        onPointerMove={inspectable ? locate : undefined} onPointerLeave={inspectable ? () => setCursor(null) : undefined}
+        onKeyDown={inspectable ? step : undefined} onBlur={inspectable ? () => setCursor(null) : undefined}>
         {data.length > 0 ? (
           <svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
             <defs>
@@ -225,6 +407,12 @@ function MetricChart({
           <span className="metric-empty">No timestamped samples retained</span>
         )}
         {showMarker && <i className="incident-marker"><b>v142 deployed</b></i>}
+        {reading && cursor !== null && (
+          <div className="chart-cursor" style={{ "--x": `${coords[cursor].x}%`, "--y": `${(coords[cursor].y / 40) * 100}%` } as React.CSSProperties}>
+            <i aria-hidden="true" />
+            <span role="status"><time>{reading.time}</time><b>{reading.value}</b></span>
+          </div>
+        )}
       </div>
       <div className="chart-axis">
         {axis.map((label, index) => <span key={index}>{label}</span>)}
@@ -259,6 +447,8 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
   const [diagnosisQuestion, setDiagnosisQuestion] = useState<string | null>(null);
   const diagnosisEpoch = useRef(0);
   const activeDiagnosis = useRef<AbortController | null>(null);
+  const [demoReplay, setDemoReplay] = useState({ stage: DEMO_SNAPSHOT_STAGE, running: false, done: false });
+  const demoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const backendEndpoint = consoleBackendEndpoint(orchestratorUrl);
   const credentials = useMemo<ConsoleCredentials>(() => ({ mode: authMode, trustedEndpoint,
     readToken: readCredential, operatorToken: authMode === "protected" ? operatorToken ?? operatorCredential : "",
@@ -293,7 +483,10 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
         setApiError("Invalid incident link; no incident was loaded.");
       }
     });
-    return () => { active = false; diagnosisEpoch.current += 1; activeDiagnosis.current?.abort(); activeDiagnosis.current = null; };
+    return () => {
+      active = false; diagnosisEpoch.current += 1; activeDiagnosis.current?.abort(); activeDiagnosis.current = null;
+      if (demoTimer.current) clearTimeout(demoTimer.current);
+    };
   }, []);
 
   function interruptDiagnosis() {
@@ -374,7 +567,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
     event.preventDefault();
     if (!prompt.trim() || requestInFlight.current || approvalUncertain) return;
     if (!orchestratorUrl) {
-      setActiveTab("trace");
+      replayDemo();
       return;
     }
     if (readAccessError) { setApiError(readAccessError); return; }
@@ -411,7 +604,20 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
     }
   }
 
+  // Offline demo only: replays the canned workflow locally. Nothing is sent.
+  function replayDemo() {
+    if (demoTimer.current) clearTimeout(demoTimer.current);
+    setActionState("pending"); setActiveTab("trace");
+    const advance = (stage: number) => {
+      const finished = stage >= traceSteps.length;
+      setDemoReplay({ stage, running: !finished, done: finished });
+      demoTimer.current = finished ? null : setTimeout(() => advance(stage + 1), demoStepDelays[stage]);
+    };
+    advance(0);
+  }
+
   async function decide(decision: "approve" | "reject") {
+    if (showDemo && demoReplay.running) return;
     if (requestInFlight.current || approvalUncertain || citationProblem || diagnosisRequiresRefresh) return;
     if (decision === "approve" && !preflightReview.known) return;
     if (!orchestratorUrl || !incident) {
@@ -481,7 +687,14 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
     }
   }
 
-  const incidentStatus = incident?.status.replaceAll("_", " ") ?? "Investigating";
+  const incidentStatus = incident?.status.replaceAll("_", " ") ?? (showDemo && demoReplay.done ? "Awaiting approval" : "Investigating");
+  const demoSteps: Array<{ title: string; detail: string; state: TraceState; duration?: string }> = traceSteps.map((step, index) => {
+    const state: TraceState = index < demoReplay.stage ? "complete" : index === demoReplay.stage ? "running" : "queued";
+    const proposed = index === traceSteps.length - 1 && state === "complete";
+    return { ...step, state, duration: state === "complete" ? step.duration : undefined,
+      detail: proposed ? "Rollback proposed · held for human approval" : step.detail };
+  });
+  const demoPending = (step: number) => showDemo && demoReplay.running && demoReplay.stage <= step;
   const retainedSteps = incident
     ? [...new Map(incident.trace.map((event) => [event.step, event])).values()].map((event) => ({
         title: event.step.replaceAll("_", " "),
@@ -489,7 +702,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
         state: "complete" as TraceState,
         duration: event.duration_ms === null ? undefined : `${event.duration_ms}ms`,
       }))
-    : isAnalyzing ? [{ title: "Start diagnostic workflow", detail: "Waiting for the first persisted checkpoint", state: "running" as TraceState }] : showDemo ? traceSteps : [];
+    : isAnalyzing ? [{ title: "Start diagnostic workflow", detail: "Waiting for the first persisted checkpoint", state: "running" as TraceState }] : showDemo ? demoSteps : [];
   if (isAnalyzing && incident) retainedSteps.push({ title: "Diagnosis still running", detail: "Awaiting the next persisted checkpoint", state: "running" });
   function metricView(metric: string, percentage = false) {
     const item = incident?.evidence.find((entry) => entry.kind === "metric" && entry.query === metric);
@@ -497,12 +710,14 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
     const points = Array.isArray(raw) ? raw.filter((point): point is { timestamp: string; value: number } =>
       point && typeof point.value === "number" && Number.isFinite(point.value) &&
       typeof point.timestamp === "string" && Number.isFinite(Date.parse(point.timestamp))) : [];
-    if (!points.length) return { value: "Unavailable", delta: "No samples", data: [], axis: ["No timestamped metric samples"] };
+    if (!points.length) return { value: "Unavailable", delta: "No samples", data: [], axis: ["No timestamped metric samples"], samples: [] };
     const peak = Math.max(...points.map((point) => point.value), 0);
     const last = points[points.length - 1].value;
     const time = (value: string) => new Date(value).toLocaleTimeString("en-SG", { hour12: false });
+    const format = (sample: number) => percentage ? `${(sample * 100).toFixed(1)}%` : `${sample.toFixed(0)}ms`;
     return {
-      value: percentage ? `${(last * 100).toFixed(1)}%` : `${last.toFixed(0)}ms`,
+      value: format(last),
+      samples: points.map((point) => ({ time: time(point.timestamp), value: format(point.value) })),
       delta: "Latest sample",
       data: points.map((point) => peak > 0 ? Math.max(0, point.value / peak * 100) : 0),
       axis: [time(points[0].timestamp), time(points[points.length - 1].timestamp)],
@@ -558,6 +773,42 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
     setActiveTab("trace");
   }
 
+  function jumpTo(selector: string) {
+    setActiveTab("timeline");
+    // A click commits the tab switch synchronously; scroll on the next task.
+    setTimeout(() => {
+      const target = document.querySelector<HTMLElement>(selector);
+      if (!target) return;
+      const before = window.scrollY;
+      target.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      // Some embedded browsers ignore smooth scrolling; land the jump regardless.
+      setTimeout(() => { if (window.scrollY === before) target.scrollIntoView({ block: "start" }); }, 350);
+      target.classList.remove("flash"); void target.offsetWidth; target.classList.add("flash");
+    }, 0);
+  }
+  function copyText(text: string, done: string) {
+    if (!navigator.clipboard) return "Clipboard unavailable in this browser";
+    void navigator.clipboard.writeText(text).catch(() => undefined);
+    return done;
+  }
+  const traceId = incident?.trace_id ?? (showDemo ? "tr_01JAZ8Y3PK7X4N" : null);
+  const hasCommand = Boolean(incident?.remediation || showDemo);
+  const paletteCommands: PaletteCommand[] = [
+    { id: "ask", group: "Investigate", label: "Ask the incident copilot", hint: "/", run: () => {
+      const field = document.getElementById("incident-question") as HTMLInputElement | null;
+      field?.focus(); field?.select();
+    } },
+    ...(showDemo ? [{ id: "replay", group: "Investigate", label: "Replay the demo investigation", run: () => { replayDemo(); } }] : []),
+    { id: "overview", group: "Navigate", label: "Incident overview", run: () => jumpTo(".metrics-grid") },
+    { id: "map", group: "Navigate", label: "Service map", run: () => jumpTo(".dependency-panel") },
+    { id: "hypothesis", group: "Navigate", label: "Leading hypothesis and evidence", run: () => jumpTo(".hypothesis-panel") },
+    { id: "remediation", group: "Navigate", label: "Remediation and approval", run: () => jumpTo(".remediation-panel") },
+    { id: "trace", group: "Navigate", label: "Agent execution trace", run: openTrace },
+    { id: "theme", group: "Console", label: "Toggle colour theme", run: toggleTheme },
+    ...(hasCommand ? [{ id: "copy-command", group: "Console", label: "Copy remediation command", run: () => copyText(commandPreview, "Command copied") }] : []),
+    ...(traceId ? [{ id: "copy-trace", group: "Console", label: "Copy trace ID", run: () => copyText(traceId, "Trace ID copied") }] : []),
+  ];
+
   return (
     <main className="shell">
       <header className="topbar">
@@ -580,29 +831,16 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
           </span>
         </nav>
         <div className="topbar-actions">
-          <button className="icon-button" aria-label="Search">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
-            </svg>
-            <span className="search-label">Search…</span>
-            <kbd>⌘K</kbd>
-          </button>
-          <button className="env-button">
+          <CommandPalette commands={paletteCommands} />
+          <span className="env-button" title="Environment label for this incident">
             <span className="status-dot" />
             prod-sg
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-          </button>
-          <button type="button" className="theme-toggle" aria-label="Toggle colour theme" onClick={() => {
-            const root = document.documentElement;
-            const dark = root.dataset.theme ? root.dataset.theme === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-            root.dataset.theme = dark ? "light" : "dark";
-          }}>
+          </span>
+          <button type="button" className="theme-toggle" aria-label="Toggle colour theme" onClick={toggleTheme}>
             <svg className="moon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" /></svg>
             <svg className="sun" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
           </button>
-          <button className="avatar" aria-label="Account menu">
-            AW
-          </button>
+          <span className="avatar" title="Signed-in operator (demo)">AW</span>
         </div>
       </header>
 
@@ -654,9 +892,17 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
                 aria-label="Incident question"
                 disabled={isApproving || isRestoring || approvalUncertain}
               />
-              <button type="submit" disabled={isAnalyzing || isApproving || isRestoring || approvalUncertain || (diagnosisRequiresRefresh && prompt === diagnosisQuestion) || Boolean(orchestratorUrl && readAccessError)}>Analyze <kbd>↵</kbd></button>
+              <button type="submit" disabled={isAnalyzing || isApproving || isRestoring || approvalUncertain || (showDemo && demoReplay.running) || (diagnosisRequiresRefresh && prompt === diagnosisQuestion) || Boolean(orchestratorUrl && readAccessError)}>{showDemo && demoReplay.running ? "Replaying…" : <>Analyze <kbd>↵</kbd></>}</button>
             </div>
           </form>
+          {showDemo && demoReplay.running && (
+            <div className="api-notice running" role="status">Replaying the demo investigation locally. No backend, model or cluster is contacted.</div>
+          )}
+          {showDemo && demoReplay.done && (
+            <div className="api-notice connected" role="status">Demo replay complete: the rollback is proposed and held for human approval.
+              <button type="button" className="notice-link" onClick={() => jumpTo(".hypothesis-panel")}>Review hypothesis and approval →</button>
+            </div>
+          )}
           {isAnalyzing && (
             <div className="api-notice running" role="status">Receiving persisted diagnostic checkpoints… Evidence and tool progress below are provisional; no final completion or approval is confirmed.</div>
           )}
@@ -758,12 +1004,12 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
               <section className="metrics-grid">
                 <MetricChart
                   label="P95 latency"
-                  {...(showDemo ? { value: "2.84s", delta: "+341%", data: bars } : metricView("request_latency_p95"))}
+                  {...(showDemo ? { value: "2.84s", delta: "+341%", data: bars, samples: demoLatencySamples } : metricView("request_latency_p95"))}
                   tone="warning"
                 />
                 <MetricChart
                   label="Error rate"
-                  {...(showDemo ? { value: "12.7%", delta: "+11.4pp", data: errors } : metricView("request_error_rate", true))}
+                  {...(showDemo ? { value: "12.7%", delta: "+11.4pp", data: errors, samples: demoErrorSamples } : metricView("request_error_rate", true))}
                   tone="critical"
                 />
               </section>
@@ -823,7 +1069,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
 
               {incident && <RootCauseCandidates incident={incident} />}
 
-              <section className="panel hypothesis-panel">
+              <section className={`panel hypothesis-panel${demoPending(4) ? " is-pending" : ""}`} inert={demoPending(4) || undefined}>
                 <div className="hypothesis-top">
                   <div className="confidence-ring" style={{ "--p": `${!showDemo && (!incident?.hypotheses.length || (incident.candidate_incident_types?.length ?? 0) > 1) ? 0 : confidence}%` } as React.CSSProperties}>
                     <strong>{!showDemo && (!incident?.hypotheses.length || (incident.candidate_incident_types?.length ?? 0) > 1) ? "—" : confidence}</strong><span>{!showDemo && (!incident?.hypotheses.length || (incident.candidate_incident_types?.length ?? 0) > 1) ? "" : "%"}</span>
@@ -881,16 +1127,19 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
               {incident && <DeploymentEventTimeline services={incident.services} evidence={incident.evidence} window={incident.anomalous_window} />}
               {incident && <EvidenceExplorer evidence={incident.evidence} citedIds={citations.cited.map(item => item.id)} />}
 
-              <section className="panel remediation-panel">
+              <section className={`panel remediation-panel${demoPending(5) ? " is-pending" : ""}`} inert={demoPending(5) || undefined}>
                 <div className="remediation-copy">
                   <span className="eyebrow">Recommended remediation</span>
                   <h2>{remediationTitle}</h2>
                   <p>{expectedResult}</p>
                   <div className="command-preview">
-                    <span>$</span>
-                    <code>{commandPreview}</code>
-                    <b>{!requiresApproval ? "ADVISORY" : preflightReview.mode === "simulation" ? "SIMULATION"
+                    <div className="command-head">
+                      <b>{!requiresApproval ? "ADVISORY" : preflightReview.mode === "simulation" ? "SIMULATION"
                       : preflightReview.mode === "kubernetes-server-dry-run" ? "SERVER DRY RUN" : "PREFLIGHT UNKNOWN"}</b>
+                      {hasCommand && <CopyButton text={commandPreview} label="Copy remediation command" />}
+                    </div>
+                    <span>$</span>
+                    <code>{commandPreview.split(" ").map((token, index) => <Fragment key={index}>{index > 0 && " "}<span>{token}</span></Fragment>)}</code>
                   </div>
                   {incident && <ActionEvidenceReview incident={incident} />}
                   {incident && incident.remediation && ["restart_deployment", "rollback_release"].includes(incident.remediation.tool)
@@ -973,7 +1222,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
                   <span className="eyebrow">Durable workflow</span>
                   <h2>Agent execution trace</h2>
                 </div>
-                <span className="small-status">{incident ? `${incident.trace.length} retained events` : "checkpoint #12 (demo)"}</span>
+                <span className="small-status">{incident ? `${incident.trace.length} retained events` : `checkpoint #${8 + demoReplay.stage} (demo)`}</span>
               </div>
               <div className="trace-list">
                 {(incident
@@ -987,7 +1236,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
                       duration:
                         event.duration_ms === null ? undefined : `${event.duration_ms}ms`,
                     }))
-                  : showDemo ? traceSteps : retainedSteps
+                  : showDemo ? demoSteps : retainedSteps
                 ).map((step, index) => (
                   <article key={index} className={step.state}>
                     <div className="trace-index">
@@ -1014,7 +1263,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
           <section className="side-panel workflow-panel">
             <div className="side-title">
               <span>Agent workflow</span>
-              <b><i /> {incident ? isAnalyzing ? "Diagnosing" : incidentStatus : showDemo ? "Running · demo" : diagnosisPhase}</b>
+              <b><i /> {incident ? isAnalyzing ? "Diagnosing" : incidentStatus : showDemo ? demoReplay.done ? "Awaiting approval · demo" : "Running · demo" : diagnosisPhase}</b>
             </div>
             <div className="workflow-list">
               {retainedSteps.map((step, index) => (
@@ -1039,27 +1288,16 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
                   <div><strong>{String(event.payload.tool ?? event.step)}</strong><span>Result retained · see trace</span></div>
                   <time>{event.duration_ms === null ? "—" : `${event.duration_ms}ms`}</time>
                 </article>
-              )) : showDemo ? <><article>
-                <i className="success">✓</i>
-                <div><strong>query_metrics</strong><span>prometheus · 12 series</span></div>
-                <time>218ms</time>
-              </article>
-              <article>
-                <i className="success">✓</i>
-                <div><strong>search_logs</strong><span>loki · 184 matches</span></div>
-                <time>641ms</time>
-              </article>
-              <article>
-                <i className="success">✓</i>
-                <div><strong>get_recent_deployments</strong><span>kubernetes · 3 releases</span></div>
-                <time>156ms</time>
-              </article>
-              <article>
-                <i className="running-icon">↻</i>
-                <div><strong>validate_evidence</strong><span>cross-source correlation</span></div>
-                <time>running</time>
-              </article>
-              </> : <p>No tool-result checkpoint has been received.</p>}
+              )) : showDemo ? demoTools.filter((tool) => demoReplay.stage >= tool.step).map((tool) => {
+                const complete = demoReplay.stage > tool.step;
+                return (
+                  <article key={tool.name}>
+                    <i className={complete ? "success" : "running-icon"}>{complete ? "✓" : "↻"}</i>
+                    <div><strong>{tool.name}</strong><span>{tool.detail}</span></div>
+                    <time>{complete ? tool.duration : "running"}</time>
+                  </article>
+                );
+              }) : <p>No tool-result checkpoint has been received.</p>}
             </div>
           </section>
 

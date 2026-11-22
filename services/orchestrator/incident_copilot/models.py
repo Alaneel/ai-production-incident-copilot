@@ -56,9 +56,15 @@ class ApprovalDecision(StrEnum):
     REJECT = "reject"
 
 
+SERVICE_NAME_PATTERN = r"^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$"
+
+
 class IncidentQuestion(BaseModel):
     question: str = Field(min_length=5, max_length=2_000)
     environment: str = Field(default="prod-sg", pattern=r"^[a-z0-9-]{2,40}$")
+    # Explicit complaint service (e.g. from an alert's labels). When absent the
+    # service is parsed from the question text, as before.
+    service: str | None = Field(default=None, pattern=SERVICE_NAME_PATTERN)
 
 
 class Evidence(BaseModel):
@@ -163,11 +169,16 @@ class TraceEvent(BaseModel):
     payload: dict[str, Any] = Field(default_factory=dict)
 
 
+def new_incident_id() -> str:
+    return f"INC-{uuid4().hex[:6].upper()}"
+
+
 class IncidentState(BaseModel):
-    incident_id: str = Field(default_factory=lambda: f"INC-{uuid4().hex[:6].upper()}")
+    incident_id: str = Field(default_factory=new_incident_id)
     trace_id: str = Field(default_factory=lambda: f"tr_{uuid4().hex}")
     question: str
     environment: str
+    requested_service: str | None = None
     status: IncidentStatus = IncidentStatus.INVESTIGATING
     current_step: WorkflowStep = WorkflowStep.CLASSIFY
     incident_type: str | None = None

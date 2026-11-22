@@ -1,0 +1,39 @@
+{
+  "name": "spring-boot-micrometer",
+  "metrics": {
+    "request_latency_p95": {
+      "promql": "histogram_quantile(0.95, sum by (le) (rate(http_server_requests_seconds_bucket{application=\"{{service}}\"}[5m]))) * 1000",
+      "unit": "milliseconds"
+    },
+    "request_error_rate": {
+      "promql": "sum(rate(http_server_requests_seconds_count{application=\"{{service}}\",outcome=\"SERVER_ERROR\"}[5m])) / clamp_min(sum(rate(http_server_requests_seconds_count{application=\"{{service}}\"}[5m])), 0.000001)",
+      "unit": "ratio"
+    },
+    "db_pool_active": {
+      "promql": "sum(hikaricp_connections_active{application=\"{{service}}\"})",
+      "unit": "connections"
+    },
+    "db_pool_active_ratio": {
+      "promql": "sum(hikaricp_connections_active{application=\"{{service}}\"}) / clamp_min(sum(hikaricp_connections_max{application=\"{{service}}\"}), 1)",
+      "unit": "ratio"
+    },
+    "cpu_utilization": {
+      "promql": "max(process_cpu_usage{application=\"{{service}}\"})",
+      "unit": "ratio"
+    },
+    "memory_working_set": {
+      "promql": "sum(container_memory_working_set_bytes{container=\"{{service}}\"})",
+      "unit": "bytes"
+    },
+    "kafka_consumer_lag": {
+      "promql": "sum(kafka_consumer_fetch_manager_records_lag_max{application=\"{{service}}\"})",
+      "unit": "messages"
+    },
+    "retry_rate": {
+      "promql": "sum(rate(resilience4j_retry_calls_total{application=\"{{service}}\",kind=~\"successful_with_retry|failed_with_retry\"}[5m]))",
+      "unit": "retries_per_second"
+    }
+  },
+  "log_selector": "{app=\"{{service}}\"}",
+  "trace_service_attribute": "resource.service.name"
+}
