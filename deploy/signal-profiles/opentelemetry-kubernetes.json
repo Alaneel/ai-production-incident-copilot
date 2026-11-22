@@ -1,0 +1,31 @@
+{
+  "name": "opentelemetry-kubernetes",
+  "metrics": {
+    "request_latency_p95": {
+      "promql": "histogram_quantile(0.95, sum by (le) (rate(http_server_request_duration_seconds_bucket{service_name=\"{{service}}\"}[5m]))) * 1000",
+      "unit": "milliseconds"
+    },
+    "request_error_rate": {
+      "promql": "sum(rate(http_server_request_duration_seconds_count{service_name=\"{{service}}\",http_response_status_code=~\"5..\"}[5m])) / clamp_min(sum(rate(http_server_request_duration_seconds_count{service_name=\"{{service}}\"}[5m])), 0.000001)",
+      "unit": "ratio"
+    },
+    "db_pool_active_ratio": {
+      "promql": "sum(db_client_connection_count{service_name=\"{{service}}\",db_client_connection_state=\"used\"}) / clamp_min(sum(db_client_connection_max{service_name=\"{{service}}\"}), 1)",
+      "unit": "ratio"
+    },
+    "cpu_utilization": {
+      "promql": "sum(rate(container_cpu_usage_seconds_total{container=\"{{service}}\"}[5m])) / clamp_min(sum(kube_pod_container_resource_limits{container=\"{{service}}\",resource=\"cpu\"}), 0.001)",
+      "unit": "ratio"
+    },
+    "memory_working_set": {
+      "promql": "sum(container_memory_working_set_bytes{container=\"{{service}}\"})",
+      "unit": "bytes"
+    },
+    "kafka_consumer_lag": {
+      "promql": "sum(kafka_consumergroup_lag{consumergroup=\"{{service}}\"})",
+      "unit": "messages"
+    }
+  },
+  "log_selector": "{service_name=\"{{service}}\"}",
+  "trace_service_attribute": "resource.service.name"
+}

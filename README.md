@@ -6,7 +6,7 @@ Python · LangGraph · Go · MCP · PostgreSQL · Redis · React · Kubernetes
 
 OpsPilot correlates metrics, logs, traces, dependencies, deployments and runbooks to investigate production incidents. Its engineering focus is the boundary between **a diagnosis, an authorized operation, and verified recovery**: a proposal cannot execute itself, and an execution receipt cannot mark an incident resolved.
 
-[Run the offline demo](docs/demo.md) · [Inspect the evidence](docs/evidence.md) · [Architecture decisions](docs/architecture.md) · [Source tour](#source-tour)
+[Run the offline demo](docs/demo.md) · [Connect your stack](docs/integrate.md) · [Inspect the evidence](docs/evidence.md) · [Architecture decisions](docs/architecture.md) · [Source tour](#source-tour)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/console-overview-dark.png">
@@ -18,7 +18,7 @@ OpsPilot correlates metrics, logs, traces, dependencies, deployments and runbook
   <img alt="Leading hypothesis with cited Prometheus, Loki and deployment evidence, and a rollback proposal held behind a human approval card" src="docs/screenshots/console-hypothesis-approval-light.png">
 </picture>
 
-<sub>Console screenshots use the built-in demo incident (no backend connected). The screenshots follow GitHub's light/dark theme; a [phone-width view](docs/screenshots/console-mobile-light.png) is also available.</sub>
+<sub>Console screenshots use the built-in demo incident (no backend connected). The screenshots follow GitHub's light/dark theme; a [phone-width view](docs/screenshots/console-mobile-light.png) is also available. In the running console, **Analyze** replays the demo investigation locally, <kbd>⌘K</kbd> opens a command palette, and the charts read out individual samples on hover or with arrow keys.</sub>
 
 ## What makes it worth inspecting
 
@@ -58,6 +58,19 @@ The fuller console and service setup is in the [project reference](docs/project-
 Checkpoint modes are separate: without `DATABASE_URL`, the API uses in-memory checkpoints and incident storage; the offline ten-case demo and 150/32 synthetic suites do not prove PostgreSQL durability. A configured PostgreSQL path uses `AsyncPostgresSaver` and durable incident/approval records. The retained 27 PostgreSQL checks and 39-check Compose experiment exercise that separate path; they are not memory-demo results.
 
 A [historical actual-model smoke](evals/results/diagnosis_smoke_20261002T220247Z.json) used synthetic telemetry, the configured model and an in-memory graph on 2026-10-02 UTC. It stopped at `waiting_approval` without a production action. This is distinct from the zero-model deterministic tests, and does not establish current model quality, PostgreSQL recovery or live telemetry diagnosis. Running the offline demo makes no model request.
+
+## Connect it to your own stack
+
+OpsPilot reads your existing telemetry through one gateway, and you don't need to change any code:
+
+- **Signal profiles**: a JSON [signal profile](docs/integrate.md#1-map-your-telemetry-with-a-signal-profile) maps the canonical signals onto your PromQL, Loki labels and trace attributes. Presets cover OpenTelemetry on Kubernetes and Spring Boot/Micrometer.
+- **Connection check**: `gateway check --service <name>` runs every query a diagnosis would make and shows which ones return data.
+- **Alertmanager webhook**: firing alerts start [read-only diagnoses](docs/integrate.md#4-start-diagnoses-from-alertmanager) and return console links. A reader token can start diagnoses but never approve them.
+
+```bash
+PROMETHEUS_URL=… LOKI_URL=… TEMPO_URL=… SIGNAL_PROFILE=opentelemetry-kubernetes \
+docker compose -f docker-compose.yml -f compose.connect.yml run --rm telemetry-gateway check --service checkout
+```
 
 ## Architecture and action boundary
 

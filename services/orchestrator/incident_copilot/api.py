@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import os
 from contextlib import AsyncExitStack, asynccontextmanager, suppress
 from typing import AsyncIterator
@@ -17,6 +18,7 @@ from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from psycopg import Error as PostgresError
 from redis.exceptions import RedisError
 
+from .alerts import AlertDeduplicator, AlertmanagerWebhook, alert_settings, console_link, triage_alerts
 from .approval import ApprovalReceiptSigner
 from .api_auth import ApiAuthorization
 from .guardrails import GuardrailViolation, validate_input
@@ -27,6 +29,7 @@ from .models import (
     IncidentQuestion,
     IncidentState,
     IncidentStatus,
+    new_incident_id,
 )
 from .reasoning import (
     ModelGenerationError,
@@ -55,6 +58,7 @@ TERMINAL_OR_PAUSED = {
     IncidentStatus.RESOLVED,
     IncidentStatus.REJECTED,
 }
+logger = logging.getLogger("incident_copilot.api")
 EVENT_CACHE_READ_TIMEOUT_SECONDS = 2.0
 EVENT_CACHE_PUBLISH_TIMEOUT_SECONDS = 2.0
 EVENT_CACHE_STARTUP_TIMEOUT_SECONDS = 2.0
@@ -91,9 +95,21 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # Repository pool capacity is ten; observers must leave connections for
     # canonical writes while their advisory-lock transactions are held.
     app.state.recovery_check_slots = asyncio.Semaphore(4)
+    app.state.alert_settings = alert_settings(os.environ)
+    app.state.alert_slots = asyncio.Semaphore(app.state.alert_settings["max_concurrent"])
+    app.state.alert_dedupe = AlertDeduplicator(ttl_seconds=app.state.alert_settings["dedupe_seconds"])
+    app.state.alert_tasks = set()
     async with AsyncExitStack() as stack:
         async with _runtime_lifespan(app, stack):
-            yield
+            try:
+                yield
+            finally:
+                # Alert-started diagnoses are read-only; cancelling one leaves
+                # its retained checkpoint prefix for read-only inspection.
+                for task in list(app.state.alert_tasks):
+                    task.cancel()
+                if app.state.alert_tasks:
+                    await asyncio.gather(*app.state.alert_tasks, return_exceptions=True)
 
 
 @asynccontextmanager
@@ -349,6 +365,57 @@ async def create_incident_stream(request_body: IncidentQuestion, request: Reques
     return StreamingResponse(snapshots(), media_type="text/event-stream", headers={
         "Cache-Control": "no-store", "X-Accel-Buffering": "no",
     })
+
+
+async def _diagnose_alert(app: FastAPI, request_body: IncidentQuestion, incident_id: str) -> None:
+    async with app.state.alert_slots:
+        try:
+            state = await app.state.workflow.start(request_body, incident_id=incident_id)
+            await app.state.repository.save(state)
+            with suppress(RedisError, TimeoutError):
+                await asyncio.wait_for(app.state.task_store.publish(state), timeout=EVENT_CACHE_PUBLISH_TIMEOUT_SECONDS)
+        except asyncio.CancelledError:
+            raise
+        except Exception as error:  # noqa: BLE001 - background run; report class only
+            logger.warning("alert diagnosis %s did not complete: %s", incident_id, type(error).__name__)
+
+
+@app.post("/v1/incidents/alerts/alertmanager", status_code=status.HTTP_202_ACCEPTED)
+async def ingest_alertmanager(payload: AlertmanagerWebhook, request: Request) -> dict:
+    """Alertmanager webhook receiver. Each firing alert with a service label
+    starts one read-only diagnosis; remediation still waits for a human.
+
+    Returns immediately: diagnoses run in the background and are read with
+    GET /v1/incidents/{incident_id} or opened from console_url."""
+    settings = request.app.state.alert_settings
+    triage = triage_alerts(payload, service_labels=settings["service_labels"],
+                           default_environment=settings["default_environment"])
+    accepted: list[dict] = []
+    skipped = list(triage.skipped)
+    dedupe: AlertDeduplicator = request.app.state.alert_dedupe
+    for item in triage.requests:
+        existing = dedupe.existing(item.key)
+        if existing:
+            skipped.append({"alertname": item.alertname, "service": item.service,
+                            "reason": "already diagnosing", "incident_id": existing})
+            continue
+        if len(accepted) >= settings["max_per_webhook"]:
+            skipped.append({"alertname": item.alertname, "service": item.service, "reason": "per-notification limit reached"})
+            continue
+        try:
+            validate_input(item.request)
+        except GuardrailViolation:
+            skipped.append({"alertname": item.alertname, "service": item.service, "reason": "rejected by input safety checks"})
+            continue
+        incident_id = new_incident_id()
+        dedupe.remember(item.key, incident_id)
+        task = asyncio.create_task(_diagnose_alert(request.app, item.request, incident_id))
+        request.app.state.alert_tasks.add(task)
+        task.add_done_callback(request.app.state.alert_tasks.discard)
+        accepted.append({"incident_id": incident_id, "alertname": item.alertname, "service": item.service,
+                         "environment": item.request.environment,
+                         "console_url": console_link(settings["console_url"], incident_id)})
+    return {"accepted": accepted, "skipped": skipped}
 
 
 @app.get("/v1/incidents/{incident_id}", response_model=IncidentState)

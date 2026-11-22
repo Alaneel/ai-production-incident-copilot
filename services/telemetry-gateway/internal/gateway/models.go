@@ -65,11 +65,12 @@ type TraceSummary struct {
 }
 
 type Dependency struct {
-	Source    string  `json:"source"`
-	Target    string  `json:"target"`
-	Protocol  string  `json:"protocol"`
-	ErrorRate float64 `json:"error_rate"`
-	P95Ms     float64 `json:"p95_ms"`
+	Source   string `json:"source"`
+	Target   string `json:"target"`
+	Protocol string `json:"protocol"`
+	// Omitted for operator-declared edges, which carry no observed health.
+	ErrorRate float64 `json:"error_rate,omitempty"`
+	P95Ms     float64 `json:"p95_ms,omitempty"`
 }
 
 type Deployment struct {

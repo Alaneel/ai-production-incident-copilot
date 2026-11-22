@@ -379,6 +379,14 @@ See the [dated results and remaining gaps](../docs/verification.md).
   Prometheus queries, bounded Loki and Tempo searches, strict JSON decoding,
   authentication, rate limiting, request tracing, timeouts, and deterministic
   offline fixtures.
+- Per-environment signal profiles that map canonical signals onto an operator's
+  own PromQL, Loki selector, trace attribute and declared dependencies, with
+  strict validation, OpenTelemetry/Kubernetes and Spring Boot presets, and a
+  `gateway check` command that probes each query. Unconfigured signals are
+  reported as unavailable, never as zero. See [integrate.md](integrate.md).
+- An Alertmanager webhook (`POST /v1/incidents/alerts/alertmanager`) that turns
+  firing alerts with a service label into deduplicated, rate-bounded read-only
+  diagnoses; approval remains an operator-only console action.
 - A repeatable four-service fault lab with eight bounded fault modes,
   Prometheus, Loki, Tempo, an OpenTelemetry Collector, a
   provisioned Grafana dashboard, continuous traffic, and a machine-verifiable

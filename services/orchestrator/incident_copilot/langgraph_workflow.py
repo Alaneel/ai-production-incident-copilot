@@ -67,11 +67,14 @@ class LangGraphIncidentWorkflow:
         self.hypothesis_generator = hypothesis_generator
         self.graph = self._build_graph(checkpointer)
 
-    async def start(self, request: IncidentQuestion) -> IncidentState:
+    async def start(self, request: IncidentQuestion, *, incident_id: str | None = None) -> IncidentState:
         validate_input(request)
         incident = IncidentState(
             question=request.question,
             environment=request.environment,
+            requested_service=request.service,
+            # A caller may reserve the ID so it can link to a run in progress.
+            **({"incident_id": incident_id} if incident_id else {}),
         )
         output = await self.graph.ainvoke(
             {"incident": incident.model_dump(mode="json")},
@@ -89,7 +92,8 @@ class LangGraphIncidentWorkflow:
         prefix, but must not silently start or resume another diagnosis.
         """
         validate_input(request)
-        incident = IncidentState(question=request.question, environment=request.environment)
+        incident = IncidentState(question=request.question, environment=request.environment,
+                                 requested_service=request.service)
         config = self._config(incident.incident_id)
         previous: dict[str, Any] | None = None
         stream = self.graph.astream(
@@ -312,7 +316,7 @@ class LangGraphIncidentWorkflow:
     async def _select_services(self, graph_state: GraphState) -> GraphState:
         incident, started = self._begin(graph_state, WorkflowStep.SELECT_SERVICES)
         profile = self._profile(incident)
-        primary = select_primary_service(incident.question, profile)
+        primary = incident.requested_service or select_primary_service(incident.question, profile)
         self._record(
             incident,
             "tool_call",

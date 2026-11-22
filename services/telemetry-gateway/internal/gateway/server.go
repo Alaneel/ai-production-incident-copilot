@@ -128,11 +128,15 @@ func (s *Server) dependencies(writer http.ResponseWriter, request *http.Request)
 		s.writeError(writer, request, http.StatusUnprocessableEntity, errors.New("invalid service name"))
 		return
 	}
+	kind := "static_fixture_catalog"
+	if declared, ok := s.store.(interface{ DeclaresDependencies() bool }); ok && declared.DeclaresDependencies() {
+		// An operator-declared catalog is configuration, not observed calls.
+		kind = "operator_declared_catalog"
+	}
 	writeJSON(writer, http.StatusOK, map[string]any{
-		"service": service,
-		"edges":   s.store.Dependencies(service),
-		// Both current stores use the static fixture catalog, not observed traces.
-		"topology_kind": "static_fixture_catalog",
+		"service":       service,
+		"edges":         s.store.Dependencies(service),
+		"topology_kind": kind,
 	})
 }
 
