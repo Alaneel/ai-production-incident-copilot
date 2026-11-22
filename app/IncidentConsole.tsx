@@ -200,6 +200,11 @@ const demoTools = [
 const demoStepDelays = [450, 700, 1100, 650, 1100, 700];
 const DEMO_SNAPSHOT_STAGE = 4;
 
+// Status labels read as sentences ("Waiting approval"), not Title Case.
+function sentence(value: string) {
+  return value ? value[0].toUpperCase() + value.slice(1) : value;
+}
+
 function toggleTheme() {
   const root = document.documentElement;
   const dark = root.dataset.theme ? root.dataset.theme === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -687,7 +692,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
     }
   }
 
-  const incidentStatus = incident?.status.replaceAll("_", " ") ?? (showDemo && demoReplay.done ? "Awaiting approval" : "Investigating");
+  const incidentStatus = sentence(incident?.status.replaceAll("_", " ") ?? (showDemo && demoReplay.done ? "awaiting approval" : "investigating"));
   const demoSteps: Array<{ title: string; detail: string; state: TraceState; duration?: string }> = traceSteps.map((step, index) => {
     const state: TraceState = index < demoReplay.stage ? "complete" : index === demoReplay.stage ? "running" : "queued";
     const proposed = index === traceSteps.length - 1 && state === "complete";
@@ -1263,7 +1268,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
           <section className="side-panel workflow-panel">
             <div className="side-title">
               <span>Agent workflow</span>
-              <b><i /> {incident ? isAnalyzing ? "Diagnosing" : incidentStatus : showDemo ? demoReplay.done ? "Awaiting approval · demo" : "Running · demo" : diagnosisPhase}</b>
+              <b><i /> {incident ? isAnalyzing ? "Diagnosing" : incidentStatus : showDemo ? demoReplay.done ? "Awaiting approval · demo" : "Running · demo" : sentence(diagnosisPhase)}</b>
             </div>
             <div className="workflow-list">
               {retainedSteps.map((step, index) => (
