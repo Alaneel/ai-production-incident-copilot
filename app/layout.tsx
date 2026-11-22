@@ -38,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       title,
       description,
-      images: [{ url: new URL("/og.png", baseUrl), width: 1731, height: 909 }],
+      images: [{ url: new URL("/og.png", baseUrl), width: 2400, height: 1260 }],
     },
     twitter: {
       card: "summary_large_image",

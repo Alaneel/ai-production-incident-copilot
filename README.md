@@ -8,6 +8,18 @@ OpsPilot correlates metrics, logs, traces, dependencies, deployments and runbook
 
 [Run the offline demo](docs/demo.md) · [Inspect the evidence](docs/evidence.md) · [Architecture decisions](docs/architecture.md) · [Source tour](#source-tour)
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/console-overview-dark.png">
+  <img alt="OpsPilot incident console: SEV-2 payment latency regression with p95 latency and error-rate charts marking the v142 deploy, and the agent workflow sidebar" src="docs/screenshots/console-overview-light.png">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/console-hypothesis-approval-dark.png">
+  <img alt="Leading hypothesis with cited Prometheus, Loki and deployment evidence, and a rollback proposal held behind a human approval card" src="docs/screenshots/console-hypothesis-approval-light.png">
+</picture>
+
+<sub>Console screenshots use the built-in demo incident (no backend connected). The screenshots follow GitHub's light/dark theme; a [phone-width view](docs/screenshots/console-mobile-light.png) is also available.</sub>
+
 ## What makes it worth inspecting
 
 | Engineering problem | Implemented mechanism | Where to inspect |

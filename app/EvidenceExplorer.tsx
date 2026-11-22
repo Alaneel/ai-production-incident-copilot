@@ -11,7 +11,7 @@ export function EvidenceExplorer({ evidence, citedIds }: { evidence: Item[]; cit
   return (
     <section className="panel evidence-explorer" aria-label="Retained evidence explorer">
       <div className="panel-title">
-        <div><span className="eyebrow">AUDITABLE EVIDENCE</span><h2>All retained observations</h2></div>
+        <div><span className="eyebrow">Auditable evidence</span><h2>All retained observations</h2></div>
         <span className="small-status">{evidence.length} items</span>
       </div>
       <p>Cited items support the leading hypothesis. Context-only items were collected but are not its citations.</p>

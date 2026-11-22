@@ -4,7 +4,7 @@ import { evidenceAnchor } from "./evidence-citations";
 export function RootCauseCandidates({ incident, now }: { incident: unknown; now?: number }) {
   const review = rootCauseCandidatesView(incident, now);
   return <section className="panel" aria-label="Candidate cause services">
-    <div className="panel-title"><div><span className="eyebrow">CROSS-SERVICE INVESTIGATION</span><h2>Candidate cause services</h2></div></div>
+    <div className="panel-title"><div><span className="eyebrow">Cross-service investigation</span><h2>Candidate cause services</h2></div></div>
     <p>A candidate is an investigation hypothesis, not a confirmed root cause. A single candidate, time overlap or a directed call does not establish causal failure propagation. This panel does not authorize remediation.</p>
     {!review.available ? <p>Candidate review unavailable or inconsistent. Legacy or stale data is not current causal confirmation; no service is automatically promoted to confirmed root cause.</p> : <>
       <p>Complaint service: <strong>{review.complaintService}</strong>.</p>
