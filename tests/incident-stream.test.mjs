@@ -7,6 +7,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import ts from "typescript";
 import { IncidentStreamDecoder, IncidentStreamProtocolError, streamConsoleIncident } from "../app/incident-stream.ts";
 import * as consoleAuth from "../app/console-auth.ts";
+import * as incidentList from "../app/incident-list.ts";
 import * as approvals from "../app/approval-recovery.ts";
 import * as location from "../app/incident-location.ts";
 import * as citations from "../app/evidence-citations.ts";
@@ -240,7 +241,7 @@ function harness() {
   const fakeLocation = { href: "http://localhost:3128/" };
   const browser = { location: fakeLocation, history: { replaceState(_a, _b, url) { fakeLocation.href = url; } } };
   const stubPanel = () => null;
-  const imports = { react: fakeReact, "./console-auth": consoleAuth, "./approval-recovery": { ...approvals,
+  const imports = { react: fakeReact, "./console-auth": consoleAuth, "./incident-list": incidentList, "./approval-recovery": { ...approvals,
     sendApproval: async (...args) => { posted.push(args); return { incident: state(1, "rejected"), uncertain: false, error: null }; },
     refreshApproval: async (...args) => { gets.push(args); return { incident: restoredState, uncertain: true, error: null }; } },
     "./incident-location": location, "./evidence-citations": citations, "./preflight-target-review": preflight,

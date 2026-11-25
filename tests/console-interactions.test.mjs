@@ -6,6 +6,7 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import ts from "typescript";
 import * as consoleAuth from "../app/console-auth.ts";
+import * as incidentList from "../app/incident-list.ts";
 import * as approvals from "../app/approval-recovery.ts";
 import * as location from "../app/incident-location.ts";
 import * as citations from "../app/evidence-citations.ts";
@@ -22,7 +23,7 @@ const nativeRequire = createRequire(import.meta.url);
 const stubPanel = () => null;
 
 function load(react) {
-  const imports = { react, "./console-auth": consoleAuth, "./approval-recovery": approvals, "./incident-location": location,
+  const imports = { react, "./console-auth": consoleAuth, "./incident-list": incidentList, "./approval-recovery": approvals, "./incident-location": location,
     "./evidence-citations": citations, "./preflight-target-review": preflight, "./recovery-verification": recovery,
     "./incident-stream": incidentStream };
   for (const name of ["EvidenceExplorer", "ActionEvidenceReview", "PreflightTargetReview", "DeploymentEventTimeline", "DependencyImpactList",
@@ -116,7 +117,7 @@ test("command palette exposes navigation, replay and copy commands for the demo"
   const tree = ui.render();
   const palette = ui.find(tree, item => Array.isArray(item.props?.commands));
   const ids = palette.props.commands.map(command => command.id);
-  assert.deepEqual(ids, ["ask", "replay", "overview", "map", "hypothesis", "remediation", "trace", "theme", "copy-command", "copy-trace"]);
+  assert.deepEqual(ids, ["ask", "replay", "overview", "map", "hypothesis", "remediation", "trace", "inbox", "theme", "copy-command", "copy-trace"]);
   palette.props.commands.find(command => command.id === "trace").run();
   assert.ok(ui.find(ui.render(), item => item.props?.className?.includes("trace-panel")));
 });

@@ -97,6 +97,24 @@ CREATE TABLE IF NOT EXISTS evaluation_results (
 """
 
 
+def incident_summary(state: IncidentState) -> dict:
+    """Bounded list-view projection. Evidence, traces and commands stay behind
+    the per-incident read."""
+    leading = state.hypotheses[0] if state.hypotheses else None
+    return {
+        "incident_id": state.incident_id,
+        "status": state.status.value,
+        "environment": state.environment,
+        "service": state.services[0] if state.services else state.requested_service,
+        "severity": state.severity,
+        "question": state.question[:240],
+        "leading_cause": leading.cause[:240] if leading else None,
+        "proposed_action": state.remediation.title[:160] if state.remediation else None,
+        "created_at": state.created_at.isoformat(),
+        "updated_at": state.updated_at.isoformat(),
+    }
+
+
 class ApprovalConflictError(ValueError):
     """An approval key cannot be rebound to another decision or actor."""
 
@@ -111,6 +129,8 @@ class IncidentRepository(Protocol):
     async def save(self, state: IncidentState) -> None: ...
 
     async def get(self, incident_id: str) -> IncidentState | None: ...
+
+    async def list_recent(self, *, limit: int = 20, status: str | None = None) -> list[dict]: ...
 
     async def record_approval(
         self, state: IncidentState, approval: ApprovalRequest
@@ -183,6 +203,12 @@ class InMemoryIncidentStore:
         async with self._lock:
             state = self._states.get(incident_id)
             return state.model_copy(deep=True) if state else None
+
+    async def list_recent(self, *, limit: int = 20, status: str | None = None) -> list[dict]:
+        async with self._lock:
+            states = [state for state in self._states.values() if status is None or state.status.value == status]
+            states.sort(key=lambda state: (state.updated_at, state.incident_id), reverse=True)
+            return [incident_summary(state) for state in states[:limit]]
 
     async def record_approval(
         self, state: IncidentState, approval: ApprovalRequest
@@ -327,6 +353,20 @@ class PostgresIncidentRepository:
             )
             row = await cursor.fetchone()
         return IncidentState.model_validate(row["state"]) if row else None
+
+    async def list_recent(self, *, limit: int = 20, status: str | None = None) -> list[dict]:
+        async with self.pool.connection() as connection:
+            cursor = await connection.execute(
+                """
+                SELECT state FROM incidents
+                WHERE %(status)s::text IS NULL OR status = %(status)s
+                ORDER BY updated_at DESC, incident_id DESC
+                LIMIT %(limit)s
+                """,
+                {"status": status, "limit": limit},
+            )
+            rows = await cursor.fetchall()
+        return [incident_summary(IncidentState.model_validate(row["state"])) for row in rows]
 
     async def record_approval(
         self, state: IncidentState, approval: ApprovalRequest

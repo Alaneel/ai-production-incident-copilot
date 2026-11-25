@@ -80,6 +80,9 @@ function scopedRoute(endpoint: string, target: string, method: string): { scope:
     throw new ConsoleAuthError("Request does not match the trusted backend. No credential was sent.");
   }
   if (url.pathname === prefix && method === "POST") return { scope: "read", approval: false };
+  // Recent-incident summaries. Query strings stay refused, so the list is the
+  // server's bounded default and cannot carry filters or identifiers in a URL.
+  if (url.pathname === prefix && method === "GET") return { scope: "read", approval: false };
   if (url.pathname === `${prefix}/stream` && method === "POST") return { scope: "read", approval: false };
   const suffix = url.pathname.startsWith(`${prefix}/`) ? url.pathname.slice(prefix.length + 1) : "";
   const [incident, operation, ...extra] = suffix.split("/");

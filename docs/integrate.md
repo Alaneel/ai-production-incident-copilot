@@ -182,6 +182,40 @@ Repeat notifications for the same alert fingerprint return the existing incident
 
 Opening the console link loads the incident read-only. Restore it with your reader credentials, review the cited evidence, and approve or reject the proposal there.
 
+### Find alert-started incidents
+
+Nobody is watching a diagnosis that an alert started, so there are two ways to reach it afterwards.
+
+**The console inbox.** "Incidents" in the top bar (or <kbd>⌘K</kbd> → "Recent incidents") lists the 20 most recently updated incidents with their status, service and leading hypothesis, and shows how many are waiting for approval. Opening one is a single read-only GET.
+
+**The list API.** The same data is available to scripts and bots with a reader token:
+
+```bash
+curl -sS "https://opspilot-api.internal/v1/incidents?status=waiting_approval&limit=50" \
+  -H "Authorization: Bearer $OPSPILOT_READER_TOKEN"
+```
+
+The list returns bounded summaries only: no evidence, traces or commands. `status` and `limit` (1–100, default 20) are optional.
+
+### Notify a channel when a human is needed
+
+Set `NOTIFY_WEBHOOK_URL` and the orchestrator posts one message when an alert-started diagnosis pauses for approval or finishes:
+
+```text
+OpsPilot INC-4F2A91 for checkout needs a human decision.
+Alert: HighLatency
+Leading hypothesis (87%): Database connection pool exhaustion
+Proposed (not executed): Restore checkout container images from revision 141
+Review: https://opspilot.internal/?incident=INC-4F2A91
+```
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `NOTIFY_WEBHOOK_URL` | unset (off) | Receiver URL: http(s), no embedded credentials |
+| `NOTIFY_WEBHOOK_FORMAT` | `json` | `slack` sends `{"text": …}` for Slack-compatible incoming webhooks; `json` sends the text plus `incident_id`, `status`, `service`, `requires_approval` and `console_url` |
+
+The message is a pointer, not a control: it carries no evidence, command or approval capability, and approving still happens in the console. Text taken from the diagnosis is escaped so it cannot form mentions, links or markup. Delivery is best effort with a 5-second timeout, redirects are not followed, and a failed delivery never changes the incident. Only alert-started diagnoses notify; a question typed in the console already has someone watching.
+
 ## 5. Ask about a specific service
 
 The API also accepts an explicit service, for chat-ops bots, runbook buttons or service names without a hyphen:
@@ -199,4 +233,5 @@ Without `service`, the first hyphenated name in the question is used, as before.
 - **Failure families**: the diagnosis profiles cover eight: connection-pool exhaustion, downstream timeout, CPU saturation, memory leak, deployment regression, consumer lag, retry storm and cache penetration. Other failure modes end as *insufficient evidence* rather than a guess.
 - **Tenancy**: one gateway serves one profile and one telemetry tenant. Namespace/tenant scoping is on the [roadmap](project-reference.md#remaining-roadmap).
 - **Identity**: API tokens are scoped credentials, not per-user SSO. Put the console behind your identity proxy for shared use.
+- **Notifications**: one attempt per incident, with no retry queue. Treat the inbox or the list API as the source of truth.
 - **Alert deduplication**: deduplication is in memory, per orchestrator process. Behind several replicas, route the webhook to one of them or rely on Alertmanager grouping.

@@ -21,6 +21,8 @@ GOTOOLCHAIN=local go mod verify
 GOTOOLCHAIN=local go build -trimpath ./cmd/gateway
 ```
 
+`bash scripts/ci-local.sh` runs these same steps in CI's order, plus the offline demo and evidence verification, and accepts one stage (`backend`, `evidence`, `frontend`, `gateway`). Run it before pushing: it catches source-fingerprint and evidence drift that the unit suites alone do not.
+
 The Python suite requires local Docker Compose/kubectl render tools and a Redis executable for its socket-only startup check. The 27 PostgreSQL tests require an explicitly owned local database via `INCIDENT_TEST_DATABASE_URL`; unset it to see clearly reported skips. Never point that variable at an existing or production database.
 
 `requirements-runtime.lock` and `requirements-fault-lab.lock` pin platform-marked runtime distributions and SHA256 artifacts; `requirements-build.lock` pins build tools; `requirements-test.lock` unions all three applications and test/build tooling. `constraints-release.txt` keeps intentionally chosen compatible versions during lock regeneration. Install first-party code with `--no-deps --no-build-isolation` after the locks so build isolation cannot resolve a second graph. The human-edited service manifests retain bounds for library consumers; the release paths always use the locks.
