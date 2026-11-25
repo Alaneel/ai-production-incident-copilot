@@ -20,6 +20,7 @@ from redis.exceptions import RedisError
 
 from .alerts import AlertDeduplicator, AlertmanagerWebhook, alert_settings, console_link, triage_alerts
 from .approval import ApprovalReceiptSigner
+from .notifications import NotificationSettings, build_notification, send_notification
 from .api_auth import ApiAuthorization
 from .guardrails import GuardrailViolation, validate_input
 from .langgraph_workflow import LangGraphIncidentWorkflow
@@ -99,6 +100,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.alert_slots = asyncio.Semaphore(app.state.alert_settings["max_concurrent"])
     app.state.alert_dedupe = AlertDeduplicator(ttl_seconds=app.state.alert_settings["dedupe_seconds"])
     app.state.alert_tasks = set()
+    app.state.notifications = NotificationSettings.from_environment(os.environ)
     async with AsyncExitStack() as stack:
         async with _runtime_lifespan(app, stack):
             try:
@@ -367,7 +369,7 @@ async def create_incident_stream(request_body: IncidentQuestion, request: Reques
     })
 
 
-async def _diagnose_alert(app: FastAPI, request_body: IncidentQuestion, incident_id: str) -> None:
+async def _diagnose_alert(app: FastAPI, request_body: IncidentQuestion, incident_id: str, alertname: str) -> None:
     async with app.state.alert_slots:
         try:
             state = await app.state.workflow.start(request_body, incident_id=incident_id)
@@ -378,6 +380,15 @@ async def _diagnose_alert(app: FastAPI, request_body: IncidentQuestion, incident
             raise
         except Exception as error:  # noqa: BLE001 - background run; report class only
             logger.warning("alert diagnosis %s did not complete: %s", incident_id, type(error).__name__)
+            return
+    # Nobody is watching an alert-started run: point a human at the result.
+    # Sent only after the canonical save; delivery never alters the incident.
+    notification = build_notification(state, alertname=alertname,
+                                      console_url=console_link(app.state.alert_settings["console_url"], incident_id))
+    if notification is not None and app.state.notifications.url is not None:
+        delivered = await send_notification(app.state.notifications, notification)
+        if not delivered:
+            logger.warning("notification for %s was not acknowledged", incident_id)
 
 
 @app.post("/v1/incidents/alerts/alertmanager", status_code=status.HTTP_202_ACCEPTED)
@@ -409,13 +420,28 @@ async def ingest_alertmanager(payload: AlertmanagerWebhook, request: Request) ->
             continue
         incident_id = new_incident_id()
         dedupe.remember(item.key, incident_id)
-        task = asyncio.create_task(_diagnose_alert(request.app, item.request, incident_id))
+        task = asyncio.create_task(_diagnose_alert(request.app, item.request, incident_id, item.alertname))
         request.app.state.alert_tasks.add(task)
         task.add_done_callback(request.app.state.alert_tasks.discard)
         accepted.append({"incident_id": incident_id, "alertname": item.alertname, "service": item.service,
                          "environment": item.request.environment,
                          "console_url": console_link(settings["console_url"], incident_id)})
     return {"accepted": accepted, "skipped": skipped}
+
+
+@app.get("/v1/incidents")
+async def list_incidents(
+    request: Request,
+    limit: int = Query(default=20, ge=1, le=100),
+    incident_status: IncidentStatus | None = Query(default=None, alias="status"),
+) -> dict:
+    """Recently updated incidents, newest first, as bounded summaries.
+
+    Lists what the canonical store has retained. A diagnosis still running in
+    the background appears once its first state is saved."""
+    incidents = await _repository(request).list_recent(
+        limit=limit, status=incident_status.value if incident_status else None)
+    return {"incidents": incidents, "count": len(incidents)}
 
 
 @app.get("/v1/incidents/{incident_id}", response_model=IncidentState)

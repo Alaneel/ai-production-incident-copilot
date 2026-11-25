@@ -387,6 +387,11 @@ See the [dated results and remaining gaps](../docs/verification.md).
 - An Alertmanager webhook (`POST /v1/incidents/alerts/alertmanager`) that turns
   firing alerts with a service label into deduplicated, rate-bounded read-only
   diagnoses; approval remains an operator-only console action.
+- A bounded incident list (`GET /v1/incidents`, summaries only) with a console
+  inbox that opens an incident by one read-only GET, and an optional outbound
+  notification webhook for alert-started diagnoses that need a human. The
+  notification is an escaped pointer with no evidence, command or approval
+  capability; delivery is best effort and never alters incident state.
 - A repeatable four-service fault lab with eight bounded fault modes,
   Prometheus, Loki, Tempo, an OpenTelemetry Collector, a
   provisioned Grafana dashboard, continuous traffic, and a machine-verifiable

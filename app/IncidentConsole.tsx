@@ -8,6 +8,7 @@ import { consoleApprovalProblem, consoleAuthorizationProblem, consoleBackendEndp
 import { streamConsoleIncident } from "./incident-stream";
 import { incidentLocationUrl, readIncidentLocation, restoredApprovalUncertain } from "./incident-location";
 import { evidenceAnchor, resolveCitations } from "./evidence-citations";
+import { attentionCount, loadIncidentList, relativeTime, type IncidentListResult, type IncidentSummary } from "./incident-list";
 import { EvidenceExplorer } from "./EvidenceExplorer";
 import { ActionEvidenceReview } from "./ActionEvidenceReview";
 import { PreflightTargetReview } from "./PreflightTargetReview";
@@ -316,6 +317,77 @@ function CommandPalette({ commands }: { commands: PaletteCommand[] }) {
         document.body,
       )}
       {toast && createPortal(<div className="palette-toast" role="status">{toast}</div>, document.body)}
+    </>
+  );
+}
+
+// Recent incidents from the canonical store: where alert- and API-started
+// diagnoses are found. Listing and opening are both read-only GETs.
+function IncidentInbox({ unavailable, busy, currentId, load, onOpen }: {
+  unavailable: string | null;
+  busy: boolean;
+  currentId: string | null;
+  load: () => Promise<IncidentListResult>;
+  onOpen: (incidentId: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [list, setList] = useState<IncidentSummary[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loadedAt, setLoadedAt] = useState(0);
+  const request = useRef(0);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const waiting = list ? attentionCount(list) : 0;
+
+  async function refresh() {
+    if (unavailable) return;
+    const current = ++request.current;
+    setLoading(true);
+    const result = await load();
+    if (current !== request.current) return;
+    setList(result.error ? null : result.incidents); setError(result.error); setLoadedAt(Date.now()); setLoading(false);
+  }
+  function show() { setOpen(true); void refresh(); }
+  function close() { setOpen(false); trigger.current?.focus(); }
+
+  return (
+    <>
+      <button ref={trigger} type="button" id="incident-inbox-trigger" className="crumb-root crumb-button" aria-haspopup="dialog"
+        aria-label={waiting ? `Incidents, ${waiting} awaiting approval` : "Incidents"} onClick={show}>
+        Incidents{waiting > 0 && <i className="crumb-count">{waiting}</i>}
+      </button>
+      {open && createPortal(
+        <div className="palette-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}>
+          <div className="palette inbox" role="dialog" aria-modal="true" aria-label="Recent incidents"
+            onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); close(); } }}>
+            <div className="inbox-head">
+              <strong>Incidents</strong>
+              <span>{unavailable ? "Not connected" : loading ? "Loading…" : list ? `${list.length} most recent · ${waiting} awaiting approval` : ""}</span>
+              <button type="button" autoFocus onClick={() => void refresh()} disabled={Boolean(unavailable) || loading}>Refresh</button>
+            </div>
+            {unavailable ? <p className="inbox-note">{unavailable}</p>
+              : error ? <p className="inbox-note error" role="alert">{error}</p>
+              : list && list.length === 0 ? <p className="inbox-note">No incidents have been retained yet. Diagnoses started by alerts, the API or this console appear here.</p>
+              : <ul aria-label="Recent incidents" aria-busy={loading}>
+                {(list ?? []).map((item) => (
+                  <li key={item.incident_id}>
+                    <button type="button" className="inbox-row" disabled={busy} aria-current={item.incident_id === currentId ? "true" : undefined}
+                      onClick={() => { setOpen(false); onOpen(item.incident_id); }}>
+                      <span className={`inbox-status ${item.status}`}>{sentence(item.status.replaceAll("_", " "))}</span>
+                      <span className="inbox-main">
+                        <b>{item.service ?? "Unknown service"}<code>{item.incident_id}</code></b>
+                        <small>{item.leading_cause ?? item.question}</small>
+                      </span>
+                      <time dateTime={item.updated_at}>{relativeTime(item.updated_at, loadedAt)}</time>
+                    </button>
+                  </li>
+                ))}
+              </ul>}
+            <div className="palette-foot" aria-hidden="true"><span>Opening an incident is a read-only restore. Nothing is re-run or approved.</span></div>
+          </div>
+        </div>,
+        document.body,
+      )}
     </>
   );
 }
@@ -692,6 +764,33 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
     }
   }
 
+  // Open a listed incident with one read-only GET. Never used while another
+  // request, an unconfirmed approval or a running diagnosis is outstanding.
+  async function openIncident(incidentId: string) {
+    if (!orchestratorUrl || requestInFlight.current || isAnalyzing || approvalUncertain) return;
+    if (readAccessError) { setApiError(readAccessError); return; }
+    requestInFlight.current = true;
+    setIsRestoring(true);
+    try {
+      const result = await refreshApproval<ApiIncident>(orchestratorUrl, incidentId, apiTransport);
+      if (result.incident) {
+        pendingApprovalMarker.current = false;
+        setIncident(result.incident); setPrompt(result.incident.question); setRestoredIncidentId(incidentId);
+        setDiagnosisPhase("restored"); setDiagnosisRequiresRefresh(false); setDiagnosisQuestion(null);
+        setActionState("pending"); setActiveTab("timeline");
+        setApprovalUncertain(restoredApprovalUncertain(result.incident.status, false));
+        retainLocation(incidentId, false);
+      }
+      setApiError(result.error);
+    } finally {
+      requestInFlight.current = false;
+      setIsRestoring(false);
+    }
+  }
+  const inboxUnavailable = !orchestratorUrl
+    ? "No incident backend is configured, so this console is showing the built-in demo. Once connected, diagnoses started by alerts, the API or this console are listed here."
+    : readAccessError;
+
   const incidentStatus = sentence(incident?.status.replaceAll("_", " ") ?? (showDemo && demoReplay.done ? "awaiting approval" : "investigating"));
   const demoSteps: Array<{ title: string; detail: string; state: TraceState; duration?: string }> = traceSteps.map((step, index) => {
     const state: TraceState = index < demoReplay.stage ? "complete" : index === demoReplay.stage ? "running" : "queued";
@@ -809,6 +908,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
     { id: "hypothesis", group: "Navigate", label: "Leading hypothesis and evidence", run: () => jumpTo(".hypothesis-panel") },
     { id: "remediation", group: "Navigate", label: "Remediation and approval", run: () => jumpTo(".remediation-panel") },
     { id: "trace", group: "Navigate", label: "Agent execution trace", run: openTrace },
+    { id: "inbox", group: "Navigate", label: "Recent incidents", run: () => { document.getElementById("incident-inbox-trigger")?.click(); } },
     { id: "theme", group: "Console", label: "Toggle colour theme", run: toggleTheme },
     ...(hasCommand ? [{ id: "copy-command", group: "Console", label: "Copy remediation command", run: () => copyText(commandPreview, "Command copied") }] : []),
     ...(traceId ? [{ id: "copy-trace", group: "Console", label: "Copy trace ID", run: () => copyText(traceId, "Trace ID copied") }] : []),
@@ -827,7 +927,9 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
         </div>
         <nav className="topbar-center" aria-label="Breadcrumb">
           <span className="sep" aria-hidden="true">/</span>
-          <span className="crumb-root">Incidents</span>
+          <IncidentInbox unavailable={inboxUnavailable} busy={isAnalyzing || isApproving || isRestoring || approvalUncertain}
+            currentId={incident?.incident_id ?? null} load={() => loadIncidentList(orchestratorUrl, apiTransport)}
+            onOpen={(incidentId) => void openIncident(incidentId)} />
           <span className="sep" aria-hidden="true">/</span>
           <b>{incident?.incident_id ?? (showDemo ? "INC-2847" : "Waiting for incident reference")}</b>
           <span className="mode-pill">

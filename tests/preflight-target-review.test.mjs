@@ -11,6 +11,7 @@ import * as location from "../app/incident-location.ts";
 import * as recovery from "../app/approval-recovery.ts";
 import * as recoveryVerification from "../app/recovery-verification.ts";
 import * as consoleAuth from "../app/console-auth.ts";
+import * as incidentList from "../app/incident-list.ts";
 import * as incidentStream from "../app/incident-stream.ts";
 
 function target(tool = "restart_deployment") {
@@ -214,7 +215,7 @@ async function renderConsole(state) {
     "./OperationInspectionPanel": { OperationInspectionPanel: stubPanel },
     "./RecoveryVerificationPanel": { RecoveryVerificationPanel: stubPanel },
     "./RootCauseCandidates": { RootCauseCandidates: stubPanel },
-    "./console-auth": consoleAuth,
+    "./console-auth": consoleAuth, "./incident-list": incidentList,
     "./incident-stream": incidentStream,
   }, { env: { NEXT_PUBLIC_ORCHESTRATOR_URL: endpoint } });
   return renderToStaticMarkup(React.createElement(console.IncidentConsole));

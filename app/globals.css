@@ -852,3 +852,51 @@ p, small, .connection-title strong { text-wrap: pretty; }
   .palette-foot, .palette kbd { display: none; }
   .palette-input input { font-size: 16px; }
 }
+
+/* Incident inbox ------------------------------------------------------ */
+.crumb-button {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 6px; margin: 0 -6px; border: 0; border-radius: 6px;
+  background: none; color: var(--fg-3); font: inherit; transition: color .15s, background .15s;
+}
+.crumb-button:hover { color: var(--fg); background: var(--surface-3); }
+.crumb-count {
+  min-width: 17px; height: 17px; padding: 0 5px; border-radius: 999px; display: inline-grid; place-items: center;
+  color: var(--warn); background: var(--warn-soft); border: 1px solid var(--warn-line);
+  font: 600 10.5px/1 var(--sans); font-style: normal; font-variant-numeric: tabular-nums;
+}
+.palette.inbox { width: min(640px, 100%); }
+.inbox-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.inbox-head strong { font-size: 14.5px; font-weight: 600; }
+.inbox-head span { flex: 1; min-width: 0; color: var(--fg-3); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inbox-head button {
+  height: 28px; padding: 0 10px; border-radius: 7px; color: var(--fg-2); background: var(--surface);
+  border: 1px solid var(--line-strong); font-size: 12.5px; font-weight: 500;
+}
+.inbox-head button:not(:disabled):hover { color: var(--fg); background: var(--surface-3); }
+.inbox-note { margin: 0; padding: 22px 18px; color: var(--fg-3); font-size: 13.5px; line-height: 1.6; }
+.inbox-note.error { color: var(--crit); }
+.palette.inbox ul { padding: 6px 6px 14px; }
+.inbox-row {
+  width: 100%; display: grid; grid-template-columns: 132px minmax(0, 1fr) auto; align-items: center; gap: 12px;
+  padding: 9px 10px; border: 0; border-radius: 8px; background: none; color: inherit; text-align: left;
+}
+.inbox-row:not(:disabled):hover, .inbox-row:focus-visible { background: var(--surface-3); }
+.inbox-row[aria-current="true"] { box-shadow: inset 2px 0 0 var(--accent); }
+.inbox-status { display: inline-flex; align-items: center; gap: 7px; color: var(--fg-3); font-size: 12px; font-weight: 500; white-space: nowrap; }
+.inbox-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.inbox-status.waiting_approval, .inbox-status.remediation_pending { color: var(--warn); }
+.inbox-status.investigating, .inbox-status.mitigating { color: var(--accent); }
+.inbox-status.resolved, .inbox-status.diagnosed { color: var(--ok); }
+.inbox-status.remediation_failed { color: var(--crit); }
+.inbox-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.inbox-main b { display: flex; align-items: baseline; gap: 8px; color: var(--fg); font-size: 13.5px; font-weight: 600; }
+.inbox-main code { color: var(--fg-4); background: none; border: 0; padding: 0; font: 500 11.5px var(--mono); }
+.inbox-main small { color: var(--fg-3); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inbox-row time { color: var(--fg-4); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 720px) {
+  .inbox-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .inbox-status { grid-column: 1 / -1; }
+  .palette.inbox .palette-foot { display: flex; }
+}
+/* The Incidents crumb is a control, so it stays reachable at every width. */
+.topbar-center .crumb-root.crumb-button { display: inline-flex; margin: 0; }
