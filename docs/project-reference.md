@@ -384,7 +384,8 @@ See the [dated results and remaining gaps](../docs/verification.md).
   strict validation, OpenTelemetry/Kubernetes and Spring Boot presets, and a
   `gateway check` command that probes each query. Unconfigured signals are
   reported as unavailable, never as zero. See [integrate.md](integrate.md).
-- An Alertmanager webhook (`POST /v1/incidents/alerts/alertmanager`) that turns
+- Alertmanager and Grafana Alerting webhooks (`POST /v1/incidents/alerts/alertmanager`,
+  `/alerts/grafana`) that turn
   firing alerts with a service label into deduplicated, rate-bounded read-only
   diagnoses; approval remains an operator-only console action.
 - A bounded incident list (`GET /v1/incidents`, summaries only) with a console
