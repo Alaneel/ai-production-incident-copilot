@@ -41,7 +41,8 @@ helm test opspilot --kube-context "$context" --namespace opspilot --logs --timeo
 cat <<EOF
 
 OpsPilot is running on kind with demo telemetry and no Kubernetes access.
-Ask it about payment-service to see a diagnosis stop at the approval boundary.
+Ask it why payment-service is slow: it cites the evidence for a connection-pool
+exhaustion, and won't propose a rollback without live deployment history.
 
   kubectl --context $context -n opspilot port-forward svc/opspilot-orchestrator 8080:8080
   export OPSPILOT_READER_TOKEN=\$(kubectl --context $context -n opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}' | base64 -d)

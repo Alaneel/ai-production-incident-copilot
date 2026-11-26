@@ -16,7 +16,7 @@ The script:
 2. Builds the three images from your checkout.
 3. Installs the chart with demo telemetry.
 4. Runs `helm test`, which starts a real diagnosis through the MCP endpoint and checks that the reader credential **can't** approve it.
-5. Prints the port-forward and `claude mcp add` commands. Ask about `payment-service` to watch a demo diagnosis stop at the approval boundary.
+5. Prints the port-forward and `claude mcp add` commands. Ask why `payment-service` is slow. The demo diagnosis cites connection-pool exhaustion. Because the demo's deployment history is synthetic, OpsPilot won't propose a rollback; it asks for live revision history first. Enable `discovery` on a namespace with real Deployments to see proposals.
 
 Once images are published, use `OPSPILOT_IMAGE_TAG=0.3.0` to skip the local build. Remove everything with:
 
@@ -126,7 +126,7 @@ To manage the credentials yourself, create a Secret with the keys from [`secret.
 The [`helm chart` workflow](../.github/workflows/chart.yml) builds the three images and installs the demo chart on a fresh kind cluster. It then:
 
 - runs `helm test`;
-- checks inside the cluster that a demo diagnosis reaches `waiting_approval` with a proposed rollback, and that the reader token gets 403 when it tries to approve;
+- checks inside the cluster that a demo diagnosis reaches *connection-pool exhaustion* with cited evidence, proposes no rollback from synthetic deployment history, and that the reader token gets 403 when it tries to approve;
 - upgrades to `discovery.enabled` for one namespace and confirms the upgrade keeps the credentials;
 - checks with `kubectl auth can-i` that the MCP server can read but not patch Deployments in that namespace, and has no access elsewhere.
 

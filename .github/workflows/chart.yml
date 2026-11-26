@@ -53,7 +53,7 @@ jobs:
           helm status opspilot --namespace opspilot
       - name: helm test (read-only diagnosis; a reader cannot approve)
         run: helm test opspilot --namespace opspilot --logs --timeout 3m
-      - name: Demo diagnosis stops at the human approval boundary
+      - name: Demo diagnosis is cited, read-only, and cannot be approved by a reader
         run: |
           kubectl --namespace opspilot exec deploy/opspilot-orchestrator -- python -c '
           import json, os, urllib.request, urllib.error
@@ -70,13 +70,17 @@ jobs:
               "name": "diagnose_incident", "arguments": {"question": "Why is payment-service slow today?",
               "service": "payment-service", "wait_seconds": 25}}})
           view = body["result"]["structuredContent"]
-          print(view["incident_id"], view["status"], "|", view["hypotheses"][0]["cause"], "|", view["proposed_action"]["title"])
-          assert view["status"] == "waiting_approval", view["status"]
-          assert view["proposed_action"]["requires_approval"]
+          leading = view["hypotheses"][0]
+          print(view["incident_id"], view["status"], "|", leading["cause"], leading["confidence"], "|", view["proposed_action"]["title"])
+          assert view["status"] == "diagnosed", view["status"]
+          assert leading["cause"] == "Database connection pool exhaustion", leading
+          assert len(leading["evidence_ids"]) >= 2, leading
+          # The gateway deployment catalog is synthetic, so no rollback is proposed.
+          assert view["proposed_action"]["tool"] == "none", view["proposed_action"]
           code, _ = post("/v1/incidents/" + view["incident_id"] + "/approval", {"decision": "approve",
               "actor": "ci", "reason": "reader must not approve", "idempotency_key": "ci-reader-approval-1"})
           assert code == 403, code
-          print("ok: proposal waits for a human; the reader token got 403")'
+          print("ok: cited diagnosis, no rollback without live deployment history, reader approval refused")'
           test "$(kubectl auth can-i get deployments --namespace default --as system:serviceaccount:opspilot:opspilot-mcp-server)" = no
       - name: helm upgrade to discovery in one namespace keeps credentials
         run: |
