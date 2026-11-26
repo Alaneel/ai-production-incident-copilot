@@ -228,6 +228,17 @@ curl -sS https://opspilot-api.internal/v1/incidents \
 
 Without `service`, the first hyphenated name in the question is used, as before.
 
+## 6. Let your agents ask OpsPilot
+
+Claude Code, Cursor and other MCP clients can connect to the orchestrator's `/mcp` endpoint with the reader token. From there they can diagnose incidents and read the evidence, but they can't approve or execute anything:
+
+```bash
+claude mcp add --transport http opspilot https://opspilot-api.internal/mcp \
+  --header "Authorization: Bearer $OPSPILOT_READER_TOKEN"
+```
+
+See [Use OpsPilot from your coding or ops agent](agents.md) for the tools and the safety properties.
+
 ## Current limits
 
 - **Failure families**: the diagnosis profiles cover eight: connection-pool exhaustion, downstream timeout, CPU saturation, memory leak, deployment regression, consumer lag, retry storm and cache penetration. Other failure modes end as *insufficient evidence* rather than a guess.

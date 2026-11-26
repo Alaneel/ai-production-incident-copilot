@@ -18,6 +18,14 @@ from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from psycopg import Error as PostgresError
 from redis.exceptions import RedisError
 
+from .agent_mcp import (
+    INSTRUCTIONS as AGENT_INSTRUCTIONS,
+    AgentToolError,
+    AgentTools,
+    DiagnoseArguments,
+    negotiate_version,
+    tool_definitions as agent_tool_definitions,
+)
 from .alerts import AlertDeduplicator, AlertmanagerWebhook, alert_settings, console_link, triage_alerts
 from .approval import ApprovalReceiptSigner
 from .notifications import NotificationSettings, build_notification, send_notification
@@ -65,6 +73,8 @@ EVENT_CACHE_PUBLISH_TIMEOUT_SECONDS = 2.0
 EVENT_CACHE_STARTUP_TIMEOUT_SECONDS = 2.0
 DIAGNOSIS_STREAM_HEARTBEAT_SECONDS = 5.0
 DIAGNOSIS_STREAM_MAX_FRAME_BYTES = 8 * 1024 * 1024
+# Background diagnoses (alerts and agents) beyond this many are refused, not queued.
+MAX_PENDING_BACKGROUND_DIAGNOSES = 10
 EVENT_DELIVERY_RESPONSE_HEADERS = {
     "X-Incident-Event-Delivery": {
         "description": "Event delivery after canonical persistence. checkpoint-fallback means delivery was not confirmed; it does not imply cache rollback. May be absent when publication was not attempted.",
@@ -389,6 +399,116 @@ async def _diagnose_alert(app: FastAPI, request_body: IncidentQuestion, incident
         delivered = await send_notification(app.state.notifications, notification)
         if not delivered:
             logger.warning("notification for %s was not acknowledged", incident_id)
+
+
+def _start_background_diagnosis(app: FastAPI, request_body: IncidentQuestion, label: str) -> tuple[str, asyncio.Task]:
+    incident_id = new_incident_id()
+    task = asyncio.create_task(_diagnose_alert(app, request_body, incident_id, label))
+    app.state.alert_tasks.add(task)
+    task.add_done_callback(app.state.alert_tasks.discard)
+    return incident_id, task
+
+
+async def _read_incident(app: FastAPI, incident_id: str) -> IncidentState | None:
+    state = await app.state.workflow.get(incident_id)
+    return state if state is not None else await app.state.repository.get(incident_id)
+
+
+def _agent_tools(app: FastAPI) -> AgentTools:
+    async def start(arguments: DiagnoseArguments) -> tuple[str, asyncio.Task]:
+        request_body = IncidentQuestion(question=arguments.question, environment=arguments.environment,
+                                        service=arguments.service)
+        try:
+            validate_input(request_body)
+        except GuardrailViolation:
+            raise AgentToolError("The question was rejected by input safety checks.") from None
+        if len(app.state.alert_tasks) >= MAX_PENDING_BACKGROUND_DIAGNOSES:
+            raise AgentToolError("OpsPilot is busy with other diagnoses. Try again in a minute.")
+        return _start_background_diagnosis(app, request_body, "Requested by an MCP client")
+
+    async def list_recent(limit: int, incident_status: str | None) -> list[dict]:
+        return await app.state.repository.list_recent(limit=limit, status=incident_status)
+
+    return AgentTools(start=start, read=lambda incident_id: _read_incident(app, incident_id),
+                      list_recent=list_recent,
+                      console_link=lambda incident_id: console_link(app.state.alert_settings["console_url"], incident_id))
+
+
+def _rpc(request_id, *, result=None, error=None, version=None, http_status=200) -> JSONResponse:
+    body = {"jsonrpc": "2.0", "id": request_id}
+    body.update({"result": result} if error is None else {"error": error})
+    headers = {"Cache-Control": "no-store"}
+    if version:
+        headers["MCP-Protocol-Version"] = version
+    return JSONResponse(body, status_code=http_status, headers=headers)
+
+
+@app.post("/mcp")
+async def agent_mcp(request: Request) -> Response:
+    """MCP (Streamable HTTP, JSON responses) for external agents.
+
+    Reader and operator credentials both work, and neither can approve
+    through this endpoint: it has no approval or execution tool."""
+    origin = request.headers.get("Origin")
+    if origin is not None and origin not in cors_origins:
+        return _rpc(None, error={"code": -32001, "message": "Origin is not allowed."}, http_status=403)
+    try:
+        request.app.state.api_authorization.authorize(request.headers.get("Authorization"), approval=False)
+    except HTTPException as error:
+        return JSONResponse({"detail": error.detail}, status_code=error.status_code,
+                            headers={**(error.headers or {}), "Cache-Control": "no-store"})
+    try:
+        message = await request.json()
+    except ValueError:
+        return _rpc(None, error={"code": -32700, "message": "Parse error."}, http_status=400)
+    if isinstance(message, list):
+        return _rpc(None, error={"code": -32600, "message": "JSON-RPC batching is not supported."}, http_status=400)
+    if (not isinstance(message, dict) or message.get("jsonrpc") != "2.0"
+            or not isinstance(message.get("method"), str)
+            or ("id" in message and (isinstance(message["id"], bool) or not isinstance(message["id"], (str, int))))):
+        return _rpc(None, error={"code": -32600, "message": "Invalid JSON-RPC request."}, http_status=400)
+    method, request_id = message["method"], message.get("id")
+    version = request.headers.get("MCP-Protocol-Version")
+    if request_id is None:
+        return Response(status_code=202)  # notifications and responses need no reply
+    params = message.get("params") or {}
+    if not isinstance(params, dict):
+        return _rpc(request_id, error={"code": -32602, "message": "params must be an object."})
+    if method == "initialize":
+        negotiated = negotiate_version(params.get("protocolVersion"))
+        return _rpc(request_id, version=negotiated, result={
+            "protocolVersion": negotiated,
+            "capabilities": {"tools": {"listChanged": False}},
+            "serverInfo": {"name": "opspilot", "title": "OpsPilot incident copilot", "version": app.version},
+            "instructions": AGENT_INSTRUCTIONS,
+        })
+    if method == "ping":
+        return _rpc(request_id, result={}, version=version)
+    if method == "tools/list":
+        return _rpc(request_id, result={"tools": agent_tool_definitions()}, version=version)
+    if method != "tools/call":
+        return _rpc(request_id, error={"code": -32601, "message": f"Method not found: {method[:80]}"}, version=version)
+    name, arguments = params.get("name"), params.get("arguments") or {}
+    if not isinstance(name, str) or not isinstance(arguments, dict):
+        return _rpc(request_id, error={"code": -32602, "message": "Invalid tools/call parameters."}, version=version)
+    try:
+        output = await _agent_tools(request.app).call(name, arguments)
+    except LookupError:
+        return _rpc(request_id, error={"code": -32602, "message": f"Unknown tool: {name[:80]}"}, version=version)
+    except AgentToolError as error:
+        return _rpc(request_id, version=version, result={
+            "content": [{"type": "text", "text": str(error)}], "isError": True})
+    except (McpToolError, PostgresError, TimeoutError):
+        return _rpc(request_id, version=version, result={
+            "content": [{"type": "text", "text": "OpsPilot could not read its incident store or tools right now."}],
+            "isError": True})
+    logger.info(json.dumps({"event": "agent_mcp_call", "tool": name,
+                            "incident_id": output.get("incident_id")}, separators=(",", ":")))
+    return _rpc(request_id, version=version, result={
+        "content": [{"type": "text", "text": json.dumps(output, separators=(",", ":"), default=str)}],
+        "structuredContent": output,
+        "isError": False,
+    })
 
 
 @app.post("/v1/incidents/alerts/alertmanager", status_code=status.HTTP_202_ACCEPTED)
