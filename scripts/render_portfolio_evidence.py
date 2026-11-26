@@ -11,8 +11,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from evals.release_provenance import locked_runtime_versions, release_recipe_fingerprints  # noqa: E402
-WORKFLOW = 'evals/results/workflow_benchmark_20261126T104246Z_55083661.json'
-CROSS = 'evals/results/cross_service_benchmark_20261126T104248Z_66fee23d62cf4183b69bebc15fd83548.json'
+WORKFLOW = 'evals/results/workflow_benchmark_20261126T110223Z_4d9a8979.json'
+CROSS = 'evals/results/cross_service_benchmark_20261126T110225Z_93d975cebd224b55bd3fb87b24f6eb17.json'
 
 
 def sha(path: Path) -> str:

@@ -83,5 +83,6 @@ Agents that want to run their own queries can also connect to the MCP server beh
 ## Limits
 
 - Answers are deterministic unless the orchestrator has a model configured. See the [project reference](project-reference.md).
+- A diagnosis that stops early returns a tool error with the error class, for example when discovery is on and the environment isn't an allowed namespace. It isn't left looking like it's still running. This record is kept per orchestrator process, for the last 500 failures.
 - The endpoint answers each request in full. It doesn't stream progress or push notifications, so for a long diagnosis, call `get_incident` again.
 - Like the API, it uses scoped tokens rather than per-user identity. OAuth for MCP clients is not implemented.
