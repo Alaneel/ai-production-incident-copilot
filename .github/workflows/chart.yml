@@ -1,0 +1,83 @@
+name: helm chart
+on:
+  push:
+    paths: ["deploy/helm/**", "deploy/signal-profiles/**", "services/**", "requirements-*.lock", ".github/workflows/chart.yml"]
+  pull_request:
+    paths: ["deploy/helm/**", "deploy/signal-profiles/**", "services/**", "requirements-*.lock", ".github/workflows/chart.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: helm-chart-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  HELM_VERSION: v4.3.1
+  HELM_SHA256: 0403a88ae20913d11b10a2467b50087721fea7581736da6b9d3992f5357fe54b
+  KIND_VERSION: v0.33.0
+  KIND_SHA256: aee6151561422756b764a4ae28e7f44cda5af5a9eead3cc9985112b1de8d8e0d
+  KIND_NODE_IMAGE: kindest/node:v1.37.0@sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5
+jobs:
+  install-on-kind:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install exact Helm and kind
+        run: |
+          bin="$RUNNER_TEMP/bin"; mkdir -p "$bin"
+          curl -fsSL "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz" -o "$RUNNER_TEMP/helm.tgz"
+          echo "${HELM_SHA256}  $RUNNER_TEMP/helm.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/helm.tgz" -C "$RUNNER_TEMP" linux-amd64/helm && install -m0755 "$RUNNER_TEMP/linux-amd64/helm" "$bin/helm"
+          curl -fsSL "https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64" -o "$bin/kind"
+          echo "${KIND_SHA256}  $bin/kind" | sha256sum --check && chmod 0755 "$bin/kind"
+          echo "$bin" >> "$GITHUB_PATH"
+      - name: Render and policy checks
+        run: bash deploy/helm/test-chart.sh
+      - name: Build images exactly as released
+        run: |
+          for component in orchestrator mcp-server telemetry-gateway; do
+            docker build --file "services/$component/Dockerfile" --tag "ghcr.io/alaneel/opspilot-$component:ci" .
+          done
+      - name: Create an owned kind cluster
+        run: |
+          kind create cluster --name opspilot-chart --image "$KIND_NODE_IMAGE" --wait 120s
+          kind load docker-image --name opspilot-chart \
+            ghcr.io/alaneel/opspilot-orchestrator:ci ghcr.io/alaneel/opspilot-mcp-server:ci ghcr.io/alaneel/opspilot-telemetry-gateway:ci
+          kubectl create namespace shop
+      - name: helm install (demo telemetry, discovery in one namespace)
+        run: |
+          helm install opspilot deploy/helm/opspilot --namespace opspilot --create-namespace \
+            --set image.tag=ci --set image.pullPolicy=Never \
+            --set discovery.enabled=true --set 'targetNamespaces={shop}' \
+            --wait --timeout 6m
+          helm status opspilot --namespace opspilot
+      - name: helm test (read-only diagnosis; a reader cannot approve)
+        run: helm test opspilot --namespace opspilot --logs --timeout 3m
+      - name: Kubernetes permissions are namespaced and read-only
+        run: |
+          sa=system:serviceaccount:opspilot:opspilot-mcp-server
+          test "$(kubectl auth can-i get deployments --namespace shop --as "$sa")" = yes
+          test "$(kubectl auth can-i patch deployments --namespace shop --as "$sa")" = no
+          test "$(kubectl auth can-i get deployments --namespace default --as "$sa")" = no
+          test "$(kubectl auth can-i list secrets --namespace opspilot --as "$sa")" = no
+          test "$(kubectl auth can-i get deployments --namespace shop --as system:serviceaccount:opspilot:opspilot-orchestrator)" = no
+          echo "RBAC checks passed"
+      - name: helm upgrade keeps generated credentials
+        run: |
+          before="$(kubectl --namespace opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}')"
+          helm upgrade opspilot deploy/helm/opspilot --namespace opspilot --reuse-values --set orchestrator.consoleUrl=http://console.test --wait --timeout 4m
+          after="$(kubectl --namespace opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}')"
+          test -n "$before" && test "$before" = "$after"
+          helm test opspilot --namespace opspilot --timeout 3m
+      - name: Diagnostics on failure
+        if: failure()
+        run: |
+          kubectl get pods,svc,events --all-namespaces -o wide || true
+          for pod in $(kubectl --namespace opspilot get pods -o name); do
+            echo "::group::$pod"; kubectl --namespace opspilot describe "$pod" | tail -30; kubectl --namespace opspilot logs "$pod" --all-containers --tail 80 || true; echo "::endgroup::"
+          done
+      - name: Delete the owned cluster
+        if: always()
+        run: kind delete cluster --name opspilot-chart || true

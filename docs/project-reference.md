@@ -399,6 +399,13 @@ See the [dated results and remaining gaps](../docs/verification.md).
   guardrails, shares the background-diagnosis bound with alerts, and returns
   bounded projections with evidence marked untrusted. It has no approval or
   execution tool. See [agents.md](agents.md).
+- A Helm chart (`deploy/helm/opspilot`) that installs read-only by default: demo
+  fixtures until all three telemetry URLs are set, no mounted Kubernetes token,
+  and per-namespace Roles for discovery (`get`/`list`) and, separately,
+  remediation (`patch` on Deployments). Credentials are generated once and kept
+  across upgrades. CI renders it under a dozen value sets, installs it on kind,
+  runs `helm test` and checks RBAC with `kubectl auth can-i`. Version tags
+  publish multi-arch images and the chart to GHCR. See [kubernetes.md](kubernetes.md).
 - A repeatable four-service fault lab with eight bounded fault modes,
   Prometheus, Loki, Tempo, an OpenTelemetry Collector, a
   provisioned Grafana dashboard, continuous traffic, and a machine-verifiable

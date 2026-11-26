@@ -1,0 +1,93 @@
+{{- $c := dict "root" . "component" "mcp-server" }}
+{{- $kube := or .Values.discovery.enabled .Values.remediation.enabled }}
+{{- if and $kube (not .Values.targetNamespaces) }}
+{{- fail "discovery.enabled and remediation.enabled need at least one entry in targetNamespaces" }}
+{{- end }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+spec:
+  selector:
+    {{- include "opspilot.selector" $c | nindent 4 }}
+  ports:
+    - name: http
+      port: 8082
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+spec:
+  replicas: {{ .Values.mcpServer.replicas }}
+  selector:
+    matchLabels:
+      {{- include "opspilot.selector" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "opspilot.labels" $c | nindent 8 }}
+      annotations:
+        checksum/config: {{ toJson .Values | sha256sum | trunc 16 }}
+    spec:
+      serviceAccountName: {{ include "opspilot.name" $c }}
+      # The Kubernetes token is mounted only when OpsPilot may read or act on
+      # targetNamespaces; its Roles are namespaced (see rbac.yaml).
+      automountServiceAccountToken: {{ $kube }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "opspilot.podSecurity" . | nindent 8 }}
+      containers:
+        - name: mcp-server
+          image: {{ include "opspilot.image" $c }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: TELEMETRY_GATEWAY_URL
+              value: http://{{ include "opspilot.name" (dict "root" . "component" "telemetry-gateway") }}:8081
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "TELEMETRY_GATEWAY_TOKEN" "key" "telemetry-gateway-token") | nindent 12 }}
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "MCP_READ_TOKEN" "key" "mcp-read-token") | nindent 12 }}
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "MCP_OPERATOR_TOKEN" "key" "mcp-operator-token") | nindent 12 }}
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "MCP_APPROVAL_SECRET" "key" "mcp-approval-secret") | nindent 12 }}
+            - name: MCP_ALLOWED_ORIGINS
+              value: {{ join "," .Values.orchestrator.corsAllowedOrigins | default "http://localhost:3000" | quote }}
+            - name: KUBERNETES_REMEDIATION_ENABLED
+              value: {{ .Values.remediation.enabled | quote }}
+            - name: KUBERNETES_DEPLOYMENT_DISCOVERY_ENABLED
+              value: {{ .Values.discovery.enabled | quote }}
+            - name: KUBERNETES_DEPLOYMENT_EVENTS_ENABLED
+              value: {{ and .Values.discovery.enabled .Values.discovery.events | quote }}
+            - name: MCP_ALLOWED_NAMESPACES
+              value: {{ join "," .Values.targetNamespaces | quote }}
+          ports:
+            - name: http
+              containerPort: 8082
+          readinessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.mcpServer.resources | nindent 12 }}
+          securityContext:
+            {{- include "opspilot.containerSecurity" . | nindent 12 }}
+          volumeMounts:
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - {name: tmp, emptyDir: {}}

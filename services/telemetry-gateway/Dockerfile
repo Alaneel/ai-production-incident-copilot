@@ -8,6 +8,8 @@ RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /gateway ./cmd/gateway
 
 FROM gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
 COPY --from=build /gateway /gateway
+# Presets selectable with TELEMETRY_SIGNAL_PROFILE=/etc/opspilot/signal-profiles/<name>.json
+COPY deploy/signal-profiles /etc/opspilot/signal-profiles
 COPY LICENSE THIRD_PARTY_NOTICES.md /usr/share/doc/opspilot/
 EXPOSE 8081
 ENTRYPOINT ["/gateway"]

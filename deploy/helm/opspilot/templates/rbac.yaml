@@ -1,0 +1,48 @@
+{{- /*
+One namespaced Role per target namespace, bound to the MCP server's service
+account. Reading is limited to what rollout history and events need; patch
+on Deployments exists only with remediation.enabled, and the MCP server still
+refuses any execution without a signed human approval receipt.
+*/}}
+{{- if or .Values.discovery.enabled .Values.remediation.enabled }}
+{{- $root := . }}
+{{- $sa := include "opspilot.name" (dict "root" . "component" "mcp-server") }}
+{{- range .Values.targetNamespaces }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $sa }}
+  namespace: {{ . }}
+  labels:
+    {{- include "opspilot.labels" (dict "root" $root "component" "mcp-server") | nindent 4 }}
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: {{ if $root.Values.remediation.enabled }}["get", "patch"]{{ else }}["get"]{{ end }}
+  - apiGroups: ["apps"]
+    resources: ["replicasets"]
+    verbs: ["get", "list"]
+  {{- if and $root.Values.discovery.enabled $root.Values.discovery.events }}
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["list"]
+  {{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $sa }}
+  namespace: {{ . }}
+  labels:
+    {{- include "opspilot.labels" (dict "root" $root "component" "mcp-server") | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ $sa }}
+    namespace: {{ $root.Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ $sa }}
+{{- end }}
+{{- end }}

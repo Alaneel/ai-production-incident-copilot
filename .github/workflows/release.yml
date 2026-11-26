@@ -1,0 +1,110 @@
+name: release images and chart
+# Runs only for a pushed version tag (v0.3.0) or a manual dispatch from a tag.
+# Publishes multi-arch images and the Helm chart to GitHub Container Registry
+# with build provenance attestations.
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  HELM_VERSION: v4.3.1
+  HELM_SHA256: 0403a88ae20913d11b10a2467b50087721fea7581736da6b9d3992f5357fe54b
+jobs:
+  version:
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      owner: ${{ steps.version.outputs.owner }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: version
+        name: Tag must match the chart version
+        run: |
+          test "${GITHUB_REF_TYPE}" = tag || { echo "Run this from a version tag." >&2; exit 1; }
+          version="${GITHUB_REF_NAME#v}"
+          chart="$(sed -n 's/^version: //p' deploy/helm/opspilot/Chart.yaml)"
+          app="$(sed -n 's/^appVersion: "\(.*\)"/\1/p' deploy/helm/opspilot/Chart.yaml)"
+          test "$version" = "$chart" && test "$version" = "$app" || { echo "Tag $version, chart $chart, appVersion $app must match." >&2; exit 1; }
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "owner=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_OUTPUT"
+
+  images:
+    needs: version
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+    strategy:
+      fail-fast: true
+      matrix:
+        component: [orchestrator, mcp-server, telemetry-gateway]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          file: services/${{ matrix.component }}/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          provenance: mode=max
+          sbom: true
+          tags: |
+            ghcr.io/${{ needs.version.outputs.owner }}/opspilot-${{ matrix.component }}:${{ needs.version.outputs.version }}
+            ghcr.io/${{ needs.version.outputs.owner }}/opspilot-${{ matrix.component }}:sha-${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ needs.version.outputs.version }}
+            org.opencontainers.image.licenses=MIT
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-name: ghcr.io/${{ needs.version.outputs.owner }}/opspilot-${{ matrix.component }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+
+  chart:
+    needs: [version, images]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install exact Helm
+        run: |
+          curl -fsSL "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz" -o "$RUNNER_TEMP/helm.tgz"
+          echo "${HELM_SHA256}  $RUNNER_TEMP/helm.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/helm.tgz" -C "$RUNNER_TEMP" linux-amd64/helm
+          echo "$RUNNER_TEMP/linux-amd64" >> "$GITHUB_PATH"
+      - name: Package and push the chart
+        env:
+          OWNER: ${{ needs.version.outputs.owner }}
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bash deploy/helm/test-chart.sh
+          helm package deploy/helm/opspilot --destination "$RUNNER_TEMP/chart"
+          echo "$REGISTRY_TOKEN" | helm registry login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          helm push "$RUNNER_TEMP"/chart/opspilot-*.tgz "oci://ghcr.io/$OWNER/charts"

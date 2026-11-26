@@ -103,6 +103,8 @@ docker compose -f docker-compose.yml -f compose.connect.yml run --rm telemetry-g
 
 ## 3. Run the stack against your backends
 
+On Kubernetes, use the [Helm chart](kubernetes.md) instead: set `telemetry.prometheusUrl`, `lokiUrl`, `tempoUrl` and `signalProfile`. The rest of this section describes the Compose route.
+
 ```bash
 PROMETHEUS_URL=https://prometheus.internal LOKI_URL=https://loki.internal TEMPO_URL=https://tempo.internal \
 SIGNAL_PROFILE=opentelemetry-kubernetes CONSOLE_URL=https://opspilot.internal \

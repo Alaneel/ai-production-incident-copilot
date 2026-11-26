@@ -1,0 +1,12 @@
+apiVersion: v2
+name: opspilot
+description: Evidence-first incident diagnosis with human-approved remediation. Installs read-only by default.
+type: application
+version: 0.3.0
+appVersion: "0.3.0"
+kubeVersion: ">=1.27.0-0"
+home: https://github.com/Alaneel/ai-production-incident-copilot
+sources:
+  - https://github.com/Alaneel/ai-production-incident-copilot
+keywords: [incident, sre, observability, mcp, kubernetes, prometheus, loki, tempo]
+license: MIT
