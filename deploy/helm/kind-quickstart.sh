@@ -23,9 +23,6 @@ if kind get clusters | grep -Fxq "$cluster"; then
 fi
 
 kind create cluster --name "$cluster" --wait 120s
-# Every command below names this cluster's context explicitly.
-k() { kubectl --context "$context" "$@"; }
-
 image_args=()
 if [ -z "$tag" ]; then
   tag=local
@@ -36,15 +33,15 @@ if [ -z "$tag" ]; then
   image_args=(--set image.pullPolicy=Never)
 fi
 
-k create namespace shop
 helm install opspilot deploy/helm/opspilot --kube-context "$context" \
   --namespace opspilot --create-namespace --set image.tag="$tag" ${image_args[@]+"${image_args[@]}"} \
-  --set discovery.enabled=true --set 'targetNamespaces={shop}' --wait --timeout 6m
+  --wait --timeout 6m
 helm test opspilot --kube-context "$context" --namespace opspilot --logs --timeout 3m
 
 cat <<EOF
 
-OpsPilot is running on kind (demo telemetry, read-only).
+OpsPilot is running on kind with demo telemetry and no Kubernetes access.
+Ask it about payment-service to see a diagnosis stop at the approval boundary.
 
   kubectl --context $context -n opspilot port-forward svc/opspilot-orchestrator 8080:8080
   export OPSPILOT_READER_TOKEN=\$(kubectl --context $context -n opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}' | base64 -d)

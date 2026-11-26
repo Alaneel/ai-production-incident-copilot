@@ -46,31 +46,56 @@ jobs:
           kind load docker-image --name opspilot-chart \
             ghcr.io/alaneel/opspilot-orchestrator:ci ghcr.io/alaneel/opspilot-mcp-server:ci ghcr.io/alaneel/opspilot-telemetry-gateway:ci
           kubectl create namespace shop
-      - name: helm install (demo telemetry, discovery in one namespace)
+      - name: helm install (demo telemetry, no Kubernetes access)
         run: |
           helm install opspilot deploy/helm/opspilot --namespace opspilot --create-namespace \
-            --set image.tag=ci --set image.pullPolicy=Never \
-            --set discovery.enabled=true --set 'targetNamespaces={shop}' \
-            --wait --timeout 6m
+            --set image.tag=ci --set image.pullPolicy=Never --wait --timeout 6m
           helm status opspilot --namespace opspilot
       - name: helm test (read-only diagnosis; a reader cannot approve)
         run: helm test opspilot --namespace opspilot --logs --timeout 3m
+      - name: Demo diagnosis stops at the human approval boundary
+        run: |
+          kubectl --namespace opspilot exec deploy/opspilot-orchestrator -- python -c '
+          import json, os, urllib.request, urllib.error
+          token = os.environ["ORCHESTRATOR_READ_TOKEN"]
+          def post(path, body):
+              request = urllib.request.Request("http://127.0.0.1:8080" + path, json.dumps(body).encode(),
+                  {"Content-Type": "application/json", "Authorization": "Bearer " + token})
+              try:
+                  with urllib.request.urlopen(request, timeout=40) as response:
+                      return response.status, json.load(response)
+              except urllib.error.HTTPError as error:
+                  return error.code, None
+          status, body = post("/mcp", {"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {
+              "name": "diagnose_incident", "arguments": {"question": "Why is payment-service slow today?",
+              "service": "payment-service", "wait_seconds": 25}}})
+          view = body["result"]["structuredContent"]
+          print(view["incident_id"], view["status"], "|", view["hypotheses"][0]["cause"], "|", view["proposed_action"]["title"])
+          assert view["status"] == "waiting_approval", view["status"]
+          assert view["proposed_action"]["requires_approval"]
+          code, _ = post("/v1/incidents/" + view["incident_id"] + "/approval", {"decision": "approve",
+              "actor": "ci", "reason": "reader must not approve", "idempotency_key": "ci-reader-approval-1"})
+          assert code == 403, code
+          print("ok: proposal waits for a human; the reader token got 403")'
+          test "$(kubectl auth can-i get deployments --namespace default --as system:serviceaccount:opspilot:opspilot-mcp-server)" = no
+      - name: helm upgrade to discovery in one namespace keeps credentials
+        run: |
+          before="$(kubectl --namespace opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}')"
+          helm upgrade opspilot deploy/helm/opspilot --namespace opspilot --reuse-values \
+            --set discovery.enabled=true --set 'targetNamespaces={shop}' --wait --timeout 4m
+          after="$(kubectl --namespace opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}')"
+          test -n "$before" && test "$before" = "$after"
+          helm test opspilot --namespace opspilot --logs --timeout 3m
       - name: Kubernetes permissions are namespaced and read-only
         run: |
           sa=system:serviceaccount:opspilot:opspilot-mcp-server
           test "$(kubectl auth can-i get deployments --namespace shop --as "$sa")" = yes
+          test "$(kubectl auth can-i list replicasets --namespace shop --as "$sa")" = yes
           test "$(kubectl auth can-i patch deployments --namespace shop --as "$sa")" = no
           test "$(kubectl auth can-i get deployments --namespace default --as "$sa")" = no
           test "$(kubectl auth can-i list secrets --namespace opspilot --as "$sa")" = no
           test "$(kubectl auth can-i get deployments --namespace shop --as system:serviceaccount:opspilot:opspilot-orchestrator)" = no
           echo "RBAC checks passed"
-      - name: helm upgrade keeps generated credentials
-        run: |
-          before="$(kubectl --namespace opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}')"
-          helm upgrade opspilot deploy/helm/opspilot --namespace opspilot --reuse-values --set orchestrator.consoleUrl=http://console.test --wait --timeout 4m
-          after="$(kubectl --namespace opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}')"
-          test -n "$before" && test "$before" = "$after"
-          helm test opspilot --namespace opspilot --timeout 3m
       - name: Diagnostics on failure
         if: failure()
         run: |

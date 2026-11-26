@@ -16,7 +16,7 @@ The script:
 2. Builds the three images from your checkout.
 3. Installs the chart with demo telemetry.
 4. Runs `helm test`, which starts a real diagnosis through the MCP endpoint and checks that the reader credential **can't** approve it.
-5. Prints the port-forward and `claude mcp add` commands.
+5. Prints the port-forward and `claude mcp add` commands. Ask about `payment-service` to watch a demo diagnosis stop at the approval boundary.
 
 Once images are published, use `OPSPILOT_IMAGE_TAG=0.3.0` to skip the local build. Remove everything with:
 
@@ -95,7 +95,7 @@ remediation:
 
 Every grant is a namespaced Role bound to the MCP server's service account. The chart never creates a ClusterRole, and the orchestrator has no Kubernetes access at all. Even with `remediation.enabled`, each execution needs a named human approval with the operator credential, and a signed receipt bound to the exact Deployment identity that a server-side dry run verified.
 
-OpsPilot reads and acts in the namespace named by the incident's environment. Set `orchestrator.alerts.defaultEnvironment`, or the alert's `environment` label, to the service's namespace, and list that namespace in `targetNamespaces`.
+OpsPilot reads and acts in the namespace named by the incident's environment. With discovery on, it reads real rollout history, so a service with no Deployment in that namespace ends as *insufficient evidence* rather than a guess. Set `orchestrator.alerts.defaultEnvironment`, or the alert's `environment` label, to the service's namespace, and list that namespace in `targetNamespaces`.
 
 ## Credentials
 
@@ -123,11 +123,12 @@ To manage the credentials yourself, create a Secret with the keys from [`secret.
 
 [`deploy/helm/test-chart.sh`](../deploy/helm/test-chart.sh) renders the chart under a dozen value sets. It checks that the default has no Roles, no `patch` and no mounted token. It checks that RBAC stays namespaced, and that invalid combinations fail.
 
-The [`helm chart` workflow](../.github/workflows/chart.yml) builds the three images and installs the chart on a fresh kind cluster. It then:
+The [`helm chart` workflow](../.github/workflows/chart.yml) builds the three images and installs the demo chart on a fresh kind cluster. It then:
 
 - runs `helm test`;
-- checks with `kubectl auth can-i` that the MCP server can read but not patch Deployments in the target namespace, and has no access elsewhere;
-- confirms that `helm upgrade` keeps the credentials.
+- checks inside the cluster that a demo diagnosis reaches `waiting_approval` with a proposed rollback, and that the reader token gets 403 when it tries to approve;
+- upgrades to `discovery.enabled` for one namespace and confirms the upgrade keeps the credentials;
+- checks with `kubectl auth can-i` that the MCP server can read but not patch Deployments in that namespace, and has no access elsewhere.
 
 Version tags publish multi-arch images and the chart to GHCR with build provenance ([`release.yml`](../.github/workflows/release.yml)).
 
