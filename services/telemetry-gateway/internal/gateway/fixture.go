@@ -22,9 +22,16 @@ func (s *FixtureStore) QueryMetrics(_ context.Context, query MetricQuery) (Metri
 		value := baseline
 		if index >= 9 {
 			value = anomalous + float64(index-9)*(anomalous*0.03)
+			// A ratio cannot exceed 1: a saturated pool stays at 1.0, and the
+			// orchestrator rightly discards impossible ratio samples.
+			if unit == "ratio" {
+				value = min(value, 1)
+			}
 		}
 		points = append(points, MetricPoint{
-			Timestamp: query.Start.Add(time.Duration(index) * time.Minute),
+			// Samples end at the window's end, as live telemetry does, so the
+			// anomaly is current rather than half an hour old.
+			Timestamp: s.windowEnd(query.End).Add(-time.Duration(15-index) * time.Minute),
 			Value:     value,
 		})
 	}
@@ -35,6 +42,13 @@ func (s *FixtureStore) QueryMetrics(_ context.Context, query MetricQuery) (Metri
 		Points:     points,
 		DataOrigin: "synthetic",
 	}, nil
+}
+
+func (s *FixtureStore) windowEnd(end time.Time) time.Time {
+	if end.IsZero() {
+		return s.now()
+	}
+	return end
 }
 
 func fixtureMetricShape(metric string, service string) (float64, float64, string) {
@@ -57,7 +71,12 @@ func fixtureMetricShape(metric string, service string) (float64, float64, string
 	case "cache_miss_rate":
 		return 0, 0, "misses_per_second"
 	default:
-		return 630, 2360, "milliseconds"
+		// The demo incident: payment-service and its caller slow down;
+		// its own dependencies stay healthy, so the cause is local.
+		if service == "payment-service" || service == "checkout-api" {
+			return 630, 2360, "milliseconds"
+		}
+		return 120, 120, "milliseconds"
 	}
 }
 
@@ -79,7 +98,7 @@ func (s *FixtureStore) SearchLogs(_ context.Context, query LogSearch) ([]LogEven
 			fields["max"] = "50"
 		}
 		events = append(events, LogEvent{
-			Timestamp: query.Start.Add(time.Duration(index) * 3 * time.Second),
+			Timestamp: s.windowEnd(query.End).Add(-time.Duration(limit-1-index) * 3 * time.Second),
 			Level:     "ERROR",
 			Message:   message,
 			Fields:    fields,

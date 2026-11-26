@@ -1,0 +1,136 @@
+{{- $c := dict "root" . "component" "orchestrator" }}
+{{- $hasDatabase := include "opspilot.hasDatabase" . }}
+{{- $o := .Values.orchestrator }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+spec:
+  selector:
+    {{- include "opspilot.selector" $c | nindent 4 }}
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+spec:
+  # Without a database, incident state lives in one process; never split it.
+  replicas: {{ if $hasDatabase }}{{ $o.replicas }}{{ else }}1{{ end }}
+  selector:
+    matchLabels:
+      {{- include "opspilot.selector" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "opspilot.labels" $c | nindent 8 }}
+      annotations:
+        checksum/config: {{ toJson .Values | sha256sum | trunc 16 }}
+    spec:
+      serviceAccountName: {{ include "opspilot.name" $c }}
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "opspilot.podSecurity" . | nindent 8 }}
+      containers:
+        - name: orchestrator
+          image: {{ include "opspilot.image" $c }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: ORCHESTRATOR_AUTH_MODE
+              value: required
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "ORCHESTRATOR_READ_TOKEN" "key" "orchestrator-read-token") | nindent 12 }}
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "ORCHESTRATOR_OPERATOR_TOKEN" "key" "orchestrator-operator-token") | nindent 12 }}
+            - name: ORCHESTRATOR_OPERATOR_ACTOR
+              value: {{ .Values.auth.operatorActor | quote }}
+            {{- if $hasDatabase }}
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "DATABASE_URL" "key" "database-url") | nindent 12 }}
+            {{- end }}
+            {{- if .Values.redis.enabled }}
+            - name: REDIS_URL
+              value: redis://{{ include "opspilot.name" (dict "root" . "component" "redis") }}:6379/0
+            {{- end }}
+            - name: MCP_SERVER_URL
+              value: http://{{ include "opspilot.name" (dict "root" . "component" "mcp-server") }}:8082/mcp
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "MCP_READ_TOKEN" "key" "mcp-read-token") | nindent 12 }}
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "MCP_OPERATOR_TOKEN" "key" "mcp-operator-token") | nindent 12 }}
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "MCP_APPROVAL_SECRET" "key" "mcp-approval-secret") | nindent 12 }}
+            - name: CORS_ALLOWED_ORIGINS
+              value: {{ join "," $o.corsAllowedOrigins | default "http://localhost:3000" | quote }}
+            - name: CONSOLE_URL
+              value: {{ $o.consoleUrl | quote }}
+            - name: ALERT_SERVICE_LABELS
+              value: {{ $o.alerts.serviceLabels | quote }}
+            - name: ALERT_DEFAULT_ENVIRONMENT
+              value: {{ $o.alerts.defaultEnvironment | quote }}
+            - name: ALERT_MAX_DIAGNOSES_PER_WEBHOOK
+              value: {{ $o.alerts.maxDiagnosesPerWebhook | quote }}
+            - name: ALERT_MAX_CONCURRENT_DIAGNOSES
+              value: {{ $o.alerts.maxConcurrentDiagnoses | quote }}
+            - name: ALERT_DEDUPE_SECONDS
+              value: {{ $o.alerts.dedupeSeconds | quote }}
+            {{- if or $o.notifications.webhookUrl .Values.auth.existingSecret }}
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "NOTIFY_WEBHOOK_URL" "key" "notify-webhook-url" "optional" true) | nindent 12 }}
+            - name: NOTIFY_WEBHOOK_FORMAT
+              value: {{ $o.notifications.format | quote }}
+            {{- end }}
+            {{- if $o.model.name }}
+            - name: OPENAI_MODEL
+              value: {{ $o.model.name | quote }}
+            {{- if $o.model.baseUrl }}
+            - name: OPENAI_BASE_URL
+              value: {{ $o.model.baseUrl | quote }}
+            {{- end }}
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "OPENAI_API_KEY" "key" "openai-api-key" "optional" true) | nindent 12 }}
+            {{- end }}
+            - name: LANGGRAPH_STRICT_MSGPACK
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          resources:
+            {{- toYaml $o.resources | nindent 12 }}
+          securityContext:
+            {{- include "opspilot.containerSecurity" . | nindent 12 }}
+          volumeMounts:
+            - {name: tmp, mountPath: /tmp}
+      volumes:
+        - {name: tmp, emptyDir: {}}
+{{- if and $hasDatabase (gt (int $o.replicas) 1) }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      {{- include "opspilot.selector" $c | nindent 6 }}
+{{- end }}

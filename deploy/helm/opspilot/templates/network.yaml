@@ -1,0 +1,76 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "opspilot.fullname" . }}-internal
+  labels:
+    {{- include "opspilot.labels" (dict "root" . "component" "network") | nindent 4 }}
+spec:
+  # Every OpsPilot pod accepts traffic only from pods in this namespace...
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - podSelector: {}
+{{- if .Values.networkPolicy.ingressNamespaces }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "opspilot.fullname" . }}-api
+  labels:
+    {{- include "opspilot.labels" (dict "root" . "component" "network") | nindent 4 }}
+spec:
+  # ...and only the orchestrator API is reachable from the listed namespaces.
+  podSelector:
+    matchLabels:
+      {{- include "opspilot.selector" (dict "root" . "component" "orchestrator") | nindent 6 }}
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        {{- range .Values.networkPolicy.ingressNamespaces }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ . }}
+        {{- end }}
+      ports:
+        - protocol: TCP
+          port: 8080
+{{- end }}
+{{- end }}
+{{- if .Values.ingress.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "opspilot.fullname" . }}
+  labels:
+    {{- include "opspilot.labels" (dict "root" . "component" "orchestrator") | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- with .Values.ingress.tls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+    - {{- with .Values.ingress.host }}
+      host: {{ . }}
+      {{- end }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "opspilot.name" (dict "root" . "component" "orchestrator") }}
+                port:
+                  name: http
+{{- end }}

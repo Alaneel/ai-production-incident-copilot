@@ -2,7 +2,7 @@
 # Run the same steps as .github/workflows/ci.yml before pushing.
 #
 #   bash scripts/ci-local.sh            # everything
-#   bash scripts/ci-local.sh backend    # one stage: backend | evidence | frontend | gateway
+#   bash scripts/ci-local.sh backend    # one stage: backend | evidence | frontend | gateway | chart
 #
 # Differences from CI, stated rather than hidden:
 #   - CI starts an owned PostgreSQL fixture and rejects skipped tests. Locally
@@ -87,9 +87,18 @@ gateway() {
   )
 }
 
+chart() {
+  step "Helm chart render and policy checks (the kind install runs in CI)"
+  if ! command -v helm >/dev/null 2>&1; then
+    echo "helm is not installed; skipping chart checks (CI runs them in the helm chart workflow)."
+    return
+  fi
+  bash deploy/helm/test-chart.sh
+}
+
 case "$stage" in
-  all) backend; evidence; frontend; gateway ;;
-  backend|evidence|frontend|gateway) "$stage" ;;
-  *) echo "Unknown stage: $stage (use backend, evidence, frontend, gateway or no argument)" >&2; exit 2 ;;
+  all) backend; evidence; frontend; gateway; chart ;;
+  backend|evidence|frontend|gateway|chart) "$stage" ;;
+  *) echo "Unknown stage: $stage (use backend, evidence, frontend, gateway, chart or no argument)" >&2; exit 2 ;;
 esac
 printf '\nAll requested stages passed.\n'

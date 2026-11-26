@@ -1,0 +1,34 @@
+{{- $api := include "opspilot.name" (dict "root" . "component" "orchestrator") -}}
+{{- $secret := include "opspilot.secretName" . -}}
+OpsPilot {{ .Chart.AppVersion }} is installed in namespace {{ .Release.Namespace }}.
+
+Telemetry:   {{ if include "opspilot.liveTelemetry" . }}live ({{ .Values.telemetry.prometheusUrl }}){{ else }}demo fixtures. Set telemetry.prometheusUrl, lokiUrl and tempoUrl for real data{{ end }}
+Persistence: {{ if include "opspilot.hasDatabase" . }}PostgreSQL{{ else }}in memory, single replica; incidents are lost on restart{{ end }}
+Cluster:     {{ if .Values.remediation.enabled }}may restart or roll back Deployments in {{ join ", " .Values.targetNamespaces }} after a named human approves{{ else if .Values.discovery.enabled }}reads rollout history in {{ join ", " .Values.targetNamespaces }}; cannot change anything{{ else }}no Kubernetes access; cannot change anything{{ end }}
+
+{{- if and (or .Values.discovery.enabled .Values.remediation.enabled) (not (has .Values.orchestrator.alerts.defaultEnvironment .Values.targetNamespaces)) }}
+Note: orchestrator.alerts.defaultEnvironment ({{ .Values.orchestrator.alerts.defaultEnvironment }}) is not in targetNamespaces.
+OpsPilot reads rollout history in the namespace named by an incident's environment
+and fails closed elsewhere; give alerts an environment label or set the default.
+
+{{ end -}}
+1. Check the install (runs a read-only diagnosis and confirms a reader cannot approve):
+
+   helm test {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+2. Reach the API:
+
+   kubectl -n {{ .Release.Namespace }} port-forward svc/{{ $api }} 8080:8080
+   export OPSPILOT_READER_TOKEN=$(kubectl -n {{ .Release.Namespace }} get secret {{ $secret }} -o jsonpath='{.data.orchestrator-read-token}' | base64 -d)
+
+3. Connect an agent (diagnose and read only; no tool can approve):
+
+   claude mcp add --transport http opspilot http://localhost:8080/mcp \
+     --header "Authorization: Bearer $OPSPILOT_READER_TOKEN"
+
+4. Send alerts: point an Alertmanager webhook receiver at
+   http://{{ $api }}.{{ .Release.Namespace }}.svc:8080/v1/incidents/alerts/alertmanager
+   with the same bearer token{{ if and .Values.networkPolicy.enabled (not .Values.networkPolicy.ingressNamespaces) }}, and add Alertmanager's namespace to networkPolicy.ingressNamespaces{{ end }}.
+
+Approvals need the operator token (key orchestrator-operator-token), which
+records "{{ .Values.auth.operatorActor }}" as the approving actor. Keep it with your on-call engineers.
