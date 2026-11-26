@@ -6,7 +6,7 @@ Python · LangGraph · Go · MCP · PostgreSQL · Redis · React · Kubernetes
 
 OpsPilot correlates metrics, logs, traces, dependencies, deployments and runbooks to investigate production incidents. Its engineering focus is the boundary between **a diagnosis, an authorized operation, and verified recovery**: a proposal cannot execute itself, and an execution receipt cannot mark an incident resolved.
 
-[Run the offline demo](docs/demo.md) · [Connect your stack](docs/integrate.md) · [Inspect the evidence](docs/evidence.md) · [Architecture decisions](docs/architecture.md) · [Source tour](#source-tour)
+[Run the offline demo](docs/demo.md) · [Install on Kubernetes](docs/kubernetes.md) · [Connect your stack](docs/integrate.md) · [Inspect the evidence](docs/evidence.md) · [Architecture decisions](docs/architecture.md) · [Source tour](#source-tour)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/console-overview-dark.png">
@@ -68,6 +68,11 @@ OpsPilot reads your existing telemetry through one gateway, and you don't need t
 - **Alertmanager and Grafana webhooks**: firing alerts start [read-only diagnoses](docs/integrate.md#4-start-diagnoses-from-alertmanager-or-grafana) and return console links. A reader token can start diagnoses but never approve them.
 - **Inbox and notifications**: the console's incident inbox and `GET /v1/incidents` list what alerts started, and an optional Slack-compatible webhook tells a channel when a diagnosis [needs a human](docs/integrate.md#notify-a-channel-when-a-human-is-needed).
 - **MCP for your agents**: Claude Code, Cursor and other MCP clients can [diagnose through OpsPilot](docs/agents.md) and read cited evidence. No tool on that endpoint can approve or execute; a proposed fix still waits for a named human.
+- **Helm chart**: [`helm install`](docs/kubernetes.md) gives a read-only install by default. Read access, and then approved restarts and rollbacks, are granted per namespace through namespaced Roles. CI installs the chart on kind and runs `helm test`.
+
+```bash
+bash deploy/helm/kind-quickstart.sh     # throwaway kind cluster, demo telemetry, helm test
+```
 
 ```bash
 PROMETHEUS_URL=… LOKI_URL=… TEMPO_URL=… SIGNAL_PROFILE=opentelemetry-kubernetes \

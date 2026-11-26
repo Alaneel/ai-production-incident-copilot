@@ -1,0 +1,77 @@
+{{- $c := dict "root" . "component" "smoke-test" }}
+{{- $environment := .Values.orchestrator.alerts.defaultEnvironment }}
+{{- if or .Values.discovery.enabled .Values.remediation.enabled }}{{ $environment = first .Values.targetNamespaces }}{{ end }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  automountServiceAccountToken: false
+  securityContext:
+    {{- include "opspilot.podSecurity" . | nindent 4 }}
+  containers:
+    - name: smoke
+      # Reuses the orchestrator image so the test needs no extra pull.
+      image: {{ include "opspilot.image" (dict "root" . "component" "orchestrator") }}
+      imagePullPolicy: {{ .Values.image.pullPolicy }}
+      env:
+        - name: OPSPILOT_URL
+          value: http://{{ include "opspilot.name" (dict "root" . "component" "orchestrator") }}:8080
+        {{- include "opspilot.secretEnv" (dict "root" . "name" "READ_TOKEN" "key" "orchestrator-read-token") | nindent 8 }}
+        - {name: SMOKE_SERVICE, value: {{ .Values.tests.service | quote }}}
+        - {name: SMOKE_ENVIRONMENT, value: {{ $environment | quote }}}
+      command: ["python", "-c"]
+      args:
+        - |
+          import json, os, sys, urllib.error, urllib.request
+          base, token = os.environ["OPSPILOT_URL"], os.environ["READ_TOKEN"]
+          def post(path, body, auth=True):
+              headers = {"Content-Type": "application/json", "Accept": "application/json, text/event-stream"}
+              if auth:
+                  headers["Authorization"] = f"Bearer {token}"
+              request = urllib.request.Request(base + path, json.dumps(body).encode(), headers)
+              try:
+                  with urllib.request.urlopen(request, timeout=40) as response:
+                      return response.status, json.load(response)
+              except urllib.error.HTTPError as error:
+                  return error.code, None
+          def rpc(method, params=None, request_id=1):
+              status, body = post("/mcp", {"jsonrpc": "2.0", "id": request_id, "method": method, "params": params or {}})
+              assert status == 200, (method, status)
+              return body["result"]
+          health = json.load(urllib.request.urlopen(base + "/health", timeout=10))
+          print("health:", health)
+          assert post("/mcp", {"jsonrpc": "2.0", "id": 1, "method": "ping"}, auth=False)[0] == 401, "MCP must require a credential"
+          assert rpc("initialize", {"protocolVersion": "2025-06-18"})["protocolVersion"] == "2025-06-18"
+          tools = [tool["name"] for tool in rpc("tools/list")["tools"]]
+          assert tools == ["diagnose_incident", "get_incident", "list_incidents"], tools
+          service, environment = os.environ["SMOKE_SERVICE"], os.environ["SMOKE_ENVIRONMENT"]
+          result = rpc("tools/call", {"name": "diagnose_incident", "arguments": {
+              "question": f"Why is {service} slow today?", "service": service,
+              "environment": environment, "wait_seconds": 25}})
+          if result["isError"]:
+              sys.exit(f"diagnosis of {service} in {environment} failed: {result['content'][0]['text']} "
+                       "(with discovery on, tests.service must be a Deployment in that namespace)")
+          view = result["structuredContent"]
+          print("diagnosis:", view["incident_id"], view["status"], "|", view.get("next_step"))
+          assert view["status"] != "investigating", "diagnosis did not finish within 25 seconds"
+          approval = post(f"/v1/incidents/{view['incident_id']}/approval", {
+              "decision": "approve", "actor": "smoke-test", "reason": "reader must not approve",
+              "idempotency_key": "smoke-test-reader-0001"})
+          assert approval[0] == 403, ("a reader credential must not approve", approval[0])
+          print("ok: read-only diagnosis works and the reader credential cannot approve")
+      resources:
+        requests: {cpu: 50m, memory: 64Mi}
+        limits: {cpu: 500m, memory: 256Mi}
+      securityContext:
+        {{- include "opspilot.containerSecurity" . | nindent 8 }}
+      volumeMounts:
+        - {name: tmp, mountPath: /tmp}
+  volumes:
+    - {name: tmp, emptyDir: {}}

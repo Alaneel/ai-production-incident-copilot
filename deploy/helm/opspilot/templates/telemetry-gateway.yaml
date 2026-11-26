@@ -1,0 +1,103 @@
+{{- $c := dict "root" . "component" "telemetry-gateway" }}
+{{- $live := include "opspilot.liveTelemetry" . }}
+{{- $t := .Values.telemetry }}
+{{- if $t.signalProfileJson }}
+{{- if hasKey ($t.signalProfileJson | fromJson) "Error" }}
+{{- fail "telemetry.signalProfileJson is not valid JSON" }}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "opspilot.name" $c }}-profile
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+data:
+  profile.json: {{ $t.signalProfileJson | quote }}
+---
+{{- else if not (has $t.signalProfile (list "opentelemetry-kubernetes" "spring-boot-micrometer" "fault-lab")) }}
+{{- fail "telemetry.signalProfile must be opentelemetry-kubernetes, spring-boot-micrometer or fault-lab (or set telemetry.signalProfileJson)" }}
+{{- end }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+spec:
+  selector:
+    {{- include "opspilot.selector" $c | nindent 4 }}
+  ports:
+    - name: http
+      port: 8081
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "opspilot.name" $c }}
+  labels:
+    {{- include "opspilot.labels" $c | nindent 4 }}
+spec:
+  replicas: {{ .Values.telemetryGateway.replicas }}
+  selector:
+    matchLabels:
+      {{- include "opspilot.selector" $c | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "opspilot.labels" $c | nindent 8 }}
+      annotations:
+        checksum/config: {{ toJson .Values | sha256sum | trunc 16 }}
+    spec:
+      serviceAccountName: {{ include "opspilot.name" $c }}
+      automountServiceAccountToken: false
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- include "opspilot.podSecurity" . | nindent 8 }}
+      containers:
+        - name: telemetry-gateway
+          image: {{ include "opspilot.image" $c }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "TELEMETRY_GATEWAY_TOKEN" "key" "telemetry-gateway-token") | nindent 12 }}
+            {{- if $live }}
+            - {name: PROMETHEUS_URL, value: {{ $t.prometheusUrl | quote }}}
+            - {name: LOKI_URL, value: {{ $t.lokiUrl | quote }}}
+            - {name: TEMPO_URL, value: {{ $t.tempoUrl | quote }}}
+            {{- end }}
+            - name: TELEMETRY_SIGNAL_PROFILE
+              value: {{ if $t.signalProfileJson }}/etc/opspilot/custom-profile/profile.json{{ else }}/etc/opspilot/signal-profiles/{{ $t.signalProfile }}.json{{ end }}
+          ports:
+            - name: http
+              containerPort: 8081
+          readinessProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.telemetryGateway.resources | nindent 12 }}
+          securityContext:
+            {{- include "opspilot.containerSecurity" . | nindent 12 }}
+          {{- if $t.signalProfileJson }}
+          volumeMounts:
+            - {name: profile, mountPath: /etc/opspilot/custom-profile, readOnly: true}
+          {{- end }}
+      {{- if $t.signalProfileJson }}
+      volumes:
+        - name: profile
+          configMap:
+            name: {{ include "opspilot.name" $c }}-profile
+      {{- end }}

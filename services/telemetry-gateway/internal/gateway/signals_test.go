@@ -190,3 +190,24 @@ func unwrapAll(err error) error {
 		err = next.Unwrap()
 	}
 }
+
+func TestFixtureRatiosNeverExceedOne(t *testing.T) {
+	store := NewFixtureStore(time.Now)
+	start := time.Now().Add(-30 * time.Minute)
+	for _, metric := range []string{"db_pool_active_ratio", "request_error_rate", "cpu_utilization"} {
+		result, err := store.QueryMetrics(context.Background(), MetricQuery{Service: "payment-service", Metric: metric, Start: start, End: start.Add(16 * time.Minute)})
+		if err != nil {
+			t.Fatal(err)
+		}
+		peak := 0.0
+		for _, point := range result.Points {
+			if point.Value > 1 {
+				t.Fatalf("%s fixture sample %.3f exceeds a ratio of 1", metric, point.Value)
+			}
+			peak = max(peak, point.Value)
+		}
+		if metric == "db_pool_active_ratio" && peak != 1 {
+			t.Fatalf("payment-service pool fixture should saturate at 1.0, peaked at %.3f", peak)
+		}
+	}
+}
