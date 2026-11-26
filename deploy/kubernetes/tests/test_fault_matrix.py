@@ -139,7 +139,7 @@ def rejected(tmp_path, report, expected):
 
 
 def test_source_helper_retains_current_runner_corpus_and_package_inputs(source_snapshot):
-    assert len(source_snapshot) == 147
+    assert len(source_snapshot) == 148
     for context in ("postgres", "redis", "collector", "tempo", "prometheus", "loki", "grafana"):
         assert f"deploy/images/{context}-security/Dockerfile" in source_snapshot
     for context in ("collector", "tempo", "prometheus", "loki"):

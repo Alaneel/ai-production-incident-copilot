@@ -392,6 +392,13 @@ See the [dated results and remaining gaps](../docs/verification.md).
   notification webhook for alert-started diagnoses that need a human. The
   notification is an escaped pointer with no evidence, command or approval
   capability; delivery is best effort and never alters incident state.
+- An agent-facing MCP endpoint on the orchestrator (`POST /mcp`, Streamable
+  HTTP with JSON responses) with three tools: `diagnose_incident`,
+  `get_incident` and `list_incidents`. It accepts reader or operator API
+  credentials, refuses disallowed browser origins, applies the same input
+  guardrails, shares the background-diagnosis bound with alerts, and returns
+  bounded projections with evidence marked untrusted. It has no approval or
+  execution tool. See [agents.md](agents.md).
 - A repeatable four-service fault lab with eight bounded fault modes,
   Prometheus, Loki, Tempo, an OpenTelemetry Collector, a
   provisioned Grafana dashboard, continuous traffic, and a machine-verifiable

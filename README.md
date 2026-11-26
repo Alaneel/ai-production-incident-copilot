@@ -34,7 +34,7 @@ OpsPilot correlates metrics, logs, traces, dependencies, deployments and runbook
 
 ![Retained synthetic workflow results, with source and case-record provenance](docs/assets/evidence.svg)
 
-The graphic uses two **2026-11-25 UTC synthetic snapshot runs**: 150 single-fault cases (120 fault cases plus 30 controls), and 32 cross-service cases. The workflow retained 75 explicit rejections of destructive proposals and made zero execution attempts. Both runs made zero model calls. The rendering script verifies paired case-record hashes, source fingerprints, exact runtime/build lock hashes, the CPython 3.13.16 package provenance and declared release image/recipe hashes (the replay does not execute those images). The earlier 2026-11-22, 2026-11-21 and 2026-10-07 UTC artifacts remain separately retained.
+The graphic uses two **2026-11-26 UTC synthetic snapshot runs**: 150 single-fault cases (120 fault cases plus 30 controls), and 32 cross-service cases. The workflow retained 75 explicit rejections of destructive proposals and made zero execution attempts. Both runs made zero model calls. The rendering script verifies paired case-record hashes, source fingerprints, exact runtime/build lock hashes, the CPython 3.13.16 package provenance and declared release image/recipe hashes (the replay does not execute those images). The earlier 2026-11-25, 2026-11-22, 2026-11-21 and 2026-10-07 UTC artifacts remain separately retained.
 
 These artifacts establish deterministic workflow contracts. They do not establish model accuracy, semantic faithfulness, live root-cause accuracy or causal repair efficacy. The [evidence guide](docs/evidence.md) separates these runs from historical PostgreSQL and Kubernetes experiments. The retained [ten-case demo result](docs/assets/demo-result.json), recorded during release preparation, provides a smaller reproducible entry point.
 
@@ -67,6 +67,7 @@ OpsPilot reads your existing telemetry through one gateway, and you don't need t
 - **Connection check**: `gateway check --service <name>` runs every query a diagnosis would make and shows which ones return data.
 - **Alertmanager webhook**: firing alerts start [read-only diagnoses](docs/integrate.md#4-start-diagnoses-from-alertmanager) and return console links. A reader token can start diagnoses but never approve them.
 - **Inbox and notifications**: the console's incident inbox and `GET /v1/incidents` list what alerts started, and an optional Slack-compatible webhook tells a channel when a diagnosis [needs a human](docs/integrate.md#notify-a-channel-when-a-human-is-needed).
+- **MCP for your agents**: Claude Code, Cursor and other MCP clients can [diagnose through OpsPilot](docs/agents.md) and read cited evidence. No tool on that endpoint can approve or execute; a proposed fix still waits for a named human.
 
 ```bash
 PROMETHEUS_URL=… LOKI_URL=… TEMPO_URL=… SIGNAL_PROFILE=opentelemetry-kubernetes \
