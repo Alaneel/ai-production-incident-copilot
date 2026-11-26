@@ -2,13 +2,14 @@ import json
 import os
 import unittest
 from datetime import UTC, datetime
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 from fastapi.testclient import TestClient
 
 import incident_copilot.api as api_module
 from incident_copilot.agent_mcp import MAX_EVIDENCE, agent_view, negotiate_version, tool_definitions
 from incident_copilot.api import app
+from incident_copilot.mcp_client import McpToolError
 from incident_copilot.models import Evidence, EvidenceKind, Hypothesis, IncidentState, IncidentStatus
 
 READ = "r" * 40
@@ -125,6 +126,29 @@ class DiagnosisTests(unittest.TestCase):
             self.assertTrue(injected["isError"])
             self.assertIn("safety checks", injected["content"][0]["text"])
             self.assertEqual(client.get("/v1/incidents").json()["count"], 0)
+
+    def test_a_failed_background_run_is_reported_not_left_investigating(self):
+        with TestClient(app) as client:
+            # Discovery outside an allowed namespace fails closed like this.
+            app.state.workflow.tools.get_recent_deployments = AsyncMock(side_effect=McpToolError("namespace not allowed"))
+            failed = call(client, "diagnose_incident", {"question": "Why is payment-service slow today?",
+                                                        "service": "payment-service", "wait_seconds": 25})["result"]
+            self.assertTrue(failed["isError"])
+            text = failed["content"][0]["text"]
+            self.assertIn("stopped before it finished (McpToolError)", text)
+            self.assertIn("nothing was changed", text)
+            self.assertNotIn("namespace not allowed", text)  # error class only, never provider detail
+            incident_id = text.split()[1]
+            again = call(client, "get_incident", {"incident_id": incident_id})["result"]
+            self.assertTrue(again["isError"])
+            self.assertIn("stopped before it finished", again["content"][0]["text"])
+
+    def test_failure_memory_is_bounded(self):
+        with TestClient(app) as client, patch.object(api_module, "MAX_REMEMBERED_FAILURES", 2):
+            app.state.workflow.tools.get_recent_deployments = AsyncMock(side_effect=McpToolError("down"))
+            for _ in range(3):
+                call(client, "diagnose_incident", {"question": "Why is payment-service slow today?", "wait_seconds": 25})
+            self.assertEqual(len(app.state.failed_diagnoses), 2)
 
     def test_background_capacity_is_bounded(self):
         with TestClient(app) as client, patch.object(api_module, "MAX_PENDING_BACKGROUND_DIAGNOSES", 0):

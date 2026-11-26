@@ -4,6 +4,7 @@ import asyncio
 import json
 import logging
 import os
+from collections import OrderedDict
 from contextlib import AsyncExitStack, asynccontextmanager, suppress
 from typing import AsyncIterator
 from datetime import UTC, datetime
@@ -75,6 +76,9 @@ DIAGNOSIS_STREAM_HEARTBEAT_SECONDS = 5.0
 DIAGNOSIS_STREAM_MAX_FRAME_BYTES = 8 * 1024 * 1024
 # Background diagnoses (alerts and agents) beyond this many are refused, not queued.
 MAX_PENDING_BACKGROUND_DIAGNOSES = 10
+# Background diagnoses that stopped early, remembered per process so readers
+# are told the run failed instead of seeing a partial checkpoint as running.
+MAX_REMEMBERED_FAILURES = 500
 EVENT_DELIVERY_RESPONSE_HEADERS = {
     "X-Incident-Event-Delivery": {
         "description": "Event delivery after canonical persistence. checkpoint-fallback means delivery was not confirmed; it does not imply cache rollback. May be absent when publication was not attempted.",
@@ -110,6 +114,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.alert_slots = asyncio.Semaphore(app.state.alert_settings["max_concurrent"])
     app.state.alert_dedupe = AlertDeduplicator(ttl_seconds=app.state.alert_settings["dedupe_seconds"])
     app.state.alert_tasks = set()
+    app.state.failed_diagnoses = OrderedDict()
     app.state.notifications = NotificationSettings.from_environment(os.environ)
     async with AsyncExitStack() as stack:
         async with _runtime_lifespan(app, stack):
@@ -390,6 +395,10 @@ async def _diagnose_alert(app: FastAPI, request_body: IncidentQuestion, incident
             raise
         except Exception as error:  # noqa: BLE001 - background run; report class only
             logger.warning("alert diagnosis %s did not complete: %s", incident_id, type(error).__name__)
+            failures = app.state.failed_diagnoses
+            failures[incident_id] = type(error).__name__
+            while len(failures) > MAX_REMEMBERED_FAILURES:
+                failures.popitem(last=False)
             return
     # Nobody is watching an alert-started run: point a human at the result.
     # Sent only after the canonical save; delivery never alters the incident.
@@ -430,7 +439,7 @@ def _agent_tools(app: FastAPI) -> AgentTools:
         return await app.state.repository.list_recent(limit=limit, status=incident_status)
 
     return AgentTools(start=start, read=lambda incident_id: _read_incident(app, incident_id),
-                      list_recent=list_recent,
+                      list_recent=list_recent, failure=app.state.failed_diagnoses.get,
                       console_link=lambda incident_id: console_link(app.state.alert_settings["console_url"], incident_id))
 
 

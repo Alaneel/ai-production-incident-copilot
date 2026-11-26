@@ -176,12 +176,21 @@ StartDiagnosis = Callable[[DiagnoseArguments], Awaitable[tuple[str, "asyncio.Tas
 ReadIncident = Callable[[str], Awaitable[IncidentState | None]]
 ListIncidents = Callable[[int, str | None], Awaitable[list[dict]]]
 ConsoleLink = Callable[[str], str | None]
+Failure = Callable[[str], str | None]
+
+FAILED_MESSAGE = (
+    "Diagnosis {incident_id} stopped before it finished ({reason}); nothing was changed. A tool or store it "
+    "needs was unavailable. With Kubernetes discovery on, check that the environment names a namespace "
+    "OpsPilot may read and that the service is a Deployment there; otherwise run `gateway check --service "
+    "<name>` to check the telemetry backends."
+)
 
 
 class AgentTools:
     def __init__(self, *, start: StartDiagnosis, read: ReadIncident, list_recent: ListIncidents,
-                 console_link: ConsoleLink) -> None:
+                 console_link: ConsoleLink, failure: Failure | None = None) -> None:
         self._start = start
+        self._failure = failure or (lambda _incident_id: None)
         self._read = read
         self._list = list_recent
         self._console_link = console_link
@@ -200,6 +209,7 @@ class AgentTools:
             return await self._diagnose(arguments)
         if isinstance(arguments, IncidentArguments):
             state = await self._read(arguments.incident_id)
+            self._raise_if_failed(arguments.incident_id, state)
             if state is None:
                 raise AgentToolError(f"Incident {arguments.incident_id} was not found.")
             return agent_view(state, self._console_link(state.incident_id))
@@ -213,6 +223,7 @@ class AgentTools:
         if arguments.wait_seconds:
             await asyncio.wait({task}, timeout=arguments.wait_seconds)
         state = await self._read(incident_id)
+        self._raise_if_failed(incident_id, state)
         if state is None:
             if task.done():
                 raise AgentToolError("The diagnosis did not complete; no incident was retained. "
@@ -226,3 +237,10 @@ class AgentTools:
             # than presenting an unsaved state as final.
             view["next_step"] = _NEXT_STEPS[IncidentStatus.INVESTIGATING]
         return view
+
+    def _raise_if_failed(self, incident_id: str, state: IncidentState | None) -> None:
+        # A failed run can leave a partial checkpoint that still reads as
+        # investigating; never present it as running.
+        reason = self._failure(incident_id)
+        if reason and (state is None or state.status is IncidentStatus.INVESTIGATING):
+            raise AgentToolError(FAILED_MESSAGE.format(incident_id=incident_id, reason=reason))
