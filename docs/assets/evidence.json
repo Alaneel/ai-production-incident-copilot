@@ -1,7 +1,7 @@
 {
   "measured_at": [
-    "2026-11-26T10:24:56.616890+00:00",
-    "2026-11-26T10:24:58.436389+00:00"
+    "2026-11-26T10:42:46.810473+00:00",
+    "2026-11-26T10:42:48.551826+00:00"
   ],
   "source_scope_verified": true,
   "source_fingerprint_counts": [
@@ -9,8 +9,8 @@
     39
   ],
   "artifacts": [
-    "evals/results/workflow_benchmark_20261126T102456Z_140f160c.json",
-    "evals/results/cross_service_benchmark_20261126T102458Z_000d6d2540124d2c8325c6261ba20649.json"
+    "evals/results/workflow_benchmark_20261126T104246Z_55083661.json",
+    "evals/results/cross_service_benchmark_20261126T104248Z_66fee23d62cf4183b69bebc15fd83548.json"
   ],
   "single_fault_snapshots": {
     "cases": 150,

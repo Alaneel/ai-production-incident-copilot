@@ -65,7 +65,7 @@ OpsPilot reads your existing telemetry through one gateway, and you don't need t
 
 - **Signal profiles**: a JSON [signal profile](docs/integrate.md#1-map-your-telemetry-with-a-signal-profile) maps the canonical signals onto your PromQL, Loki labels and trace attributes. Presets cover OpenTelemetry on Kubernetes and Spring Boot/Micrometer.
 - **Connection check**: `gateway check --service <name>` runs every query a diagnosis would make and shows which ones return data.
-- **Alertmanager webhook**: firing alerts start [read-only diagnoses](docs/integrate.md#4-start-diagnoses-from-alertmanager) and return console links. A reader token can start diagnoses but never approve them.
+- **Alertmanager and Grafana webhooks**: firing alerts start [read-only diagnoses](docs/integrate.md#4-start-diagnoses-from-alertmanager-or-grafana) and return console links. A reader token can start diagnoses but never approve them.
 - **Inbox and notifications**: the console's incident inbox and `GET /v1/incidents` list what alerts started, and an optional Slack-compatible webhook tells a channel when a diagnosis [needs a human](docs/integrate.md#notify-a-channel-when-a-human-is-needed).
 - **MCP for your agents**: Claude Code, Cursor and other MCP clients can [diagnose through OpsPilot](docs/agents.md) and read cited evidence. No tool on that endpoint can approve or execute; a proposed fix still waits for a named human.
 
