@@ -22,9 +22,12 @@ expect_failure() {
 }
 
 echo "lint"
-helm lint . --strict >/dev/null && pass "helm lint --strict" || fail "helm lint --strict"
-helm lint . --strict --set discovery.enabled=true --set remediation.enabled=true \
-  --set 'targetNamespaces={shop}' >/dev/null && pass "lint with remediation" || fail "lint with remediation"
+lint() {
+  local name="$1" output; shift
+  if output="$(helm lint . --strict "$@" 2>&1)"; then pass "$name"; else fail "$name"; printf '%s\n' "$output" | grep -vE '^$|^==>' | sed 's/^/       /'; fi
+}
+lint "helm lint --strict"
+lint "lint with remediation" --set discovery.enabled=true --set remediation.enabled=true --set 'targetNamespaces={shop}'
 
 echo "default install is a read-only demo"
 default="$(render)"
@@ -83,7 +86,7 @@ echo "invalid combinations fail at render time"
 expect_failure "partial telemetry" "must be set together" --set telemetry.prometheusUrl=http://prom:9090
 expect_failure "remediation without namespaces" "need at least one entry in targetNamespaces" --set remediation.enabled=true
 expect_failure "unknown preset" "telemetry.signalProfile must be" --set telemetry.signalProfile=nope
-expect_failure "invalid profile JSON" "not valid JSON" --set telemetry.signalProfileJson='{oops'
+expect_failure "invalid profile JSON" "not valid JSON" --set-json 'telemetry.signalProfileJson="{oops"'
 
 if [ "$failures" -gt 0 ]; then
   echo "$failures chart check(s) failed" >&2
