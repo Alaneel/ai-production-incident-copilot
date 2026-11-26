@@ -9,4 +9,5 @@ home: https://github.com/Alaneel/ai-production-incident-copilot
 sources:
   - https://github.com/Alaneel/ai-production-incident-copilot
 keywords: [incident, sre, observability, mcp, kubernetes, prometheus, loki, tempo]
-license: MIT
+annotations:
+  licenses: MIT
