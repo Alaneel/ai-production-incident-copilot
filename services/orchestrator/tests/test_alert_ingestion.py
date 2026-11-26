@@ -153,5 +153,60 @@ class AlertWebhookApiTests(unittest.TestCase):
             self.wait_for(client, ok.json()["accepted"][0]["incident_id"], headers={"Authorization": f"Bearer {read}"})
 
 
+def grafana_webhook(*alerts):
+    # Shape of Grafana Alerting's webhook contact point (version 1), with the
+    # Grafana-only fields OpsPilot ignores.
+    return {"receiver": "opspilot", "status": "firing", "orgId": 1, "version": "1", "state": "alerting",
+            "groupKey": "{}/{}:{alertname=\"Checkout p95 latency\"}", "truncatedAlerts": 0,
+            "groupLabels": {"alertname": "Checkout p95 latency"}, "commonLabels": {}, "commonAnnotations": {},
+            "externalURL": "https://grafana.example.test/", "title": "[FIRING:1] Checkout p95 latency",
+            "message": "**Firing**", "alerts": list(alerts)}
+
+
+def grafana_alert(labels, *, status="firing", fingerprint="0a1b2c3d4e5f6071"):
+    return {"status": status, "labels": labels,
+            "annotations": {"summary": "checkout p95 above 1.5s", "description": "p95 has been above 1.5s for 10m"},
+            "startsAt": "2026-11-26T09:00:00Z", "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "https://grafana.example.test/alerting/grafana/abc/view", "fingerprint": fingerprint,
+            "silenceURL": "https://grafana.example.test/alerting/silence/new", "dashboardURL": "", "panelURL": "",
+            "imageURL": "", "values": {"B": 1734.2, "C": 1}, "valueString": "[ var='B' value=1734.2 ]"}
+
+
+class GrafanaAlertTests(unittest.TestCase):
+    def test_grafana_contact_point_payload_starts_a_read_only_diagnosis(self):
+        with TestClient(app) as client:
+            response = client.post("/v1/incidents/alerts/grafana", json=grafana_webhook(
+                grafana_alert({"alertname": "Checkout p95 latency", "grafana_folder": "Shop",
+                               "service_name": "payment-service", "severity": "critical", "env": "staging"}),
+                grafana_alert({"alertname": "TestAlert", "instance": "Grafana"}, fingerprint="57c6d9296de2ad39"),
+                grafana_alert({"alertname": "Checkout p95 latency", "service_name": "checkout"}, status="resolved"),
+            ))
+            self.assertEqual(response.status_code, 202)
+            body = response.json()
+            self.assertEqual(len(body["accepted"]), 1)
+            accepted = body["accepted"][0]
+            self.assertEqual((accepted["service"], accepted["environment"]), ("payment-service", "staging"))
+            # Grafana's "Test" button sends an alert without a service label.
+            self.assertEqual([item["alertname"] for item in body["skipped"]], ["TestAlert", "Checkout p95 latency"])
+            self.assertEqual(body["skipped"][1]["reason"], "resolved")
+            state = AlertWebhookApiTests.wait_for(self, client, accepted["incident_id"])
+            self.assertTrue(state["question"].startswith("Alert Checkout p95 latency is firing for payment-service (severity critical)"))
+            self.assertIsNone(state["approval_decision"])
+
+    def test_grafana_route_shares_auth_and_deduplication_with_alertmanager(self):
+        read = "r" * 40
+        environment = {"ORCHESTRATOR_AUTH_MODE": "required", "ORCHESTRATOR_READ_TOKEN": read,
+                       "ORCHESTRATOR_OPERATOR_TOKEN": "o" * 40, "ORCHESTRATOR_OPERATOR_ACTOR": "oncall-operator"}
+        payload = grafana_webhook(grafana_alert({"alertname": "Ledger errors", "service_name": "ledger"}, fingerprint="feedbeef01"))
+        with patch.dict(os.environ, environment), TestClient(app) as client:
+            self.assertEqual(client.post("/v1/incidents/alerts/grafana", json=payload).status_code, 401)
+            headers = {"Authorization": f"Bearer {read}"}
+            first = client.post("/v1/incidents/alerts/grafana", json=payload, headers=headers).json()
+            self.assertEqual(len(first["accepted"]), 1)
+            repeat = client.post("/v1/incidents/alerts/grafana", json=payload, headers=headers).json()
+            self.assertEqual(repeat["skipped"][-1]["reason"], "already diagnosing")
+            AlertWebhookApiTests.wait_for(self, client, first["accepted"][0]["incident_id"], headers=headers)
+
+
 if __name__ == "__main__":
     unittest.main()

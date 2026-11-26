@@ -512,9 +512,12 @@ async def agent_mcp(request: Request) -> Response:
 
 
 @app.post("/v1/incidents/alerts/alertmanager", status_code=status.HTTP_202_ACCEPTED)
+@app.post("/v1/incidents/alerts/grafana", status_code=status.HTTP_202_ACCEPTED)
 async def ingest_alertmanager(payload: AlertmanagerWebhook, request: Request) -> dict:
-    """Alertmanager webhook receiver. Each firing alert with a service label
-    starts one read-only diagnosis; remediation still waits for a human.
+    """Alertmanager and Grafana Alerting webhook receiver. Grafana's webhook
+    contact point sends the Alertmanager alert shape plus extra fields, which
+    are ignored. Each firing alert with a service label starts one read-only
+    diagnosis; remediation still waits for a human.
 
     Returns immediately: diagnoses run in the background and are read with
     GET /v1/incidents/{incident_id} or opened from console_url."""

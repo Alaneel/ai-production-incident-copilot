@@ -136,7 +136,7 @@ patches:
 
 Deployment history and approved restart/rollback use the Kubernetes API through the MCP server; see the [Kubernetes guide](../deploy/kubernetes/README.md) for its namespace-scoped RBAC.
 
-## 4. Start diagnoses from Alertmanager
+## 4. Start diagnoses from Alertmanager or Grafana
 
 Point an Alertmanager receiver at the orchestrator. When the API runs with `ORCHESTRATOR_AUTH_MODE=required`, use the **reader** token: the webhook can start diagnoses but can never approve one.
 
@@ -183,6 +183,21 @@ Repeat notifications for the same alert fingerprint return the existing incident
 | `ALERT_DEFAULT_ENVIRONMENT` | `prod-sg` | Used when the alert has no `environment`/`env` label |
 
 Opening the console link loads the incident read-only. Restore it with your reader credentials, review the cited evidence, and approve or reject the proposal there.
+
+### Grafana Alerting
+
+Grafana-managed alerts work the same way. Add a **Webhook** contact point:
+
+| Field | Value |
+|---|---|
+| URL | `https://opspilot-api.internal/v1/incidents/alerts/grafana` |
+| HTTP method | `POST` |
+| Authorization header: scheme | `Bearer` |
+| Authorization header: credentials | the reader token |
+
+Then route the alerts you want diagnosed to it with a notification policy. Use **Continue matching** to keep your existing contact points. Grafana sends the Alertmanager alert shape plus fields of its own (`values`, `generatorURL`, `title`), which OpsPilot ignores.
+
+The service comes from the same `ALERT_SERVICE_LABELS`. Give the alert rule a `service` label, or keep a `service_name` or `job` label from the query. Grafana's **Test** button sends an alert without a service label. It appears under `skipped` with the reason, which is a quick way to check the contact point and its token. Deduplication, limits and console links are shared with the Alertmanager route.
 
 ### Find alert-started incidents
 
