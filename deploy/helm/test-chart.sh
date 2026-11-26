@@ -49,6 +49,8 @@ expect_contains "Role in payments" "namespace: payments" "$discovery"
 expect_absent "no patch permission" '"patch"' "$discovery"
 expect_absent "no ClusterRole" "ClusterRole" "$discovery"
 expect_contains "MCP token mounted" "automountServiceAccountToken: true" "$discovery"
+smoke="$(render --set discovery.enabled=true --set 'targetNamespaces={shop,payments}' --show-only templates/tests/smoke.yaml)"
+expect_contains "helm test diagnoses in the first target namespace" $'name: SMOKE_ENVIRONMENT, value: "shop"' "$smoke"
 
 echo "remediation: patch only on Deployments in the listed namespaces"
 remediation="$(render --set remediation.enabled=true --set 'targetNamespaces={shop}')"

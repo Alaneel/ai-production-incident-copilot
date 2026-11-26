@@ -121,3 +121,10 @@ ingress:
   host: ""
   annotations: {}
   tls: []
+
+tests:
+  # Service the `helm test` diagnosis asks about. With discovery or
+  # remediation enabled, the diagnosis runs in the first targetNamespaces
+  # entry, and this must be a Deployment there: OpsPilot fails closed
+  # rather than diagnose a service whose rollout history it cannot read.
+  service: payment-service

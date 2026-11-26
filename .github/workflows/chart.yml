@@ -84,12 +84,34 @@ jobs:
           test "$(kubectl auth can-i get deployments --namespace default --as system:serviceaccount:opspilot:opspilot-mcp-server)" = no
       - name: helm upgrade to discovery in one namespace keeps credentials
         run: |
+          # A real Deployment for discovery to read, in the target namespace.
+          kubectl --namespace shop create deployment payment-service --image=registry.k8s.io/pause:3.10
+          kubectl --namespace shop rollout status deployment/payment-service --timeout 120s
           before="$(kubectl --namespace opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}')"
           helm upgrade opspilot deploy/helm/opspilot --namespace opspilot --reuse-values \
-            --set discovery.enabled=true --set 'targetNamespaces={shop}' --wait --timeout 4m
+            --set discovery.enabled=true --set 'targetNamespaces={shop}' --set orchestrator.alerts.defaultEnvironment=shop \
+            --wait --timeout 4m
           after="$(kubectl --namespace opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}')"
           test -n "$before" && test "$before" = "$after"
           helm test opspilot --namespace opspilot --logs --timeout 3m
+      - name: Discovery reads the real Deployment's rollout history
+        run: |
+          kubectl --namespace opspilot exec deploy/opspilot-orchestrator -- python -c '
+          import json, os, urllib.request
+          request = urllib.request.Request("http://127.0.0.1:8080/mcp", json.dumps({"jsonrpc": "2.0", "id": 1,
+              "method": "tools/call", "params": {"name": "diagnose_incident", "arguments": {
+              "question": "Why is payment-service slow today?", "service": "payment-service", "environment": "shop",
+              "wait_seconds": 25}}}).encode(), {"Content-Type": "application/json",
+              "Authorization": "Bearer " + os.environ["ORCHESTRATOR_READ_TOKEN"]})
+          result = json.load(urllib.request.urlopen(request, timeout=40))["result"]
+          assert not result["isError"], result
+          incident_id = result["structuredContent"]["incident_id"]
+          state = json.load(urllib.request.urlopen(urllib.request.Request(
+              "http://127.0.0.1:8080/v1/incidents/" + incident_id,
+              headers={"Authorization": "Bearer " + os.environ["ORCHESTRATOR_READ_TOKEN"]}), timeout=10))
+          sources = sorted({item["source"] for item in state["evidence"] if item["kind"] == "deployment"})
+          print(incident_id, state["status"], sources)
+          assert "kubernetes-api-owned-revision-history" in sources, sources'
       - name: Kubernetes permissions are namespaced and read-only
         run: |
           sa=system:serviceaccount:opspilot:opspilot-mcp-server

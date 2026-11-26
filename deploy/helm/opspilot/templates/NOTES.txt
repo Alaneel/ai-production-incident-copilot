@@ -6,6 +6,12 @@ Telemetry:   {{ if include "opspilot.liveTelemetry" . }}live ({{ .Values.telemet
 Persistence: {{ if include "opspilot.hasDatabase" . }}PostgreSQL{{ else }}in memory, single replica; incidents are lost on restart{{ end }}
 Cluster:     {{ if .Values.remediation.enabled }}may restart or roll back Deployments in {{ join ", " .Values.targetNamespaces }} after a named human approves{{ else if .Values.discovery.enabled }}reads rollout history in {{ join ", " .Values.targetNamespaces }}; cannot change anything{{ else }}no Kubernetes access; cannot change anything{{ end }}
 
+{{- if and (or .Values.discovery.enabled .Values.remediation.enabled) (not (has .Values.orchestrator.alerts.defaultEnvironment .Values.targetNamespaces)) }}
+Note: orchestrator.alerts.defaultEnvironment ({{ .Values.orchestrator.alerts.defaultEnvironment }}) is not in targetNamespaces.
+OpsPilot reads rollout history in the namespace named by an incident's environment
+and fails closed elsewhere; give alerts an environment label or set the default.
+
+{{ end -}}
 1. Check the install (runs a read-only diagnosis and confirms a reader cannot approve):
 
    helm test {{ .Release.Name }} -n {{ .Release.Namespace }}

@@ -1,4 +1,6 @@
 {{- $c := dict "root" . "component" "smoke-test" }}
+{{- $environment := .Values.orchestrator.alerts.defaultEnvironment }}
+{{- if or .Values.discovery.enabled .Values.remediation.enabled }}{{ $environment = first .Values.targetNamespaces }}{{ end }}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -22,6 +24,8 @@ spec:
         - name: OPSPILOT_URL
           value: http://{{ include "opspilot.name" (dict "root" . "component" "orchestrator") }}:8080
         {{- include "opspilot.secretEnv" (dict "root" . "name" "READ_TOKEN" "key" "orchestrator-read-token") | nindent 8 }}
+        - {name: SMOKE_SERVICE, value: {{ .Values.tests.service | quote }}}
+        - {name: SMOKE_ENVIRONMENT, value: {{ $environment | quote }}}
       command: ["python", "-c"]
       args:
         - |
@@ -47,9 +51,13 @@ spec:
           assert rpc("initialize", {"protocolVersion": "2025-06-18"})["protocolVersion"] == "2025-06-18"
           tools = [tool["name"] for tool in rpc("tools/list")["tools"]]
           assert tools == ["diagnose_incident", "get_incident", "list_incidents"], tools
+          service, environment = os.environ["SMOKE_SERVICE"], os.environ["SMOKE_ENVIRONMENT"]
           result = rpc("tools/call", {"name": "diagnose_incident", "arguments": {
-              "question": "Why is payment-service slow today?", "service": "payment-service", "wait_seconds": 25}})
-          assert not result["isError"], result
+              "question": f"Why is {service} slow today?", "service": service,
+              "environment": environment, "wait_seconds": 25}})
+          if result["isError"]:
+              sys.exit(f"diagnosis of {service} in {environment} failed: {result['content'][0]['text']} "
+                       "(with discovery on, tests.service must be a Deployment in that namespace)")
           view = result["structuredContent"]
           print("diagnosis:", view["incident_id"], view["status"], "|", view.get("next_step"))
           assert view["status"] != "investigating", "diagnosis did not finish within 25 seconds"
