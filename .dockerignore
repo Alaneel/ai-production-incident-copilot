@@ -32,6 +32,9 @@
 !services/telemetry-gateway/cmd/**
 !services/telemetry-gateway/internal
 !services/telemetry-gateway/internal/**
+!deploy
+!deploy/signal-profiles
+!deploy/signal-profiles/*.json
 **/.env*
 **/.kube/**
 **/hosting.local.json
