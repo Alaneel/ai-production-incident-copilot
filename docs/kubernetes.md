@@ -106,8 +106,23 @@ Without `auth.existingSecret`, the chart generates random credentials once in `o
 | `orchestrator-read-token` | Console readers, Alertmanager, MCP clients. Can start and read diagnoses, can't approve. |
 | `orchestrator-operator-token` | On-call engineers. Approves as `auth.operatorActor`. |
 | `mcp-*`, `telemetry-gateway-token` | Service-to-service only |
+| `anthropic-api-key` or `openai-api-key` | Optional model reasoning; only with `auth.existingSecret` |
 
 To manage the credentials yourself, create a Secret with the keys from [`secret.example.yaml`](../deploy/kubernetes/secret.example.yaml), including `database-url`, and set `auth.existingSecret`.
+
+### Model reasoning (optional)
+
+Diagnoses are deterministic until you name a model. To let Claude write the hypotheses, add `anthropic-api-key` to your Secret and set:
+
+```yaml
+orchestrator:
+  model:
+    provider: anthropic
+    name: claude-opus-5-5
+    effort: ""        # or low | medium | high | xhigh | max
+```
+
+`provider: openai` (the default) uses `openai-api-key` and the OpenAI Responses API instead. Either way, the model sees only the retained evidence, may cite only evidence IDs it was given, and never proposes or runs tools; approvals still go to a named human. An unknown provider or effort fails at render time.
 
 ## Persistence
 

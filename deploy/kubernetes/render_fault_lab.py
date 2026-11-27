@@ -56,7 +56,8 @@ def render(base, *, tag, connect_risk=False):
             if container["name"] == "telemetry-gateway":
                 environment(container, PROMETHEUS_URL="http://prometheus:9090", LOKI_URL="http://loki:3100", TEMPO_URL="http://tempo:3200")
             elif container["name"] == "orchestrator":
-                environment(container, OPENAI_API_KEY="", OPENAI_MODEL="")
+                environment(container, OPENAI_API_KEY="", OPENAI_MODEL="",
+                            ANTHROPIC_API_KEY="", ANTHROPIC_MODEL="")
             elif container["name"] == "mcp-server":
                 environment(container, MCP_ALLOWED_ORIGINS="http://localhost:3000,http://127.0.0.1:3000",
                             KUBERNETES_REMEDIATION_ENABLED="true", MCP_ALLOWED_NAMESPACES=NAMESPACE)

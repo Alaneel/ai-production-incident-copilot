@@ -1,16 +1,16 @@
 {
   "measured_at": [
-    "2026-11-26T11:02:23.408165+00:00",
-    "2026-11-26T11:02:25.480431+00:00"
+    "2026-11-27T00:33:15.278820+00:00",
+    "2026-11-27T00:33:17.074351+00:00"
   ],
   "source_scope_verified": true,
   "source_fingerprint_counts": [
-    37,
-    39
+    38,
+    40
   ],
   "artifacts": [
-    "evals/results/workflow_benchmark_20261126T110223Z_4d9a8979.json",
-    "evals/results/cross_service_benchmark_20261126T110225Z_93d975cebd224b55bd3fb87b24f6eb17.json"
+    "evals/results/workflow_benchmark_20261127T003315Z_be5ddcd1.json",
+    "evals/results/cross_service_benchmark_20261127T003317Z_6274b35104f34e5bb79d3a12582aaff0.json"
   ],
   "single_fault_snapshots": {
     "cases": 150,
@@ -48,25 +48,30 @@
       "python_version": "3.13",
       "sys_platform": "darwin"
     },
-    "runtime_lock_sha256": "e1ef31501297b5bc1a4c6ce30f399b44e1a76bc863faf05b2e39786355c01f33",
+    "runtime_lock_sha256": "bb6a8244c695bf17dd1e8551eb9c33bb3c919fb6a638907a8624fd4a6b2d9b3c",
     "build_lock_sha256": "891d2994d3a0349aa73cd73d03b81dc822c2e94986a46dd1ac8480bf3bcf71c4",
     "provenance_helper_sha256": "09e761d5010c748ca6b08d9e4d41f9af1155baeb6f3855c67151d4d16c7db033",
     "installed_runtime_versions": {
       "annotated-doc": "0.0.4",
       "annotated-types": "0.7.0",
+      "anthropic": "2.8.0",
       "anyio": "4.14.2",
       "certifi": "2026.7.22",
       "charset-normalizer": "3.4.9",
       "click": "8.4.2",
       "distro": "1.9.0",
+      "docstring-parser": "0.18.0",
       "fastapi": "0.139.2",
       "h11": "0.16.0",
       "httpcore": "1.0.9",
+      "httpcore2": "2.16.0",
       "httptools": "0.8.0",
       "httpx": "0.28.1",
+      "httpx2": "2.16.0",
       "idna": "3.18",
       "incident-copilot-mcp-server": "0.2.0",
       "incident-copilot-orchestrator": "0.2.0",
+      "jiter": "0.19.0",
       "jsonpatch": "1.33",
       "jsonpointer": "3.1.1",
       "langchain-core": "1.5.0",
@@ -77,6 +82,7 @@
       "langgraph-prebuilt": "1.1.0",
       "langgraph-sdk": "0.4.4",
       "langsmith": "0.10.10",
+      "opentelemetry-api": "1.45.2",
       "orjson": "3.11.9",
       "ormsgpack": "1.12.2",
       "packaging": "26.2",
@@ -93,6 +99,7 @@
       "sniffio": "1.3.1",
       "starlette": "1.3.1",
       "tenacity": "9.1.4",
+      "truststore": "0.10.5",
       "typing-extensions": "4.16.0",
       "typing-inspection": "0.4.2",
       "urllib3": "2.8.0",

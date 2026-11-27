@@ -84,11 +84,25 @@ existing="$(render --set auth.existingSecret=team-opspilot)"
 expect_absent "no generated Secret with existingSecret" "kind: Secret" "$existing"
 expect_contains "uses the existing Secret" "name: team-opspilot" "$existing"
 
+echo "model reasoning is off by default and needs an explicit model"
+expect_absent "no model env by default" "_MODEL" "$default"
+claude="$(render --set orchestrator.model.provider=anthropic --set orchestrator.model.name=claude-opus-5-5 --set orchestrator.model.effort=high)"
+expect_contains "Claude model" $'name: ANTHROPIC_MODEL\n              value: "claude-opus-5-5"' "$claude"
+expect_contains "Claude key from the secret" "key: anthropic-api-key" "$claude"
+expect_contains "Claude effort" $'name: ANTHROPIC_EFFORT\n              value: "high"' "$claude"
+expect_absent "no OpenAI env with Claude" "OPENAI_" "$claude"
+openai="$(render --set orchestrator.model.name=some-model)"
+expect_contains "OpenAI stays the default provider" "key: openai-api-key" "$openai"
+expect_absent "no Claude env with OpenAI" "ANTHROPIC_" "$openai"
+
 echo "invalid combinations fail at render time"
 expect_failure "partial telemetry" "must be set together" --set telemetry.prometheusUrl=http://prom:9090
 expect_failure "remediation without namespaces" "need at least one entry in targetNamespaces" --set remediation.enabled=true
 expect_failure "unknown preset" "telemetry.signalProfile must be" --set telemetry.signalProfile=nope
 expect_failure "invalid profile JSON" "not valid JSON" --set-json 'telemetry.signalProfileJson="{oops"'
+expect_failure "unknown model provider" "provider must be openai or anthropic" --set orchestrator.model.name=m --set orchestrator.model.provider=gemini
+expect_failure "unknown effort" "effort must be one of" --set orchestrator.model.provider=anthropic --set orchestrator.model.name=m --set orchestrator.model.effort=turbo
+expect_failure "effort with OpenAI" "effort applies only to provider anthropic" --set orchestrator.model.name=m --set orchestrator.model.effort=high
 
 if [ "$failures" -gt 0 ]; then
   echo "$failures chart check(s) failed" >&2

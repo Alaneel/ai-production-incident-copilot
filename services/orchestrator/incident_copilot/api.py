@@ -27,6 +27,7 @@ from .agent_mcp import (
     negotiate_version,
     tool_definitions as agent_tool_definitions,
 )
+from .anthropic_reasoning import AnthropicMessagesHypothesisGenerator
 from .alerts import AlertDeduplicator, AlertmanagerWebhook, alert_settings, console_link, triage_alerts
 from .approval import ApprovalReceiptSigner
 from .notifications import NotificationSettings, build_notification, send_notification
@@ -187,8 +188,26 @@ async def _runtime_lifespan(app: FastAPI, stack: AsyncExitStack) -> AsyncIterato
 
     openai_api_key = os.getenv("OPENAI_API_KEY")
     openai_model = os.getenv("OPENAI_MODEL")
+    anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
+    anthropic_model = os.getenv("ANTHROPIC_MODEL")
     hypothesis_generator = None
-    if openai_api_key and openai_model:
+    # A provider is enabled only by its key AND an explicit model, so a key
+    # that happens to be in the environment never starts paid calls alone.
+    if openai_api_key and openai_model and anthropic_api_key and anthropic_model:
+        raise RuntimeError(
+            "Both OpenAI and Anthropic reasoning are configured; set only one of "
+            "OPENAI_MODEL or ANTHROPIC_MODEL."
+        )
+    if anthropic_api_key and anthropic_model:
+        hypothesis_generator = AnthropicMessagesHypothesisGenerator(
+            api_key=anthropic_api_key,
+            model=anthropic_model,
+            base_url=os.getenv("ANTHROPIC_BASE_URL") or None,
+            effort=os.getenv("ANTHROPIC_EFFORT") or None,
+        )
+        reasoning_mode = f"anthropic:{anthropic_model}"
+        stack.push_async_callback(hypothesis_generator.close)
+    elif openai_api_key and openai_model:
         hypothesis_generator = OpenAIResponsesHypothesisGenerator(
             api_key=openai_api_key,
             model=openai_model,

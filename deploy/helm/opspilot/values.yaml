@@ -68,10 +68,16 @@ orchestrator:
     webhookUrl: ""
     format: json
   model:
-    # Optional OpenAI-compatible model for hypothesis generation. The key is
-    # read from `existingSecret` key `openai-api-key` when set.
+    # Optional model for hypothesis generation; off while `name` is empty.
+    # provider: openai     -> OpenAI Responses API, key `openai-api-key`
+    # provider: anthropic  -> Claude Messages API, key `anthropic-api-key`
+    # Keys are read from `auth.existingSecret`. Example: provider anthropic,
+    # name claude-opus-5-5.
+    provider: openai
     name: ""
     baseUrl: ""
+    # Claude only: low | medium | high | xhigh | max (empty = model default).
+    effort: ""
   resources:
     requests: {cpu: 250m, memory: 256Mi}
     limits: {cpu: "2", memory: 1Gi}
