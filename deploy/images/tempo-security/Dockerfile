@@ -10,7 +10,7 @@ RUN test "$(go env GOVERSION)" = go1.26.9 \
 COPY go.mod go.sum ./
 RUN --mount=type=cache,id=opspilot-public-sidecar-modules-20261014,target=/go/pkg/mod --mount=type=cache,id=opspilot-public-sidecar-build-20261014,target=/root/.cache/go-build GOFLAGS=-mod=readonly go mod download && GOFLAGS=-mod=readonly go mod verify
 RUN --mount=type=cache,id=opspilot-public-sidecar-modules-20261014,target=/go/pkg/mod --mount=type=cache,id=opspilot-public-sidecar-build-20261014,target=/root/.cache/go-build GOWORK=off CGO_ENABLED=0 go build -p=2 -mod=readonly -buildvcs=false -trimpath -tags=netgo -ldflags="-s -w -X main.Version=2.10.8 -X main.Revision=f0f3ed59197bfe9f54f3b0f8015ccca112f9e544 -X main.Branch=opspilot-security" -o /out/tempo ./cmd/tempo
-RUN echo '3c2465bd18403d270d6efe92d63de0bbe5d980a1e538088c76d709ac3366bc02  go.mod' | sha256sum -c - && echo 'bed85395d2963edc028c6cad023af760746dfa68d72a512ec64f8be3b0afd11d  go.sum' | sha256sum -c -
+RUN echo '9cb6128c9498e6115dd00193db5ae1f64d3a62b948364f3a0935b650e3582aa0  go.mod' | sha256sum -c - && echo '0df95e2ec2695bb0fe4fde294c6ba21c8c822e142720fce5c0271f9b45393414  go.sum' | sha256sum -c -
 RUN cp go.mod /out/go.mod && cp go.sum /out/go.sum
 COPY collect-module-notices.go /tmp/collect-module-notices.go
 RUN --mount=type=cache,id=opspilot-public-sidecar-modules-20261014,target=/go/pkg/mod --mount=type=cache,id=opspilot-public-sidecar-build-20261014,target=/root/.cache/go-build GOFLAGS=-mod=readonly go run /tmp/collect-module-notices.go /out/module-notices /out/tempo

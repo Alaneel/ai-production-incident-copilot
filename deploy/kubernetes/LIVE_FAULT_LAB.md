@@ -245,8 +245,8 @@ lab or loading a kind node:
 docker compose -f docker-compose.yml -f compose.fault-lab.yml build prometheus loki tempo otel-collector
 kind load docker-image --name <cluster-name> \
   opspilot-prometheus:3.15.0-security-20261115 \
-  opspilot-loki:3.7.8-security-20261121 \
-  opspilot-tempo:2.10.8-security-20261115 \
+  opspilot-loki:3.7.8-security-20261127 \
+  opspilot-tempo:2.10.8-security-20261127 \
   opspilot-collector:0.162.0-security-20261115
 ```
 

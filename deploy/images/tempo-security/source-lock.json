@@ -20,7 +20,11 @@
     "go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploghttp@v0.23.0",
     "go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc@v0.23.0",
     "go.opentelemetry.io/otel/exporters/stdout/stdoutlog@v0.23.0",
-    "go.opentelemetry.io/contrib/bridges/otelzap@v0.21.0"
+    "go.opentelemetry.io/contrib/bridges/otelzap@v0.21.0",
+    "github.com/go-jose/go-jose/v4@v4.1.9",
+    "go.opentelemetry.io/otel/exporters/otlp/otlptrace@v1.47.0",
+    "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc@v1.47.0",
+    "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp@v1.47.0"
   ],
-  "status": "LOCAL LINUX/ARM64 IMAGE BUILD AND READINESS VERIFIED 2026-11-15; NOT PUBLISHED OR DEPLOYED"
+  "status": "GO MODULE SECURITY UPDATE; LOCAL LINUX/ARM64 IMAGE BUILD AND READINESS VERIFIED 2026-11-27; NOT PUBLISHED OR DEPLOYED"
 }

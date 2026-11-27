@@ -157,7 +157,7 @@ services:
   loki:
     build:
       context: deploy/images/loki-security
-    image: opspilot-loki:3.7.8-security-20261121
+    image: opspilot-loki:3.7.8-security-20261127
     command: ["-config.file=/etc/loki/local-config.yaml"]
     volumes:
       - ./fault-lab/observability/loki.yml:/etc/loki/local-config.yaml:ro
@@ -180,7 +180,7 @@ services:
   tempo:
     build:
       context: deploy/images/tempo-security
-    image: opspilot-tempo:2.10.8-security-20261115
+    image: opspilot-tempo:2.10.8-security-20261127
     command: ["-config.file=/etc/tempo.yml"]
     volumes:
       - ./fault-lab/observability/tempo.yml:/etc/tempo.yml:ro

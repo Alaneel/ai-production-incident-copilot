@@ -288,6 +288,12 @@
     "scope": "installed lock instance; not a claim all code is bundled"
   },
   {
+    "name": "@isaacs/nonrecursive-glob-match",
+    "version": "1.1.0",
+    "license": "BlueOak-1.0.0",
+    "scope": "installed lock instance; not a claim all code is bundled"
+  },
+  {
     "name": "@jridgewell/gen-mapping",
     "version": "0.3.13",
     "license": "MIT",
@@ -1435,7 +1441,7 @@
   },
   {
     "name": "fast-uri",
-    "version": "3.1.8",
+    "version": "3.1.9",
     "license": "BSD-3-Clause",
     "scope": "installed lock instance; not a claim all code is bundled"
   },
@@ -2101,7 +2107,7 @@
   },
   {
     "name": "minimatch",
-    "version": "10.2.6",
+    "version": "11.0.7",
     "license": "BlueOak-1.0.0",
     "scope": "installed lock instance; not a claim all code is bundled"
   },
@@ -2803,7 +2809,7 @@
   },
   {
     "name": "undici",
-    "version": "7.29.1",
+    "version": "7.30.2",
     "license": "MIT",
     "scope": "installed lock instance; not a claim all code is bundled"
   },
