@@ -15,6 +15,9 @@ ORCHESTRATOR_OPERATOR_ACTOR=<credential-bound principal, 2–120 characters>
 
 Required mode fails startup if configuration is missing, invalid or duplicated.
 All `/v1/incidents` routes require an `Authorization: Bearer …` credential.
+The console the orchestrator serves at `/` is public static content with no
+credential of its own; serving it changes nothing about which requests are
+authorized.
 The read credential permits synchronous/streamed diagnosis and reads, including history and events;
 it does not permit approval, operation-status inspection or recovery checks. The operator credential additionally permits
 approval, `GET /v1/incidents/{incident_id}/operation-status` and

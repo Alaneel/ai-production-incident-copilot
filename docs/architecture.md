@@ -371,6 +371,33 @@ against those live backends. The Agent never supplies raw PromQL, LogQL, or
 TraceQL. Without all three values it falls back to deterministic fixtures,
 keeping unit tests and offline demos reproducible.
 
+## Console served from the API origin
+
+An install needs somewhere for a person to review evidence and decide. The
+console is exported as static files when the orchestrator image is built and
+served by the orchestrator at its own address, so there is no second service,
+no CORS configuration and no API URL baked into a public build.
+
+- **Build.** `npm run build:console` renders the page once under local workerd
+  and writes it with its hashed assets, self-hosted fonts and a manifest of
+  sizes and SHA-256 digests. The export fails if the page was built for a fixed
+  backend, references a file that is not exported or loads from another origin.
+- **Startup.** The orchestrator reads each file once, verifies it against the
+  manifest and serves it from memory; a modified or incomplete bundle stops
+  startup. Only the document, `_next/static/**` and top-level files with a
+  known extension can be served, so a bundle cannot shadow an API route.
+- **Browser.** The document's Content-Security-Policy allows scripts only from
+  the same origin or matching the SHA-256 of an exported inline script, and
+  connections only to the same origin. Nothing is fetched from a third party.
+- **Authority.** None. The page is public static content with no credential.
+  It calls `/v1/incidents` like any other client, with tokens the user enters
+  and that stay in page memory. It takes its backend from the origin that
+  served it, accepts that origin only over HTTPS or HTTP loopback, and still
+  asks for explicit confirmation before the first request.
+
+This removes an installation step. It is not an identity layer: API tokens
+remain scoped credentials, not per-user sign-in.
+
 ## Trust boundaries
 
 ```text

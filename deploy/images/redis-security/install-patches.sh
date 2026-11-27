@@ -7,7 +7,7 @@ case "$arch" in aarch64|x86_64) ;; *) echo 'No reviewed package pins for this ar
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT HUP INT TERM
 for name in libcrypto3 libssl3 zlib; do
-  case "$name" in libcrypto3|libssl3) version=3.3.7-r2 ;; zlib) version=1.3.2-r1 ;; esac
+  case "$name" in libcrypto3|libssl3) version=3.3.7-r2 ;; zlib) version=1.4-r0 ;; esac
   count=$(awk -F '|' -v a="$arch" -v p="$name" '$1 == a && $2 == p {n++} END {print n+0}' "$lock")
   test "$count" -eq 1
   row=$(awk -F '|' -v a="$arch" -v p="$name" '$1 == a && $2 == p {print}' "$lock")
@@ -23,7 +23,7 @@ done
 apk add --no-cache --no-network --repositories-file /dev/null "$work"/*.apk
 # apk2 and apk3 expose different installed-query flags; their database schema is stable.
 for name in libcrypto3 libssl3 zlib; do
-  case "$name" in libcrypto3|libssl3) version=3.3.7-r2 ;; zlib) version=1.3.2-r1 ;; esac
+  case "$name" in libcrypto3|libssl3) version=3.3.7-r2 ;; zlib) version=1.4-r0 ;; esac
   awk -v name="$name" -v version="$version" '
     BEGIN { RS=""; FS="\n" }
     { package=""; actual=""; for (i=1; i<=NF; i++) {

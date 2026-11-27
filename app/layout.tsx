@@ -34,6 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: "%s · OpsPilot",
     },
     description,
+    icons: { icon: { url: "/favicon.svg", type: "image/svg+xml" } },
     openGraph: {
       type: "website",
       title,

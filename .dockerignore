@@ -35,6 +35,23 @@
 !deploy
 !deploy/signal-profiles
 !deploy/signal-profiles/*.json
+# Console sources for the orchestrator image's static bundle.
+!package.json
+!package-lock.json
+!tsconfig.json
+!next.config.ts
+!vite.config.ts
+!postcss.config.mjs
+!.openai
+!.openai/hosting.json
+!app
+!app/**
+!build
+!build/**
+!public
+!public/**
+!worker
+!worker/**
 **/.env*
 **/.kube/**
 **/hosting.local.json

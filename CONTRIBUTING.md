@@ -14,6 +14,7 @@ python -B -m pytest services/orchestrator/tests services/mcp-server/tests evals/
 npm ci --ignore-scripts --no-audit --no-fund
 OPSPILOT_PUBLIC_BUILD=1 npm test
 npm run test:stream-contract
+npm run test:console-export
 cd services/telemetry-gateway
 GOTOOLCHAIN=local go vet ./...
 GOTOOLCHAIN=local go test -race ./...
@@ -27,6 +28,6 @@ The Python suite requires local Docker Compose/kubectl render tools and a Redis 
 
 `requirements-runtime.lock` and `requirements-fault-lab.lock` pin platform-marked runtime distributions and SHA256 artifacts; `requirements-build.lock` pins build tools; `requirements-test.lock` unions all three applications and test/build tooling. `constraints-release.txt` keeps intentionally chosen compatible versions during lock regeneration. Install first-party code with `--no-deps --no-build-isolation` after the locks so build isolation cannot resolve a second graph. The human-edited service manifests retain bounds for library consumers; the release paths always use the locks.
 
-Use `npm run build:public` for a reviewable neutral Workers package. `npm start` serves that compiled target in the real local workerd runtime on 127.0.0.1:3000; it requires a completed build. The secure Vinext release delegates its Node server separately and cannot directly load a Cloudflare-target module, so the local Workers command is intentional. `.openai/hosting.local.json` is an ignored local deployment override and must never be published. The Docker build context is the repository root with a strict `.dockerignore` allowlist; individual service-directory build commands from older notes are superseded. See [release validation](docs/release-verification-2026-10-13.md) for exact tested images and commands.
+`npm run build:console` builds the console for the orchestrator's own origin and exports it to `dist/console`, the static bundle the orchestrator image serves; `test:console-export` runs it and checks the result. Use `npm run build:public` for a reviewable neutral Workers package. `npm start` serves that compiled target in the real local workerd runtime on 127.0.0.1:3000; it requires a completed build. The secure Vinext release delegates its Node server separately and cannot directly load a Cloudflare-target module, so the local Workers command is intentional. `.openai/hosting.local.json` is an ignored local deployment override and must never be published. The Docker build context is the repository root with a strict `.dockerignore` allowlist; individual service-directory build commands from older notes are superseded. See [release validation](docs/release-verification-2026-10-13.md) for exact tested images and commands.
 
 Contributions are distributed under the root MIT license. Retain the third-party notices and package license files. The SHA-pinned GitHub Actions workflow is prepared but has not been executed on GitHub; its local equivalents are recorded separately. It uses no provider credentials and does not deploy.

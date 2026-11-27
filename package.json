@@ -15,7 +15,9 @@
     "typecheck": "tsc --noEmit --incremental false",
     "types:generate": "WRANGLER_LOG_PATH=.wrangler/types.log wrangler types worker/runtime.d.ts --include-env false --env-file /dev/null --config worker/types.wrangler.json",
     "db:generate": "drizzle-kit generate",
-    "build:public": "OPSPILOT_PUBLIC_BUILD=1 WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build"
+    "build:public": "OPSPILOT_PUBLIC_BUILD=1 WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
+    "build:console": "OPSPILOT_PUBLIC_BUILD=1 NEXT_PUBLIC_ORCHESTRATOR_URL=same-origin WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build && node build/export-console.mjs",
+    "test:console-export": "npm run build:console && node --experimental-strip-types --test tests/console-export.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",

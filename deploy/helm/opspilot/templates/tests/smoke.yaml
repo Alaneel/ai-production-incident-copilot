@@ -26,6 +26,7 @@ spec:
         {{- include "opspilot.secretEnv" (dict "root" . "name" "READ_TOKEN" "key" "orchestrator-read-token") | nindent 8 }}
         - {name: SMOKE_SERVICE, value: {{ .Values.tests.service | quote }}}
         - {name: SMOKE_ENVIRONMENT, value: {{ $environment | quote }}}
+        - {name: SMOKE_CONSOLE, value: {{ ternary "bundled" "not_bundled" .Values.orchestrator.console.enabled | quote }}}
       command: ["python", "-c"]
       args:
         - |
@@ -47,6 +48,18 @@ spec:
               return body["result"]
           health = json.load(urllib.request.urlopen(base + "/health", timeout=10))
           print("health:", health)
+          console = os.environ["SMOKE_CONSOLE"]
+          assert health.get("console") == console, ("console", health.get("console"), console)
+          try:
+              with urllib.request.urlopen(base + "/", timeout=10) as page:
+                  served = page.status, page.headers.get("Content-Security-Policy", ""), page.read().decode()
+          except urllib.error.HTTPError as error:
+              served = error.code, "", ""
+          if console == "bundled":
+              assert served[0] == 200 and "script-src 'self' 'sha256-" in served[1] and 'data-backend="same-origin"' in served[2], "the bundled console is not served"
+          else:
+              assert served[0] == 404, "the console is turned off and must not be served"
+          print("console:", console)
           assert post("/mcp", {"jsonrpc": "2.0", "id": 1, "method": "ping"}, auth=False)[0] == 401, "MCP must require a credential"
           assert rpc("initialize", {"protocolVersion": "2025-06-18"})["protocolVersion"] == "2025-06-18"
           tools = [tool["name"] for tool in rpc("tools/list")["tools"]]

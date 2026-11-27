@@ -92,7 +92,10 @@ type ApiIncident = {
   }>;
 };
 
-const orchestratorUrl = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL?.replace(/\/$/, "");
+// "same-origin" marks the build the orchestrator serves itself: the incident
+// backend is then whichever origin served this page, read after hydration.
+const SAME_ORIGIN_BACKEND = "same-origin";
+const configuredBackend = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL?.replace(/\/$/, "");
 
 function retainLocation(incidentId: string, approvalPending: boolean, diagnosisPending = false) {
   const url = new URL(incidentLocationUrl(window.location.href, incidentId, approvalPending));
@@ -526,11 +529,14 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
   const activeDiagnosis = useRef<AbortController | null>(null);
   const [demoReplay, setDemoReplay] = useState({ stage: DEMO_SNAPSHOT_STAGE, running: false, done: false });
   const demoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [pageOrigin, setPageOrigin] = useState<string | undefined>(undefined);
+  const servedByBackend = configuredBackend === SAME_ORIGIN_BACKEND;
+  const orchestratorUrl = servedByBackend ? pageOrigin : configuredBackend;
   const backendEndpoint = consoleBackendEndpoint(orchestratorUrl);
   const credentials = useMemo<ConsoleCredentials>(() => ({ mode: authMode, trustedEndpoint,
     readToken: readCredential, operatorToken: authMode === "protected" ? operatorToken ?? operatorCredential : "",
     operatorActor }), [authMode, trustedEndpoint, readCredential, operatorToken, operatorCredential, operatorActor]);
-  const apiTransport = useMemo(() => createConsoleTransport(orchestratorUrl, credentials), [credentials]);
+  const apiTransport = useMemo(() => createConsoleTransport(orchestratorUrl, credentials), [orchestratorUrl, credentials]);
   const readAccessError = consoleAuthorizationProblem(orchestratorUrl, credentials, "read");
   const operatorAccessError = consoleAuthorizationProblem(orchestratorUrl, credentials, "operator");
   const approvalAccessError = consoleApprovalProblem(orchestratorUrl, credentials);
@@ -546,6 +552,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
     // fetch is made while credentials/trust are still unset.
     queueMicrotask(() => {
       if (!active) return;
+      if (servedByBackend) setPageOrigin(window.location.origin);
       try {
         const location = readIncidentLocation(window.location.href);
         if (!location) return;
@@ -915,7 +922,7 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
   ];
 
   return (
-    <main className="shell">
+    <main className="shell" data-backend={servedByBackend ? SAME_ORIGIN_BACKEND : undefined}>
       <header className="topbar">
         <div className="brand">
           <span className="brand-mark" aria-hidden="true">
@@ -1031,13 +1038,13 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
             </div>
           )}
 
-          <details className="connection-panel" aria-label="Local protected API connection" open={restoredIncidentId !== null && !incident ? true : undefined}>
+          <details className="connection-panel" aria-label={servedByBackend ? "Protected API connection" : "Local protected API connection"} open={restoredIncidentId !== null && !incident ? true : undefined}>
             <summary>
               <span className="connection-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
               </span>
               <span className="connection-title">
-                <strong>Local API connection — not SSO</strong>
+                <strong>{servedByBackend ? "API connection — not SSO" : "Local API connection — not SSO"}</strong>
                 <small>{authMode === "local-demo" ? "Unauthenticated local demo" : "Protected API credentials"} · <code>{backendEndpoint ?? "no backend configured"}</code></small>
               </span>
               <span className={`connection-state ${!orchestratorUrl ? "idle" : readAccessError ? "warn" : "ok"}`}>
@@ -1046,7 +1053,9 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
               <svg className="chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
             </summary>
             <div className="connection-body">
-              <p className="connection-note">Development integration only. Use a trusted server-side identity gateway for production; never paste production secrets here.</p>
+              <p className="connection-note">{servedByBackend
+                ? "This page is served by the API it talks to and sends tokens nowhere else. They are scoped API credentials, not per-user sign-in: where individual accountability matters, put an identity-aware proxy in front."
+                : "Development integration only. Use a trusted server-side identity gateway for production; never paste production secrets here."}</p>
               <div className="field-grid">
                 <div className="field">
                   <label htmlFor="console-auth-mode">Authorization mode</label>
@@ -1080,7 +1089,8 @@ export function IncidentConsole({ operatorToken }: { operatorToken?: string } = 
               <label className="trust-check"><input type="checkbox" checked={backendEndpoint !== null && trustedEndpoint === backendEndpoint}
                 disabled={!backendEndpoint || isApproving || isRestoring}
                 onChange={event => { if (event.target.checked) setTrustedEndpoint(backendEndpoint); else clearCredentials(); }} />
-                <span>I trust this exact backend for these development requests and credentials.</span></label>
+                <span>{servedByBackend ? "I trust this exact backend with these requests and credentials."
+                  : "I trust this exact backend for these development requests and credentials."}</span></label>
               <p className="connection-note">Tokens stay only in this page&apos;s memory, never in browser storage, URLs, incident payloads or traces. Reload or clear the connection to remove them.</p>
               <div className="connection-actions">
                 <button type="button" className="ghost-button" disabled={isApproving || isRestoring} onClick={clearCredentials}>Clear credentials and trust</button>

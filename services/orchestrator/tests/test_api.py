@@ -355,6 +355,7 @@ class IncidentApiTests(unittest.TestCase):
                     "event_cache_startup": "not_configured",
                     "tools": "fixture",
                     "reasoning": "deterministic",
+                    "console": "not_bundled",
                 },
             )
 

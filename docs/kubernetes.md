@@ -1,6 +1,6 @@
 # Install OpsPilot on Kubernetes
 
-The Helm chart in [`deploy/helm/opspilot`](../deploy/helm/opspilot) installs the orchestrator, the MCP server, the telemetry gateway and, optionally, a bundled PostgreSQL. **The default install is read-only.** It uses demo telemetry and gets no permission to change anything in your cluster.
+The Helm chart in [`deploy/helm/opspilot`](../deploy/helm/opspilot) installs the orchestrator, the MCP server, the telemetry gateway and, optionally, a bundled PostgreSQL. The orchestrator also serves the console, so the API and the page people approve in share one address. **The default install is read-only.** It uses demo telemetry and gets no permission to change anything in your cluster.
 
 ## Try it on kind in five minutes
 
@@ -16,7 +16,7 @@ The script:
 2. Builds the three images from your checkout.
 3. Installs the chart with demo telemetry.
 4. Runs `helm test`, which starts a real diagnosis through the MCP endpoint and checks that the reader credential **can't** approve it.
-5. Prints the port-forward and `claude mcp add` commands. Ask why `payment-service` is slow. The demo diagnosis cites connection-pool exhaustion. Because the demo's deployment history is synthetic, OpsPilot won't propose a rollback; it asks for live revision history first. Enable `discovery` on a namespace with real Deployments to see proposals.
+5. Prints how to open the console and the `claude mcp add` command. Ask why `payment-service` is slow. The demo diagnosis cites connection-pool exhaustion. Because the demo's deployment history is synthetic, OpsPilot won't propose a rollback; it asks for live revision history first. Enable `discovery` on a namespace with real Deployments to see proposals.
 
 Once images are published, use `OPSPILOT_IMAGE_TAG=0.3.0` to skip the local build. Remove everything with:
 
@@ -45,6 +45,35 @@ Then check it:
 ```bash
 helm test opspilot -n opspilot --logs
 ```
+
+## Open the console
+
+The console is part of the orchestrator image and is served at the API's own address:
+
+```bash
+kubectl -n opspilot port-forward svc/opspilot-orchestrator 8080:8080
+kubectl -n opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}' | base64 -d
+```
+
+Open `http://localhost:8080`, expand **API connection**, confirm the backend and paste the reader token. That is enough to ask questions, open the incident inbox and read evidence. To approve or reject, also enter the operator token (`orchestrator-operator-token`) and the actor named by `auth.operatorActor`.
+
+For shared use, put it behind your Ingress with TLS:
+
+```yaml
+ingress:
+  enabled: true
+  className: nginx
+  host: opspilot.example.com
+  tls: [{hosts: [opspilot.example.com], secretName: opspilot-tls}]
+```
+
+With the Ingress on, links in alerts, notifications and MCP results point at that host unless you set `orchestrator.consoleUrl`. What to know before you expose it:
+
+- **The page is public; the API is not.** Anyone who can reach the address can load the page. It holds no credential, and every incident request still needs a token.
+- **Tokens stay in the tab.** They are kept in page memory and never written to browser storage or a URL. The console sends them only to the address that served it, and only over HTTPS or a loopback port-forward. Opened over plain HTTP on a network, it refuses to send anything.
+- **Nothing is loaded from elsewhere.** Fonts and scripts come from the image. The page's Content-Security-Policy allows scripts only from its own origin or matching the hash of an exported inline script.
+- **The bundle is verified.** At startup the orchestrator checks every console file against the manifest written at build time and refuses to start if one was changed.
+- **Tokens are not identities.** Put an identity-aware proxy in front for per-person access. `orchestrator.console.enabled: false` turns the page off and leaves the API and MCP endpoint unchanged.
 
 ## Point it at your telemetry
 
@@ -142,6 +171,7 @@ The [`helm chart` workflow](../.github/workflows/chart.yml) builds the three ima
 
 - runs `helm test`;
 - checks inside the cluster that a demo diagnosis reaches *connection-pool exhaustion* with cited evidence, proposes no rollback from synthetic deployment history, and that the reader token gets 403 when it tries to approve;
+- fetches every console file from the running API and compares it with the build manifest, checks that the script policy carries the exported hashes, and that the incident API still answers 401 without a token;
 - upgrades to `discovery.enabled` for one namespace and confirms the upgrade keeps the credentials;
 - checks with `kubectl auth can-i` that the MCP server can read but not patch Deployments in that namespace, and has no access elsewhere.
 
@@ -149,6 +179,6 @@ Version tags publish multi-arch images and the chart to GHCR with build provenan
 
 ## Not covered yet
 
-- The console isn't part of the chart. Run it next to the API as described in the [project reference](project-reference.md#run-the-console), or use the API and MCP endpoint directly.
+- The console uses the scoped tokens, not per-user sign-in. SSO for the console is not implemented.
 - The bundled PostgreSQL uses the upstream `postgres:17.11-alpine` image pinned by digest, not the patched derivative the Compose stack builds locally. Use a managed database for production.
 - Tested on kind (Kubernetes 1.37) only. Managed clusters (EKS, GKE, AKS) and their storage classes are untested.

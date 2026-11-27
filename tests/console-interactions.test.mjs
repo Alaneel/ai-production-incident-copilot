@@ -22,7 +22,7 @@ const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.Modu
 const nativeRequire = createRequire(import.meta.url);
 const stubPanel = () => null;
 
-function load(react) {
+function load(react, env = {}) {
   const imports = { react, "./console-auth": consoleAuth, "./incident-list": incidentList, "./approval-recovery": approvals, "./incident-location": location,
     "./evidence-citations": citations, "./preflight-target-review": preflight, "./recovery-verification": recovery,
     "./incident-stream": incidentStream };
@@ -31,15 +31,17 @@ function load(react) {
   const timers = [];
   const exports = {};
   new Function("require", "exports", "process", "setTimeout", "clearTimeout", compiled)(
-    name => imports[name] ?? nativeRequire(name), exports, { env: {} },
+    name => imports[name] ?? nativeRequire(name), exports, { env },
     (fn, ms) => { timers.push({ fn, ms }); return timers.length; }, () => {});
   return { exports, timers };
 }
 
-function harness() {
+function harness(env = {}, { mount = false } = {}) {
   const values = [], refs = [];
-  let hook = 0, ref = 0;
-  const fakeReact = { ...React, useMemo: callback => callback(), useEffect() {},
+  let hook = 0, ref = 0, mounted = false;
+  // With `mount`, the console's single mount effect runs once, as after hydration.
+  const fakeReact = { ...React, useMemo: callback => callback(),
+    useEffect(effect) { if (mount && !mounted) { mounted = true; effect(); } },
     useState(initial) {
       const index = hook++;
       if (!(index in values)) values[index] = initial;
@@ -47,7 +49,7 @@ function harness() {
     },
     useRef(initial) { const index = ref++; return refs[index] ??= { current: initial }; },
   };
-  const { exports, timers } = load(fakeReact);
+  const { exports, timers } = load(fakeReact, env);
   const render = () => { hook = 0; ref = 0; return exports.IncidentConsole(); };
   const find = (element, predicate) => {
     if (!element || typeof element !== "object") return null;
@@ -120,4 +122,48 @@ test("command palette exposes navigation, replay and copy commands for the demo"
   assert.deepEqual(ids, ["ask", "replay", "overview", "map", "hypothesis", "remediation", "trace", "inbox", "theme", "copy-command", "copy-trace"]);
   palette.props.commands.find(command => command.id === "trace").run();
   assert.ok(ui.find(ui.render(), item => item.props?.className?.includes("trace-panel")));
+});
+
+test("a same-origin build names no backend until the page that served it is known", () => {
+  const sameOrigin = { NEXT_PUBLIC_ORCHESTRATOR_URL: "same-origin" };
+  const html = renderToStaticMarkup(React.createElement(load(React, sameOrigin).exports.IncidentConsole));
+  assert.match(html, /<main class="shell" data-backend="same-origin">/);
+  assert.match(html, /<code>no backend configured<\/code>/);
+  assert.match(html, /<span class="connection-state idle">Demo data<\/span>/);
+  // It describes itself as what it is: served by its API, token based, not per-user sign-in.
+  assert.match(html, /<strong>API connection — not SSO<\/strong>/);
+  assert.match(html, /This page is served by the API it talks to and sends tokens nowhere else\./);
+  assert.doesNotMatch(html, /Development integration only/);
+  // A build bound to a fixed backend, or to none, is never marked same-origin.
+  for (const env of [{}, { NEXT_PUBLIC_ORCHESTRATOR_URL: "https://opspilot-api.example.com" }]) {
+    const other = renderToStaticMarkup(React.createElement(load(React, env).exports.IncidentConsole));
+    assert.doesNotMatch(other, /data-backend/);
+    assert.match(other, /<strong>Local API connection — not SSO<\/strong>/);
+    assert.match(other, /Development integration only\./);
+  }
+});
+
+test("after hydration a same-origin build uses only the origin that served it, and only when that is safe", async (t) => {
+  t.after(() => { delete globalThis.window; });
+  const backendOf = async (href) => {
+    globalThis.window = { location: { href, origin: new URL(href).origin } };
+    const ui = harness({ NEXT_PUBLIC_ORCHESTRATOR_URL: "same-origin" }, { mount: true });
+    ui.render();
+    await new Promise(resolve => queueMicrotask(resolve));
+    const tree = ui.render();
+    return { backend: ui.text(ui.find(tree, item => item.props?.className === "field-value")),
+      state: ui.text(ui.find(tree, item => item.props?.className?.startsWith("connection-state"))),
+      notice: ui.text(ui.find(tree, item => item.props?.className === "api-notice warn")) };
+  };
+  // A port-forward or a TLS ingress: the backend is the page's own origin, still waiting for explicit trust.
+  for (const [href, origin] of [["http://localhost:8080/?incident=INC-1", "http://localhost:8080"], ["https://opspilot.example.com/", "https://opspilot.example.com"]]) {
+    const view = await backendOf(href);
+    assert.equal(view.backend, origin);
+    assert.equal(view.state, "Setup required");
+    assert.match(view.notice, /Confirm the exact trusted backend before sending credentials or requests|Enter reader credentials/);
+  }
+  // Served over plain HTTP on a network: no backend is accepted, so no credential can be sent in the clear.
+  const insecure = await backendOf("http://opspilot.internal/");
+  assert.equal(insecure.backend, "Unavailable or unsafe URL");
+  assert.match(insecure.notice, /Configure a valid HTTPS or HTTP loopback incident backend\. No credential or request was sent\./);
 });

@@ -95,6 +95,18 @@ openai="$(render --set orchestrator.model.name=some-model)"
 expect_contains "OpenAI stays the default provider" "key: openai-api-key" "$openai"
 expect_absent "no Claude env with OpenAI" "ANTHROPIC_" "$openai"
 
+echo "bundled console: on by default, one switch turns it off"
+expect_absent "image default serves the console" "CONSOLE_STATIC_DIR" "$default"
+expect_contains "helm test expects the console" $'name: SMOKE_CONSOLE, value: "bundled"' "$(render --show-only templates/tests/smoke.yaml)"
+no_console="$(render --set orchestrator.console.enabled=false)"
+expect_contains "console turned off" $'name: CONSOLE_STATIC_DIR\n              value: ""' "$no_console"
+expect_contains "helm test expects no console" $'name: SMOKE_CONSOLE, value: "not_bundled"' "$no_console"
+ingress="$(render --set ingress.enabled=true --set ingress.host=opspilot.example.com --set 'ingress.tls[0].hosts[0]=opspilot.example.com')"
+expect_contains "console links default to the TLS Ingress host" $'name: CONSOLE_URL\n              value: "https://opspilot.example.com"' "$ingress"
+explicit="$(render --set ingress.enabled=true --set ingress.host=opspilot.example.com --set orchestrator.consoleUrl=https://console.example.com)"
+expect_contains "an explicit console URL wins" $'name: CONSOLE_URL\n              value: "https://console.example.com"' "$explicit"
+expect_contains "no console link without an Ingress host" $'name: CONSOLE_URL\n              value: ""' "$default"
+
 echo "invalid combinations fail at render time"
 expect_failure "partial telemetry" "must be set together" --set telemetry.prometheusUrl=http://prom:9090
 expect_failure "remediation without namespaces" "need at least one entry in targetNamespaces" --set remediation.enabled=true

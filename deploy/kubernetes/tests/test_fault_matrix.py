@@ -139,7 +139,7 @@ def rejected(tmp_path, report, expected):
 
 
 def test_source_helper_retains_current_runner_corpus_and_package_inputs(source_snapshot):
-    assert len(source_snapshot) == 149
+    assert len(source_snapshot) == 150
     for context in ("postgres", "redis", "collector", "tempo", "prometheus", "loki", "grafana"):
         assert f"deploy/images/{context}-security/Dockerfile" in source_snapshot
     for context in ("collector", "tempo", "prometheus", "loki"):
@@ -154,6 +154,7 @@ def test_source_helper_retains_current_runner_corpus_and_package_inputs(source_s
     assert matrix.CORPUS in source_snapshot
     assert "services/orchestrator/incident_copilot/approval.py" in source_snapshot
     assert "services/orchestrator/incident_copilot/anthropic_reasoning.py" in source_snapshot
+    assert "services/orchestrator/incident_copilot/console_static.py" in source_snapshot
     # Integration inputs: alert ingestion and per-environment signal profiles.
     assert "services/orchestrator/incident_copilot/alerts.py" in source_snapshot
     assert "services/orchestrator/incident_copilot/notifications.py" in source_snapshot

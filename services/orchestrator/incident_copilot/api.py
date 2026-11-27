@@ -30,6 +30,7 @@ from .agent_mcp import (
 from .anthropic_reasoning import AnthropicMessagesHypothesisGenerator
 from .alerts import AlertDeduplicator, AlertmanagerWebhook, alert_settings, console_link, triage_alerts
 from .approval import ApprovalReceiptSigner
+from .console_static import ConsoleStaticMiddleware, load_console
 from .notifications import NotificationSettings, build_notification, send_notification
 from .api_auth import ApiAuthorization
 from .guardrails import GuardrailViolation, validate_input
@@ -108,6 +109,9 @@ async def _publish_incident_events(request: Request, state: IncidentState, respo
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.api_authorization = ApiAuthorization.from_environment(os.environ)
+    # A configured bundle is verified against its manifest here; a modified or
+    # incomplete one stops startup instead of serving a partial console.
+    app.state.console = load_console(os.getenv("CONSOLE_STATIC_DIR"))
     # Repository pool capacity is ten; observers must leave connections for
     # canonical writes while their advisory-lock transactions are held.
     app.state.recovery_check_slots = asyncio.Semaphore(4)
@@ -236,6 +240,7 @@ async def _runtime_lifespan(app: FastAPI, stack: AsyncExitStack) -> AsyncIterato
         "event_cache_startup": event_cache_startup,
         "tools": tool_mode,
         "reasoning": reasoning_mode,
+        "console": "bundled" if app.state.console else "not_bundled",
     }
 
     yield
@@ -281,6 +286,8 @@ app.add_middleware(
     allow_headers=["Content-Type", "Authorization", "Idempotency-Key"],
     expose_headers=list(EVENT_DELIVERY_RESPONSE_HEADERS),
 )
+# Outermost: exact console bundle paths are answered here; nothing else is touched.
+app.add_middleware(ConsoleStaticMiddleware)
 
 
 def _workflow(request: Request) -> LangGraphIncidentWorkflow:

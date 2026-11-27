@@ -7,4 +7,4 @@ LABEL org.opencontainers.image.title="OpsPilot local Redis 7.4.11 security deriv
       org.opencontainers.image.base.name="redis:7.4.11-alpine" \
       org.opencontainers.image.base.digest="sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499" \
       dev.opspilot.redis.openssl="3.3.7-r2" \
-      dev.opspilot.redis.zlib="1.3.2-r1"
+      dev.opspilot.redis.zlib="1.4-r0"
