@@ -82,6 +82,14 @@ spec:
                   optional: true
             - name: OPENAI_MODEL
               value: ""
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: incident-copilot-secrets
+                  key: anthropic-api-key
+                  optional: true
+            - name: ANTHROPIC_MODEL
+              value: ""
             - name: CORS_ALLOWED_ORIGINS
               value: https://incident-copilot.example.com
             - name: LANGGRAPH_STRICT_MSGPACK

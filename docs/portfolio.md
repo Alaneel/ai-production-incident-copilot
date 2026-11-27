@@ -21,7 +21,7 @@ as a current project or resume claim.
 | Area | Implemented evidence |
 | --- | --- |
 | Agent runtime | Compiled LangGraph state machine with PostgreSQL checkpoints, real `interrupt()`/resume, concurrent read tools, and failure recovery |
-| AI reasoning | Optional OpenAI Responses API structured-output adapter; citations are constrained to retained evidence IDs and usage metadata is traced |
+| AI reasoning | Optional structured-output adapters for the OpenAI Responses API and Claude (official `anthropic` SDK); citations are constrained to retained evidence IDs and usage metadata is traced |
 | Tool protocol | Custom Streamable HTTP MCP server with eleven typed tools, JSON Schema validation, scopes, rate limits, retries, audit events, and target-bound signed approvals |
 | Backend depth | Python/FastAPI orchestration plus a separate authenticated Go telemetry gateway |
 | Observability | Live Prometheus metrics, Loki logs, Tempo traces, OpenTelemetry Collector, and provisioned Grafana dashboard |

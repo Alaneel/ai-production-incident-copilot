@@ -61,6 +61,8 @@ def test_model_credentials_are_empty_and_mcp_origin_matches_client():
         if container["name"] == "orchestrator":
             assert env["OPENAI_API_KEY"] == {"name": "OPENAI_API_KEY", "value": ""}
             assert env["OPENAI_MODEL"]["value"] == ""
+            assert env["ANTHROPIC_API_KEY"] == {"name": "ANTHROPIC_API_KEY", "value": ""}
+            assert env["ANTHROPIC_MODEL"]["value"] == ""
         if container["name"] == "mcp-server":
             assert "http://localhost:3000" in env["MCP_ALLOWED_ORIGINS"]["value"].split(",")
             assert env["KUBERNETES_REMEDIATION_ENABLED"]["value"] == "true"
@@ -103,6 +105,7 @@ def test_opt_in_full_chain_sends_checkout_traffic_to_risk_without_mutating_base(
                         and obj["metadata"]["name"] == "orchestrator")
     env = {row["name"]: row.get("value") for row in orchestrator["spec"]["template"]["spec"]["containers"][0]["env"]}
     assert env["OPENAI_API_KEY"] == env["OPENAI_MODEL"] == ""
+    assert env["ANTHROPIC_API_KEY"] == env["ANTHROPIC_MODEL"] == ""
 
 
 @pytest.mark.parametrize("tag", ["", "bad tag", "x/y", "x" * 129])

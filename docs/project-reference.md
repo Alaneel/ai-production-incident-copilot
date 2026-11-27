@@ -362,9 +362,10 @@ See the [dated results and remaining gaps](../docs/verification.md).
 - A compiled LangGraph `StateGraph` with durable `thread_id` checkpoints,
   concurrent read-only telemetry queries, evidence grounding, a real
   `interrupt()` approval node, and `Command(resume=...)` recovery.
-- An optional OpenAI Responses API reasoning adapter with strict structured
-  output. Model hypotheses may cite only retained evidence IDs; provider,
-  model, response ID, and token usage are written to the incident trace.
+- Optional reasoning adapters with structured output: the OpenAI Responses API,
+  or Claude through the official `anthropic` SDK. Model hypotheses may cite only
+  retained evidence IDs; provider, model, response ID, and token usage are
+  written to the incident trace.
 - PostgreSQL-backed LangGraph checkpoint history plus canonical incident,
   approval, idempotency, audit, and evaluation tables. Redis retains task state
   and ordered trace events for the SSE endpoint.
@@ -534,8 +535,19 @@ OPENAI_API_KEY='<credential>'
 OPENAI_MODEL='<chosen-model-id>'
 ```
 
-No model is selected implicitly. If either value is absent, the runtime reports
-`reasoning=deterministic` and makes no model request. The checked-in 2026-08-08
+Or, for Claude (set only one provider; both configured stops startup):
+
+```bash
+ANTHROPIC_API_KEY='<credential>'
+ANTHROPIC_MODEL='claude-opus-5-5'
+# Optional: low | medium | high | xhigh | max (empty uses the model default)
+ANTHROPIC_EFFORT=''
+```
+
+No model is selected implicitly. If either value of a pair is absent, the runtime reports
+`reasoning=deterministic` and makes no model request. The retained model
+benchmarks below were measured with OpenAI only; no Claude benchmark has been
+run. The checked-in 2026-08-08
 credentialed benchmark ran 150 cases per variant with `gpt-5.6-terra`: Top-1
 root-cause accuracy was 19.3% for single prompt, 64.0% for RAG, and 81.3% for
 the validated Agent; grounded-response rates were 0%, 99.3%, and 100%. See

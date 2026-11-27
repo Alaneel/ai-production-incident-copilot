@@ -92,6 +92,22 @@ spec:
               value: {{ $o.notifications.format | quote }}
             {{- end }}
             {{- if $o.model.name }}
+            {{- if eq $o.model.provider "anthropic" }}
+            - name: ANTHROPIC_MODEL
+              value: {{ $o.model.name | quote }}
+            {{- if $o.model.baseUrl }}
+            - name: ANTHROPIC_BASE_URL
+              value: {{ $o.model.baseUrl | quote }}
+            {{- end }}
+            {{- if $o.model.effort }}
+            - name: ANTHROPIC_EFFORT
+              value: {{ $o.model.effort | quote }}
+            {{- end }}
+            {{- include "opspilot.secretEnv" (dict "root" . "name" "ANTHROPIC_API_KEY" "key" "anthropic-api-key" "optional" true) | nindent 12 }}
+            {{- else if eq $o.model.provider "openai" }}
+            {{- if $o.model.effort }}
+            {{- fail "orchestrator.model.effort applies only to provider anthropic" }}
+            {{- end }}
             - name: OPENAI_MODEL
               value: {{ $o.model.name | quote }}
             {{- if $o.model.baseUrl }}
@@ -99,6 +115,12 @@ spec:
               value: {{ $o.model.baseUrl | quote }}
             {{- end }}
             {{- include "opspilot.secretEnv" (dict "root" . "name" "OPENAI_API_KEY" "key" "openai-api-key" "optional" true) | nindent 12 }}
+            {{- else }}
+            {{- fail "orchestrator.model.provider must be openai or anthropic" }}
+            {{- end }}
+            {{- if and $o.model.effort (not (has $o.model.effort (list "low" "medium" "high" "xhigh" "max"))) }}
+            {{- fail "orchestrator.model.effort must be one of low, medium, high, xhigh, max" }}
+            {{- end }}
             {{- end }}
             - name: LANGGRAPH_STRICT_MSGPACK
               value: "true"

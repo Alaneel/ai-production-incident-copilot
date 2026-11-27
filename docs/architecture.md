@@ -144,7 +144,14 @@ unfinished.
 ## Model reasoning boundary
 
 When both `OPENAI_API_KEY` and an explicit `OPENAI_MODEL` are configured, the
-hypothesis node calls the OpenAI Responses API with a strict JSON Schema. The
+hypothesis node calls the OpenAI Responses API with a strict JSON Schema. When
+both `ANTHROPIC_API_KEY` and an explicit `ANTHROPIC_MODEL` are configured, it
+calls the Claude Messages API through the official `anthropic` SDK with the
+same instructions, evidence projection and output schema (structured output
+via `output_config.format`). Configuring both providers stops startup rather
+than picking one. Claude's schema cannot express every length and range limit,
+so the adapter re-validates the answer locally, and a refusal, truncated answer
+or contract violation fails the generation instead of becoming a diagnosis. The
 model sees a compressed evidence projection—not raw metric series or log
 payloads—and retrieved text is labeled as untrusted data. Returned citations
 must be a subset of retained evidence IDs, after which the normal multi-kind

@@ -18,6 +18,15 @@
     ]
   },
   {
+    "name": "anthropic",
+    "version": "2.8.0",
+    "license": "Apache-2.0",
+    "distributed_notice_paths": [
+      "anthropic-2.8.0.dist-info/licenses/LICENSE",
+      "anthropic-2.8.0.dist-info/licenses/LICENSE-MIT"
+    ]
+  },
+  {
     "name": "anyio",
     "version": "4.14.2",
     "license": "MIT",
@@ -55,6 +64,14 @@
     "license": "Apache License, Version 2.0",
     "distributed_notice_paths": [
       "distro-1.9.0.dist-info/LICENSE"
+    ]
+  },
+  {
+    "name": "docstring_parser",
+    "version": "0.18.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "docstring_parser-0.18.0.dist-info/licenses/LICENSE.md"
     ]
   },
   {
@@ -110,6 +127,14 @@
     ]
   },
   {
+    "name": "httpcore2",
+    "version": "2.16.0",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "httpcore2-2.16.0.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
     "name": "httptools",
     "version": "0.8.0",
     "license": "MIT",
@@ -125,6 +150,14 @@
     "license": "BSD-3-Clause",
     "distributed_notice_paths": [
       "httpx-0.28.1.dist-info/licenses/LICENSE.md"
+    ]
+  },
+  {
+    "name": "httpx2",
+    "version": "2.16.0",
+    "license": "BSD-3-Clause",
+    "distributed_notice_paths": [
+      "httpx2-2.16.0.dist-info/licenses/LICENSE.md"
     ]
   },
   {
@@ -165,6 +198,14 @@
     "license": "MIT",
     "distributed_notice_paths": [
       "iniconfig-2.3.1.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "jiter",
+    "version": "0.19.0",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "jiter-0.19.0.dist-info/licenses/LICENSE"
     ]
   },
   {
@@ -549,6 +590,14 @@
     ],
     "distributed_notice_paths": [
       "trove_classifiers-2026.9.21.13.dist-info/licenses/LICENSE"
+    ]
+  },
+  {
+    "name": "truststore",
+    "version": "0.10.5",
+    "license": "MIT",
+    "distributed_notice_paths": [
+      "truststore-0.10.5.dist-info/licenses/LICENSE"
     ]
   },
   {

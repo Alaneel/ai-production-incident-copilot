@@ -261,5 +261,6 @@ See [Use OpsPilot from your coding or ops agent](agents.md) for the tools and th
 - **Failure families**: the diagnosis profiles cover eight: connection-pool exhaustion, downstream timeout, CPU saturation, memory leak, deployment regression, consumer lag, retry storm and cache penetration. Other failure modes end as *insufficient evidence* rather than a guess.
 - **Tenancy**: one gateway serves one profile and one telemetry tenant. Namespace/tenant scoping is on the [roadmap](project-reference.md#remaining-roadmap).
 - **Identity**: API tokens are scoped credentials, not per-user SSO. Put the console behind your identity proxy for shared use.
+- **Model reasoning**: off by default. Claude (`ANTHROPIC_API_KEY` + `ANTHROPIC_MODEL`) or OpenAI (`OPENAI_API_KEY` + `OPENAI_MODEL`) can write the hypotheses; see [model reasoning](kubernetes.md#model-reasoning-optional). The retained model benchmark is OpenAI only.
 - **Notifications**: one attempt per incident, with no retry queue. Treat the inbox or the list API as the source of truth.
 - **Alert deduplication**: deduplication is in memory, per orchestrator process. Behind several replicas, route the webhook to one of them or rely on Alertmanager grouping.
