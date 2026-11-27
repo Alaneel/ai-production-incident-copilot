@@ -1,9 +1,18 @@
 {
-  "status": "ZLIB_1_4_R0_REBUILD_LOCAL_ARM64_AND_EMULATED_AMD64_BUILD_VERIFIED_2026_11_27_NOT_RESCANNED",
-  "parent": "redis:7.4.11-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499",
-  "server_version": "7.4.11",
-  "parent_alpine_version": "3.21.8",
-  "apk_branch": "v3.21/main",
+  "status": "REBASED_ON_OFFICIAL_REDIS_7_4_12_ALPINE_3_22_LOCAL_ARM64_AND_EMULATED_AMD64_VERIFIED_2026_11_27_NOT_SCANNED",
+  "parent": "redis:7.4.12-alpine@sha256:7f7d30b7fdd09467bac58198a1f166dd69789d348d4fe859cccb20e0cf287fbe",
+  "parent_platform_manifests": {
+    "linux/arm64/v8": "sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db",
+    "linux/amd64": "sha256:e4ee3e03ce8f75471f40937a7c6b2b0e500390b6812fcdf5cb32c01295ded446"
+  },
+  "parent_created_utc": {
+    "linux/arm64/v8": "2026-11-09T20:08:20Z",
+    "linux/amd64": "2026-11-09T20:08:26Z"
+  },
+  "parent_source": "https://github.com/redis/docker-library-redis.git#346d38e447b5 (alpine), base alpine:3.22",
+  "server_version": "7.4.12",
+  "parent_alpine_version": "3.22.8",
+  "apk_branch": "v3.22/main",
   "reviewed_architectures": [
     "aarch64",
     "x86_64"
@@ -11,47 +20,24 @@
   "packages": [
     {
       "architecture": "aarch64",
-      "package": "libcrypto3",
-      "version": "3.3.7-r2",
-      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/libcrypto3-3.3.7-r2.apk",
-      "sha256": "2303cca13dc8bba5798744a68abd07530abb35ab339d9cc4640fc53276049af0"
-    },
-    {
-      "architecture": "aarch64",
-      "package": "libssl3",
-      "version": "3.3.7-r2",
-      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/libssl3-3.3.7-r2.apk",
-      "sha256": "d494a0a211dd78a8055c24885fc06375eabb79c82ae797f7f694cefbf3653b79"
-    },
-    {
-      "architecture": "aarch64",
       "package": "zlib",
       "version": "1.4-r0",
-      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/zlib-1.4-r0.apk",
-      "sha256": "05b5663e2559dcd4b0914b946e358f34830c6897ed73404cdfa958ea3b0d0b46"
-    },
-    {
-      "architecture": "x86_64",
-      "package": "libcrypto3",
-      "version": "3.3.7-r2",
-      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/libcrypto3-3.3.7-r2.apk",
-      "sha256": "3c6fb1c90a974ef0fc83687868712340ca3df3ef5206cfc79fd81ff16f22596a"
-    },
-    {
-      "architecture": "x86_64",
-      "package": "libssl3",
-      "version": "3.3.7-r2",
-      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/libssl3-3.3.7-r2.apk",
-      "sha256": "00e674d00a80c9808580546dd388093c1c67f21628a9d70e27628bddc86a31e8"
+      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.22/main/aarch64/zlib-1.4-r0.apk",
+      "sha256": "279972bab4f817182d9617984880bc29471f1d3016f92265be10d71e6f95ca74"
     },
     {
       "architecture": "x86_64",
       "package": "zlib",
       "version": "1.4-r0",
-      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/zlib-1.4-r0.apk",
-      "sha256": "a88ff332b239e7efa688a04832da72687fe3701a952b92c9422b3dc985a3c220"
+      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.22/main/x86_64/zlib-1.4-r0.apk",
+      "sha256": "a271d6491037f7037010ac98b40f7d2b81c733f425b20294ee771b6ed7571038"
     }
   ],
+  "inherited_packages_checked": {
+    "libcrypto3": "3.5.9-r0",
+    "libssl3": "3.5.9-r0"
+  },
+  "why_zlib_is_still_pinned": "Neither official candidate ships zlib 1.4-r0: both carry their Alpine base layer's 1.3.2-r1. Alpine's v3.22 security database lists CVE-2026-4738 as fixed in 1.4-r0. The pin fails closed with HTTP 404 when Alpine publishes a newer zlib revision; drop it once an official Redis 7.4 image ships zlib 1.4-r0 or later.",
   "parent_config_preserved": {
     "Entrypoint": [
       "docker-entrypoint.sh"
@@ -69,107 +55,399 @@
     },
     "Env": [
       "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-      "REDIS_VERSION=7.4.11"
+      "REDIS_VERSION=7.4.12"
     ]
   },
-  "server_and_cli_source": "Inherited unchanged exact parent; actual server/CLI/entrypoint SHA256 equality verified in native runtime.",
-  "fixed_primary_ids": [
-    "CVE-2026-35189",
-    "CVE-2026-54872",
-    "CVE-2026-54875",
-    "CVE-2026-72897",
-    "CVE-2026-75804",
-    "CVE-2026-75805",
-    "CVE-2026-75806",
-    "CVE-2026-77696",
-    "CVE-2026-84782",
-    "CVE-2026-84784",
-    "CVE-2026-85091"
+  "server_and_cli_source": "Inherited unchanged from the exact parent; server/CLI/entrypoint SHA256 equality with the parent verified on linux/arm64 and on emulated linux/amd64.",
+  "addressed_primary_ids": [
+    "CVE-2026-4738"
   ],
-  "baseline_scanner_records": 21,
-  "baseline_scanner_counts": {
-    "CRITICAL": 0,
-    "HIGH": 2,
-    "MEDIUM": 17,
-    "LOW": 2,
-    "UNKNOWN": 0
+  "parent_already_fixed_primary_ids": {
+    "ids": [
+      "CVE-2026-35189",
+      "CVE-2026-54872",
+      "CVE-2026-54875",
+      "CVE-2026-72897",
+      "CVE-2026-75804",
+      "CVE-2026-75805",
+      "CVE-2026-75806",
+      "CVE-2026-77696",
+      "CVE-2026-84782",
+      "CVE-2026-84784",
+      "CVE-2026-85091"
+    ],
+    "basis": "The ten OpenSSL IDs that 3.3.7-r2 backported on v3.21 are fixed upstream in OpenSSL 3.5.9 per the 2026-09-29 OpenSSL advisory, and the parent ships 3.5.9-r0. CVE-2026-85091 is fixed in the parent's zlib 1.3.2-r1 per the vendor recipe. Alpine's v3.22 security database does not list the ten OpenSSL IDs under any 3.5 revision; this mapping rests on the upstream advisory, not on a scan."
   },
-  "primary_severity_notes": [
-    "CVE-2026-85091 is scanner MEDIUM but primary CNA HIGH (CVSS3.1 7.4 / CVSS4.0 8.3); the vendor recipe lists it as fixed from 1.3.2-r1, and lists CVE-2026-4738 as fixed in the 1.4-r0 package now pinned.",
-    "CVE-2026-84782 primary OpenSSL HIGH concerns DTLS retransmission; TCP-only Redis does not use DTLS, but the installed library package is patched rather than suppressed."
-  ],
-  "support_limit": "Alpine 3.21 main support ends 2026-11-01; the upstream OpenSSL 3.3 branch is unsupported and this fix is an Alpine vendor backport. Recheck a supported official Redis 7.4 image base before that date.",
+  "open_branch_fixes_not_applied": {
+    "package": "libcrypto3/libssl3",
+    "parent_version": "3.5.9-r0",
+    "available_on_branch": "3.5.9-r2",
+    "ids": {
+      "3.5.9-r1": [
+        "CVE-2026-88822",
+        "CVE-2026-88823",
+        "CVE-2026-95691",
+        "CVE-2026-95692",
+        "CVE-2026-107496"
+      ],
+      "3.5.9-r2": [
+        "CVE-2026-107493",
+        "CVE-2026-124709"
+      ]
+    },
+    "upstream_severity": "Low for all seven (OpenSSL vulnerabilities page, checked 2026-11-27); upstream fix is OpenSSL 3.5.10",
+    "affected_code": "QUIC, AES-GCM-SIV, CMS_encrypt() and PEM_X509_INFO_read_bio_ex() with a caller-supplied stack",
+    "reason_not_pinned": "The official image (built 2026-11-09) predates both revisions. Pinning them would add four more mirror URLs on a package that is revised often (3.5.10 is the announced upstream fix), recreating the 404 failure this rebase removes. Redis does not use QUIC or CMS and OpsPilot runs Redis without TLS; that is a reading of the advisories, not a function-level analysis."
+  },
+  "support_limit": "Alpine 3.22 main support ends 2027-05-01 (alpinelinux.org/releases.json). Redis 7.4.12 is the current 7.4 patch release on 2026-11-27. Recheck before that date and before any publication.",
   "licensing": "Redis 7.4 parent retains RSALv2 or SSPLv1; project MIT does not relicense the server. OpenSSL Apache-2.0 and zlib license texts preserved. No image redistribution/publication performed.",
   "vendor_source_recipes": [
     {
       "package": "openssl",
-      "source_commit": "a254386dfe34f70a05bdb8b2a3d7a5b20b6f076e",
-      "url": "https://github.com/alpinelinux/aports/blob/a254386dfe34f70a05bdb8b2a3d7a5b20b6f076e/main/openssl/APKBUILD",
-      "recipe_sha256": "3aad2fac746a559a9461c2d40e419c295104cc522486c698230996fabdbd643f"
+      "branch": "3.22-stable",
+      "version": "3.5.9-r0",
+      "use": "inherited from the parent",
+      "source_commit": "b6d0d5c5639c0034e9073c39e9ff139e28e71818",
+      "url": "https://github.com/alpinelinux/aports/blob/b6d0d5c5639c0034e9073c39e9ff139e28e71818/main/openssl/APKBUILD",
+      "recipe_sha256": "043006cc083576fd4c2869af6b3bce0de19f1509bab35c0b31e14fc9accda090"
     },
     {
       "package": "zlib",
-      "source_commit": "d3332621d44c2c4cf52e52217b16674db190212c",
-      "url": "https://github.com/alpinelinux/aports/blob/d3332621d44c2c4cf52e52217b16674db190212c/main/zlib/APKBUILD",
+      "branch": "3.22-stable",
+      "version": "1.4-r0",
+      "use": "pinned in packages.lock",
+      "source_commit": "a01d2885b6dc5443913a4a40f3689984ab66e7bb",
+      "url": "https://github.com/alpinelinux/aports/blob/a01d2885b6dc5443913a4a40f3689984ab66e7bb/main/zlib/APKBUILD",
       "recipe_sha256": "4f36ca092f06125076baff75624deb977a1ecbd3deda6e1bbdc7ebc02802ce21"
     }
   ],
-  "newer_official_alpine_tags": [
-    {
-      "tag": "7.4.11-alpine3.22",
-      "http_status": 404,
-      "checked_at": "2026-11-27T16:06:31+00:00"
-    },
-    {
-      "tag": "7.4.11-alpine3.23",
-      "http_status": 404,
-      "checked_at": "2026-11-27T16:06:31+00:00"
-    },
-    {
-      "tag": "7.4.11-alpine3.24",
-      "http_status": 404,
-      "checked_at": "2026-11-27T16:06:31+00:00"
-    }
-  ],
-  "verified_at_utc": "2026-11-27T16:05:00+00:00",
-  "local_tag": "opspilot-redis:7.4.11-security-20261127",
-  "image_id": "sha256:68f4580049ecced4ac675b7887452cb8ab97102050c7f2fa819e1a4fa09642a4",
+  "verified_at_utc": "2026-11-27T16:57:04+00:00",
+  "local_tag": "opspilot-redis:7.4.12-security-20261127",
+  "image_id": "sha256:bbe4ea9911a041264030a6028d02cfd832742213d172a87a209801a736d7459d",
   "verified_platform": "linux/arm64",
-  "not_executed_platforms": [
+  "emulated_platforms": [
     "linux/amd64"
   ],
   "build_runtime_input_sha256": {
-    "Dockerfile": "e45f80cd512be8e825a251d7f276ae8aee43077d2808330f56d3e29a486bdf33",
-    "install-patches.sh": "be20b13134dddbf50c2f4feaf869492cdbe7489a07ed6abd98b8f32242fb4e52",
+    "Dockerfile": "140d081a3518221bb12d29502405ee649705c6752b631f4ac2202614d003972c",
+    "install-patches.sh": "5f43d244fef94ba75780ff5b95010355deb813264297c5e6e0919948d40f4461",
     "licenses/OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
     "licenses/Redis-LICENSE.txt": "abffee3703161c0a6a0cd7f635b2c1ebb3b81bd199e9d18ea89652d678ae4287",
     "licenses/zlib-LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
-    "packages.lock": "a130f72b4a9c2923a3b311f15a5bd3c1c377a3013710419c7e69c95777e0ef7a"
+    "packages.lock": "f024a63794a695b328168420e8e12213b558543626d1814530914cd314b327b3"
   },
   "package_inventory_changes": {
-    "libcrypto3": {
-      "before": "3.3.7-r1",
-      "after": "3.3.7-r2"
-    },
-    "libssl3": {
-      "before": "3.3.7-r1",
-      "after": "3.3.7-r2"
-    },
     "zlib": {
-      "before": "1.3.2-r0",
+      "before": "1.3.2-r1",
       "after": "1.4-r0"
     }
   },
-  "inherited_runtime_files": [
-    "0c24c3dd1769ee917c1748c4eb189b2e45da3aaaef5f1dfd0b25ec697fca61e7  /usr/local/bin/redis-server",
-    "a978d671f03f2773790936034089d54a8e8c2a77b06088550e24cc050fa09f5d  /usr/local/bin/redis-cli",
-    "f8122ddc0eb2ae6ca7762725999f08b2ee7a6975da54e9061feee88f6d4ab2bb  /usr/local/bin/docker-entrypoint.sh"
-  ],
-  "official_tag_recheck_2026_11_27": {
-    "checked_at": "2026-11-27T16:06:31+00:00",
-    "7.4.11-alpine": "sha256:d9436322172a5b482c187bf1f363d3c4fea086fcca6b9c8a94de8f0f39ed3193",
-    "7.4.12-alpine": "sha256:7f7d30b7fdd09467bac58198a1f166dd69789d348d4fe859cccb20e0cf287fbe",
-    "note": "The 7.4.11-alpine tag no longer resolves to this recipe's pinned parent, and a 7.4.12 image now exists. Neither was pulled, inspected or validated here; moving the parent is separate work."
+  "inherited_runtime_files": {
+    "linux/arm64": [
+      "4c86948b1d8f70d27b7ac0e56630281e0131a97cbc104a7372a0a4c13d177d9d  /usr/local/bin/redis-server",
+      "fa695c4d434ea5f18cdff332efbf4f0836d80673a67f96ef61dad5649249585b  /usr/local/bin/redis-cli",
+      "06439aee27a1f563360a04991e2eb4e54649c39343bb34ac6f7047cf6282091b  /usr/local/bin/docker-entrypoint.sh"
+    ],
+    "linux/amd64": [
+      "9e60db11fd4e0ef7f6a36e9b3f12b50bb3883ecbae5de6e98f8470b3c6a1b5c5  /usr/local/bin/redis-server",
+      "20ba2461eb83c01a0f444603e8b150fdca1410a29ab7ff8a1ad5b2286b0bd5e3  /usr/local/bin/redis-cli",
+      "06439aee27a1f563360a04991e2eb4e54649c39343bb34ac6f7047cf6282091b  /usr/local/bin/docker-entrypoint.sh"
+    ]
+  },
+  "rebase_validation_2026_11_27": {
+    "reason": "The previous recipe URL-pinned three v3.21 packages on an unpatched parent; one pin was withdrawn by the mirror on 2026-11-06, and Alpine 3.21 main support ended on 2026-11-01, so no later fix reaches that branch (Alpine 3.22 received OpenSSL backports on 2026-11-23 and 2026-11-25; 3.21 received none after 2026-09-30).",
+    "tag_resolution": {
+      "checked_at": "2026-11-27T16:30:13Z/2026-11-27T16:30:35Z",
+      "method": "anonymous Docker Hub HEAD requests for the manifest index digest",
+      "7.4.11-alpine": "sha256:d9436322172a5b482c187bf1f363d3c4fea086fcca6b9c8a94de8f0f39ed3193",
+      "7.4.11-alpine3.21": "sha256:d9436322172a5b482c187bf1f363d3c4fea086fcca6b9c8a94de8f0f39ed3193",
+      "7.4.12-alpine": "sha256:7f7d30b7fdd09467bac58198a1f166dd69789d348d4fe859cccb20e0cf287fbe",
+      "7.4.12-alpine3.22": "sha256:7f7d30b7fdd09467bac58198a1f166dd69789d348d4fe859cccb20e0cf287fbe",
+      "7.4-alpine": "sha256:7f7d30b7fdd09467bac58198a1f166dd69789d348d4fe859cccb20e0cf287fbe",
+      "7.4.12-alpine3.21": "sha256:c5d34a98396a4775e223c74e929162c35c5a2182901ba26b50ade939941ce14b",
+      "not_found_404": [
+        "7.4.11-alpine3.22",
+        "7.4.11-alpine3.23",
+        "7.4.11-alpine3.24",
+        "7.4.12-alpine3.23",
+        "7.4.12-alpine3.24",
+        "7.4.13-alpine"
+      ]
+    },
+    "candidates": [
+      {
+        "reference": "redis:7.4.11-alpine@sha256:d9436322172a5b482c187bf1f363d3c4fea086fcca6b9c8a94de8f0f39ed3193",
+        "platform_manifests": {
+          "linux/arm64/v8": "sha256:12bd99f4555ce357cbe0c950ad42c7a86f76e807244995f0ad0a6b8949c3518a",
+          "linux/amd64": "sha256:8be847644e195abc4c10c8d9936cfa45332eccc6b714fa7b186ff43f1f4d5579"
+        },
+        "created_utc": "2026-10-21T21:13:21Z",
+        "alpine_release": "3.21.9",
+        "redis_version": "7.4.11",
+        "libcrypto3": "3.3.7-r2",
+        "libssl3": "3.3.7-r2",
+        "zlib": "1.3.2-r1",
+        "installed_packages": 19,
+        "inspected": "pulled by digest; linux/arm64 natively and linux/amd64 under emulation",
+        "decision": "Not chosen. It still needs the zlib pin, stays on Alpine 3.21 past its 2026-11-01 support end, and lacks the Redis 7.4.12 security fix."
+      },
+      {
+        "reference": "redis:7.4.12-alpine@sha256:7f7d30b7fdd09467bac58198a1f166dd69789d348d4fe859cccb20e0cf287fbe",
+        "platform_manifests": {
+          "linux/arm64/v8": "sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db",
+          "linux/amd64": "sha256:e4ee3e03ce8f75471f40937a7c6b2b0e500390b6812fcdf5cb32c01295ded446"
+        },
+        "created_utc": "2026-11-09T20:08:20Z",
+        "alpine_release": "3.22.8",
+        "redis_version": "7.4.12",
+        "libcrypto3": "3.5.9-r0",
+        "libssl3": "3.5.9-r0",
+        "zlib": "1.3.2-r1",
+        "installed_packages": 20,
+        "inspected": "pulled by digest; linux/arm64 natively and linux/amd64 under emulation",
+        "decision": "Chosen. Supported Alpine branch, OpenSSL at or past the previous fix level, Redis 7.4.12 security release; only zlib needs a pin."
+      },
+      {
+        "reference": "redis:7.4.12-alpine3.21@sha256:c5d34a98396a4775e223c74e929162c35c5a2182901ba26b50ade939941ce14b",
+        "created_utc": "2026-11-05T19:06:36Z",
+        "base": "alpine:3.21",
+        "inspected": "registry annotations only; not pulled",
+        "decision": "Not considered further: Alpine 3.21 is past support and the image predates zlib 1.4-r0."
+      }
+    ],
+    "candidate_config_differences": "Entrypoint, Cmd, User, WorkingDir, Volumes and ExposedPorts are identical; Env differs only in REDIS_VERSION; the 7.4.12 docker-entrypoint.sh calls /bin/setpriv instead of /usr/bin/setpriv when started as root. Both images run redis as uid 999, gid 1000.",
+    "arm64": {
+      "local_image_id": "sha256:bbe4ea9911a041264030a6028d02cfd832742213d172a87a209801a736d7459d",
+      "build": "docker build --no-cache; pinned URL fetched, SHA-256 matched, apk add verified the Alpine signature and upgraded zlib 1.3.2-r1 -> 1.4-r0; installed-version checks passed",
+      "checks_passed": 20,
+      "checks_failed": 0,
+      "checks": [
+        "installed package set differs from the parent only in zlib 1.3.2-r1 -> 1.4-r0 (20 packages)",
+        "libcrypto3/libssl3 3.5.9-r0 and zlib 1.4-r0 installed; Alpine release 3.22.8",
+        "redis-server, redis-cli and docker-entrypoint.sh SHA256 equal the parent's",
+        "Entrypoint, Cmd, User, WorkingDir, Volumes, ExposedPorts and Env equal the parent's",
+        "the three shipped license files equal licenses/",
+        "redis-server --appendonly yes started with --network none, --read-only, --cap-drop ALL, no-new-privileges and --user 999:1000",
+        "PING, SET/GET, INFO redis_version 7.4.12",
+        "BGREWRITEAOF finished with aof_last_bgrewrite_status ok",
+        "process Uid 999, Gid 1000, CapEff 0, NoNewPrivs 1; root filesystem write refused",
+        "after a container restart the value was read back from the AOF"
+      ]
+    },
+    "amd64_emulated": {
+      "local_image_id": "sha256:4b0d7fcb0a102b4bf2c9f5fcedc3f58160218677198857cbecd66da006ee657b",
+      "build": "docker build --no-cache --platform linux/amd64 under QEMU emulation; same fetch, SHA-256, signature and installed-version checks",
+      "checks_passed": 20,
+      "checks_failed": 0,
+      "note": "The same 20 checks ran under QEMU emulation on an arm64 host. This is not a native amd64 run."
+    },
+    "license_texts": {
+      "checked_at": "2026-11-27T16:48:31Z",
+      "Redis-LICENSE.txt": "byte-identical to redis/redis tag 7.4.12 LICENSE.txt",
+      "OpenSSL-LICENSE.txt": "byte-identical to openssl/openssl tag openssl-3.5.9 LICENSE.txt",
+      "zlib-LICENSE": "byte-identical to madler/zlib tag v1.4 LICENSE",
+      "parent_ships_license_files": false
+    },
+    "compose_smoke": {
+      "project": "opspilot-redis-smoke-20261127",
+      "command": "docker compose -p opspilot-redis-smoke-20261127 up --build -d",
+      "started_utc": "2026-11-27T16:54:46Z",
+      "result": "All five services started; postgres and redis reported healthy. http://localhost:8080/health returned status ok with task_state redis, checkpoint postgres and event_cache_startup ready.",
+      "redis_container": "Started as root by Compose; the entrypoint dropped to uid 999, gid 1000 via /bin/setpriv; Redis 7.4.12, aof_enabled 1, two client connections; no error lines in the stack logs.",
+      "compose_image_id": "sha256:845959e3ae010180928d8dda94517158f45b6db74da38a82c9be817835b33084",
+      "compose_image_note": "Compose's build of the same context reused the cached layers; its RootFS layers and configuration equal the verified image apart from the three com.docker.compose labels.",
+      "teardown": "docker compose -p opspilot-redis-smoke-20261127 down -v; the project's containers, volumes and network were removed"
+    },
+    "advisory_sources": [
+      "https://openssl-library.org/news/secadv/20260929.txt",
+      "https://openssl-library.org/news/secadv/20261110.txt",
+      "https://openssl-library.org/news/vulnerabilities/",
+      "https://secdb.alpinelinux.org/v3.21/main.json and v3.22/main.json (fetched 2026-11-27T16:32Z)",
+      "https://github.com/redis/redis/releases/tag/7.4.12"
+    ],
+    "not_done": [
+      "vulnerability scan of the new image (no scanner is installed on this machine)",
+      "the 26-check persistence validation",
+      "Kubernetes or kind acceptance",
+      "a native linux/amd64 run",
+      "the OpenSSL 3.5.9-r1/-r2 package updates, deliberately not pinned",
+      "publication"
+    ]
+  },
+  "previous_recipe_7_4_11": {
+    "status": "ZLIB_1_4_R0_REBUILD_LOCAL_ARM64_AND_EMULATED_AMD64_BUILD_VERIFIED_2026_11_27_NOT_RESCANNED",
+    "parent": "redis:7.4.11-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499",
+    "server_version": "7.4.11",
+    "parent_alpine_version": "3.21.8",
+    "apk_branch": "v3.21/main",
+    "reviewed_architectures": [
+      "aarch64",
+      "x86_64"
+    ],
+    "packages": [
+      {
+        "architecture": "aarch64",
+        "package": "libcrypto3",
+        "version": "3.3.7-r2",
+        "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/libcrypto3-3.3.7-r2.apk",
+        "sha256": "2303cca13dc8bba5798744a68abd07530abb35ab339d9cc4640fc53276049af0"
+      },
+      {
+        "architecture": "aarch64",
+        "package": "libssl3",
+        "version": "3.3.7-r2",
+        "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/libssl3-3.3.7-r2.apk",
+        "sha256": "d494a0a211dd78a8055c24885fc06375eabb79c82ae797f7f694cefbf3653b79"
+      },
+      {
+        "architecture": "aarch64",
+        "package": "zlib",
+        "version": "1.4-r0",
+        "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/zlib-1.4-r0.apk",
+        "sha256": "05b5663e2559dcd4b0914b946e358f34830c6897ed73404cdfa958ea3b0d0b46"
+      },
+      {
+        "architecture": "x86_64",
+        "package": "libcrypto3",
+        "version": "3.3.7-r2",
+        "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/libcrypto3-3.3.7-r2.apk",
+        "sha256": "3c6fb1c90a974ef0fc83687868712340ca3df3ef5206cfc79fd81ff16f22596a"
+      },
+      {
+        "architecture": "x86_64",
+        "package": "libssl3",
+        "version": "3.3.7-r2",
+        "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/libssl3-3.3.7-r2.apk",
+        "sha256": "00e674d00a80c9808580546dd388093c1c67f21628a9d70e27628bddc86a31e8"
+      },
+      {
+        "architecture": "x86_64",
+        "package": "zlib",
+        "version": "1.4-r0",
+        "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/zlib-1.4-r0.apk",
+        "sha256": "a88ff332b239e7efa688a04832da72687fe3701a952b92c9422b3dc985a3c220"
+      }
+    ],
+    "parent_config_preserved": {
+      "Entrypoint": [
+        "docker-entrypoint.sh"
+      ],
+      "Cmd": [
+        "redis-server"
+      ],
+      "User": "",
+      "WorkingDir": "/data",
+      "Volumes": {
+        "/data": {}
+      },
+      "ExposedPorts": {
+        "6379/tcp": {}
+      },
+      "Env": [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "REDIS_VERSION=7.4.11"
+      ]
+    },
+    "server_and_cli_source": "Inherited unchanged exact parent; actual server/CLI/entrypoint SHA256 equality verified in native runtime.",
+    "fixed_primary_ids": [
+      "CVE-2026-35189",
+      "CVE-2026-54872",
+      "CVE-2026-54875",
+      "CVE-2026-72897",
+      "CVE-2026-75804",
+      "CVE-2026-75805",
+      "CVE-2026-75806",
+      "CVE-2026-77696",
+      "CVE-2026-84782",
+      "CVE-2026-84784",
+      "CVE-2026-85091"
+    ],
+    "baseline_scanner_records": 21,
+    "baseline_scanner_counts": {
+      "CRITICAL": 0,
+      "HIGH": 2,
+      "MEDIUM": 17,
+      "LOW": 2,
+      "UNKNOWN": 0
+    },
+    "primary_severity_notes": [
+      "CVE-2026-85091 is scanner MEDIUM but primary CNA HIGH (CVSS3.1 7.4 / CVSS4.0 8.3); the vendor recipe lists it as fixed from 1.3.2-r1, and lists CVE-2026-4738 as fixed in the 1.4-r0 package now pinned.",
+      "CVE-2026-84782 primary OpenSSL HIGH concerns DTLS retransmission; TCP-only Redis does not use DTLS, but the installed library package is patched rather than suppressed."
+    ],
+    "support_limit": "Alpine 3.21 main support ends 2026-11-01; the upstream OpenSSL 3.3 branch is unsupported and this fix is an Alpine vendor backport. Recheck a supported official Redis 7.4 image base before that date.",
+    "licensing": "Redis 7.4 parent retains RSALv2 or SSPLv1; project MIT does not relicense the server. OpenSSL Apache-2.0 and zlib license texts preserved. No image redistribution/publication performed.",
+    "vendor_source_recipes": [
+      {
+        "package": "openssl",
+        "source_commit": "a254386dfe34f70a05bdb8b2a3d7a5b20b6f076e",
+        "url": "https://github.com/alpinelinux/aports/blob/a254386dfe34f70a05bdb8b2a3d7a5b20b6f076e/main/openssl/APKBUILD",
+        "recipe_sha256": "3aad2fac746a559a9461c2d40e419c295104cc522486c698230996fabdbd643f"
+      },
+      {
+        "package": "zlib",
+        "source_commit": "d3332621d44c2c4cf52e52217b16674db190212c",
+        "url": "https://github.com/alpinelinux/aports/blob/d3332621d44c2c4cf52e52217b16674db190212c/main/zlib/APKBUILD",
+        "recipe_sha256": "4f36ca092f06125076baff75624deb977a1ecbd3deda6e1bbdc7ebc02802ce21"
+      }
+    ],
+    "newer_official_alpine_tags": [
+      {
+        "tag": "7.4.11-alpine3.22",
+        "http_status": 404,
+        "checked_at": "2026-11-27T16:06:31+00:00"
+      },
+      {
+        "tag": "7.4.11-alpine3.23",
+        "http_status": 404,
+        "checked_at": "2026-11-27T16:06:31+00:00"
+      },
+      {
+        "tag": "7.4.11-alpine3.24",
+        "http_status": 404,
+        "checked_at": "2026-11-27T16:06:31+00:00"
+      }
+    ],
+    "verified_at_utc": "2026-11-27T16:05:00+00:00",
+    "local_tag": "opspilot-redis:7.4.11-security-20261127",
+    "image_id": "sha256:68f4580049ecced4ac675b7887452cb8ab97102050c7f2fa819e1a4fa09642a4",
+    "verified_platform": "linux/arm64",
+    "not_executed_platforms": [
+      "linux/amd64"
+    ],
+    "build_runtime_input_sha256": {
+      "Dockerfile": "e45f80cd512be8e825a251d7f276ae8aee43077d2808330f56d3e29a486bdf33",
+      "install-patches.sh": "be20b13134dddbf50c2f4feaf869492cdbe7489a07ed6abd98b8f32242fb4e52",
+      "licenses/OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "licenses/Redis-LICENSE.txt": "abffee3703161c0a6a0cd7f635b2c1ebb3b81bd199e9d18ea89652d678ae4287",
+      "licenses/zlib-LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+      "packages.lock": "a130f72b4a9c2923a3b311f15a5bd3c1c377a3013710419c7e69c95777e0ef7a"
+    },
+    "package_inventory_changes": {
+      "libcrypto3": {
+        "before": "3.3.7-r1",
+        "after": "3.3.7-r2"
+      },
+      "libssl3": {
+        "before": "3.3.7-r1",
+        "after": "3.3.7-r2"
+      },
+      "zlib": {
+        "before": "1.3.2-r0",
+        "after": "1.4-r0"
+      }
+    },
+    "inherited_runtime_files": [
+      "0c24c3dd1769ee917c1748c4eb189b2e45da3aaaef5f1dfd0b25ec697fca61e7  /usr/local/bin/redis-server",
+      "a978d671f03f2773790936034089d54a8e8c2a77b06088550e24cc050fa09f5d  /usr/local/bin/redis-cli",
+      "f8122ddc0eb2ae6ca7762725999f08b2ee7a6975da54e9061feee88f6d4ab2bb  /usr/local/bin/docker-entrypoint.sh"
+    ],
+    "official_tag_recheck_2026_11_27": {
+      "checked_at": "2026-11-27T16:06:31+00:00",
+      "7.4.11-alpine": "sha256:d9436322172a5b482c187bf1f363d3c4fea086fcca6b9c8a94de8f0f39ed3193",
+      "7.4.12-alpine": "sha256:7f7d30b7fdd09467bac58198a1f166dd69789d348d4fe859cccb20e0cf287fbe",
+      "note": "The 7.4.11-alpine tag no longer resolves to this recipe's pinned parent, and a 7.4.12 image now exists. Neither was pulled, inspected or validated here; moving the parent is separate work."
+    },
+    "note": "Top-level record of the previous recipe (parent redis:7.4.11-alpine@sha256:858f009f..., Alpine 3.21.8, URL-pinned v3.21 libcrypto3/libssl3 3.3.7-r2 and zlib 1.4-r0), moved here unchanged when the recipe was rebased on redis:7.4.12-alpine on 2026-11-27 UTC."
   },
   "local_validation_2026_11_27": {
     "reason": "zlib-1.3.2-r1.apk returned HTTP 404 from dl-cdn.alpinelinux.org for aarch64 and x86_64, so the recipe could not be built; Alpine v3.21 main now publishes zlib 1.4-r0 (built 2026-11-06 UTC).",

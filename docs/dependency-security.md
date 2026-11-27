@@ -38,6 +38,20 @@ The Redis recipe pinned Alpine v3.21 `zlib-1.3.2-r1.apk` by URL and SHA-256. Alp
 
 A pin by URL to a distribution mirror fails this way whenever the distribution publishes a newer revision. The postgres and Grafana recipes pin v3.24 `zlib 1.4-r0` the same way and were still served on this date.
 
+## 2026-11-27 UTC Redis recipe: rebased on the official 7.4.12 image
+
+The Redis recipe now builds on `redis:7.4.12-alpine@sha256:7f7d30b7…287fbe` (Alpine 3.22.8, main supported until 2027-05-01). It replaces the unpatched `7.4.11-alpine` digest on Alpine 3.21, whose support ended on 2026-11-01. The new parent's OpenSSL `3.5.9-r0` already carries the upstream fixes for the ten CVEs that the v3.21 `3.3.7-r2` pin backported, so the OpenSSL pins are gone. Neither the rebuilt `7.4.11-alpine` nor `7.4.12-alpine` ships zlib 1.4-r0; both have `1.3.2-r1`. So `packages.lock` still pins one package for aarch64 and x86_64: the v3.22 `zlib 1.4-r0` (CVE-2026-4738). That pin will return 404 when Alpine publishes a newer zlib revision, as the earlier one did.
+
+The image was rebuilt as `opspilot-redis:7.4.12-security-20261127`, natively on linux/arm64 and under emulation on linux/amd64. On both architectures:
+
+- the package set differs from the parent only in zlib;
+- the server, CLI, entrypoint and container configuration equal the parent's;
+- a locked-down start (no network, read-only root, no capabilities, uid 999) passed `PING`, `SET`/`GET`, an AOF rewrite and an AOF read-back after a restart. On amd64 this ran under QEMU.
+
+A `docker compose up --build` stack reported `"task_state":"redis"`. The Helm chart's optional Redis now defaults to the same upstream digest, which still ships zlib 1.3.2-r1.
+
+Alpine 3.22's later OpenSSL revisions `3.5.9-r1` and `-r2` fix seven Low-severity CVEs. They are not in the parent and are deliberately not pinned. The new image was **not** scanned, and the 26-check persistence validation and Kubernetes acceptance were not run. The [recipe record](../deploy/images/redis-security/README.md) has the details. The Redis row in the qualification table below still describes the 2026-10-14 image.
+
 ## Remaining unfixed build advisory: conditionally mitigated
 
 Final native `npm audit` reports **eight High inherited package records, zero Critical/Moderate/Low**. These eight records reduce to one vulnerable package/advisory: `braces 3.0.3`, [CVE-2026-93687 / GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm). The reviewed affected range is <= 3.0.3, no patched version is listed, and the official registry's latest remains 3.0.3. The vulnerable upstream package has not been declared fixed. `fflate 0.8.3` removed its separate malformed-ZIP finding; forced npm suggestions to downgrade Next/Vinext were rejected.
