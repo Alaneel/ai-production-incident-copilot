@@ -1,7 +1,7 @@
 {
   "measured_at": [
-    "2026-11-27T00:33:15.278820+00:00",
-    "2026-11-27T00:33:17.074351+00:00"
+    "2026-11-27T01:06:40.776024+00:00",
+    "2026-11-27T01:06:42.697588+00:00"
   ],
   "source_scope_verified": true,
   "source_fingerprint_counts": [
@@ -9,8 +9,8 @@
     40
   ],
   "artifacts": [
-    "evals/results/workflow_benchmark_20261127T003315Z_be5ddcd1.json",
-    "evals/results/cross_service_benchmark_20261127T003317Z_6274b35104f34e5bb79d3a12582aaff0.json"
+    "evals/results/workflow_benchmark_20261127T010640Z_e07ea495.json",
+    "evals/results/cross_service_benchmark_20261127T010642Z_d8a3f006744e4345b98a6c0ed7f43188.json"
   ],
   "single_fault_snapshots": {
     "cases": 150,
@@ -112,7 +112,7 @@
       "zstandard": "0.25.0"
     },
     "release_recipe_sha256": {
-      "container-images.lock.json": "4255cc6cef16188831b5d00aca279a93181ca34c8418bed8069adfe8ca57c5e7",
+      "container-images.lock.json": "a4ea544bacba000396f8ff7fd01c5af21c7a77e63cd4f9b965c5086488fa7fa7",
       "deploy/images/collector-security/.dockerignore": "84d175a2881b936a15811161fb8aa3a9efc7bd81dc4ab7c4b5ff3357f658c702",
       "deploy/images/collector-security/Dockerfile": "1ed868710d70a5d2fb37d725305d9f6d281ba8165f9a94de2e072a779afa7e51",
       "deploy/images/collector-security/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
@@ -132,12 +132,12 @@
       "deploy/images/grafana-security/licenses/zlib-LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
       "deploy/images/grafana-security/packages.lock": "fcc2777580c7ead7b5896aeaa9f2eb522189ed18b7adec72f57a234c1ec87ba9",
       "deploy/images/loki-security/.dockerignore": "1293c2472cf341de662cb3855b61516164a319ee6b4641a33f17bd718e8e9cb7",
-      "deploy/images/loki-security/Dockerfile": "c93c17fbe06ba8ede6aa57257fc6e3a0a93f5f5699461c312b600283cf37ce18",
+      "deploy/images/loki-security/Dockerfile": "fd991be05f23fef5b88ec5dfc0b90ea0b5aae62d3d6ae374e7d4baaae9266cef",
       "deploy/images/loki-security/LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
       "deploy/images/loki-security/collect-module-notices.go": "aa398786bfa146d39ae98f03ba392f88e92e17f65df0a9460faa99605958e8cf",
-      "deploy/images/loki-security/go.mod": "9b5cef3891227cdb6b5a6ffb25189d03d96e42b6979339bf8cb0119c8466d9f1",
-      "deploy/images/loki-security/go.sum": "57094b132b83b536d2f5e3804af8c8dbd011cfae4e920a35fc94b13cc9cb9ad6",
-      "deploy/images/loki-security/source-lock.json": "3d249cf700e47840149bf5c4d8ec7432abcc18229266fc2cf73bdd65ec7cac14",
+      "deploy/images/loki-security/go.mod": "b8e66dda497089691d20f9128a6d51e04698a74536143cea27d42b8a61776024",
+      "deploy/images/loki-security/go.sum": "62c0e13a849e1744e200a7f9de760898bc2300104f0e470ff6897dff0fe48cb4",
+      "deploy/images/loki-security/source-lock.json": "010ff7b0f9118e8af3c8c59fc3cf2159a020e90911462db474778f9209104605",
       "deploy/images/postgres-security/.dockerignore": "a4d19dcda7f31c0b955cd8feb51ffc5623ad03e488cdb2b2e76b32737300d7fb",
       "deploy/images/postgres-security/Dockerfile": "af3729bd114d5a5e68015fb3051c2deb9a93dc74800058d2c9bd332b38919a2d",
       "deploy/images/postgres-security/gosu/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
@@ -169,12 +169,12 @@
       "deploy/images/redis-security/licenses/zlib-LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
       "deploy/images/redis-security/packages.lock": "db904181223e2e21af0025b9eaf845c83a530bd9d81e43feb6b9155a5c6757f3",
       "deploy/images/tempo-security/.dockerignore": "1293c2472cf341de662cb3855b61516164a319ee6b4641a33f17bd718e8e9cb7",
-      "deploy/images/tempo-security/Dockerfile": "0da772936831c80a9bd1b3f883998a3f0a06ed7bfed596ffb148b9dc899f317d",
+      "deploy/images/tempo-security/Dockerfile": "cb1c4b9a94451c1b737b13bd45128b42df015a5bde61fa50d40f7650112095d7",
       "deploy/images/tempo-security/LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
       "deploy/images/tempo-security/collect-module-notices.go": "aa398786bfa146d39ae98f03ba392f88e92e17f65df0a9460faa99605958e8cf",
-      "deploy/images/tempo-security/go.mod": "3c2465bd18403d270d6efe92d63de0bbe5d980a1e538088c76d709ac3366bc02",
-      "deploy/images/tempo-security/go.sum": "bed85395d2963edc028c6cad023af760746dfa68d72a512ec64f8be3b0afd11d",
-      "deploy/images/tempo-security/source-lock.json": "39cd0a2b9c8a690b1ca37613dd6b51ebc5ea832f97e7bcb46e91c0ab9bc9dc2b"
+      "deploy/images/tempo-security/go.mod": "9cb6128c9498e6115dd00193db5ae1f64d3a62b948364f3a0935b650e3582aa0",
+      "deploy/images/tempo-security/go.sum": "0df95e2ec2695bb0fe4fde294c6ba21c8c822e142720fce5c0271f9b45393414",
+      "deploy/images/tempo-security/source-lock.json": "56cf3f93a58b108736b0aa820d599361edb7958e981c42f516a182896c09e110"
     }
   }
 }

@@ -14,8 +14,8 @@
     ],
     "compose.fault-lab.yml": [
       "opspilot-prometheus:3.15.0-security-20261115",
-      "opspilot-loki:3.7.8-security-20261121",
-      "opspilot-tempo:2.10.8-security-20261115",
+      "opspilot-loki:3.7.8-security-20261127",
+      "opspilot-tempo:2.10.8-security-20261127",
       "opspilot-collector:0.162.0-security-20261115",
       "opspilot-grafana:12.4.13-security-20261121"
     ],
@@ -74,14 +74,14 @@
       "license_scope": "Third-party upstream terms, separate from first-party MIT"
     },
     "tempo": {
-      "local_image_tag": "opspilot-tempo:2.10.8-security-20261115",
+      "local_image_tag": "opspilot-tempo:2.10.8-security-20261127",
       "context": "deploy/images/tempo-security",
       "immutable_parent": "grafana/tempo:2.10.8@sha256:f0561deb1c68ec44d6e6e7e4487f30106c4e5e768642077695b37958b105812a",
       "version": "2.10.8",
-      "verified_local_linux_arm64_image_id": "sha256:7dd65560fb6273015087ae505c3bf79f1943e7980a23950c601d0a0321dd9854",
+      "verified_local_linux_arm64_image_id": "sha256:2fbc945b37219c8177b1b051f650ce44ef6eb730157a3f84c6dfab728aeffcef",
       "lock_sha256": {
-        "go.mod": "3c2465bd18403d270d6efe92d63de0bbe5d980a1e538088c76d709ac3366bc02",
-        "go.sum": "bed85395d2963edc028c6cad023af760746dfa68d72a512ec64f8be3b0afd11d"
+        "go.mod": "9cb6128c9498e6115dd00193db5ae1f64d3a62b948364f3a0935b650e3582aa0",
+        "go.sum": "0df95e2ec2695bb0fe4fde294c6ba21c8c822e142720fce5c0271f9b45393414"
       },
       "native_compiler": "go1.26.9",
       "license_scope": "Third-party upstream terms, separate from first-party MIT"
@@ -100,14 +100,14 @@
       "license_scope": "Third-party upstream terms, separate from first-party MIT"
     },
     "loki": {
-      "local_image_tag": "opspilot-loki:3.7.8-security-20261121",
+      "local_image_tag": "opspilot-loki:3.7.8-security-20261127",
       "context": "deploy/images/loki-security",
       "immutable_parent": "grafana/loki:3.7.8@sha256:1107dd5274e0ada47e42472b7a7e71f3b2a2fe878878108f3e2f9e51528f0193",
       "version": "3.7.8",
-      "verified_local_linux_arm64_image_id": "sha256:39af3c5278f3aee41bb13bea2a1b80e3328066148bb22b11014fc1cc2a678b3a",
+      "verified_local_linux_arm64_image_id": "sha256:e2305572002e87b08a44d6c669e04a0e8ef45633ce55425603f510549c4843c2",
       "lock_sha256": {
-        "go.mod": "9b5cef3891227cdb6b5a6ffb25189d03d96e42b6979339bf8cb0119c8466d9f1",
-        "go.sum": "57094b132b83b536d2f5e3804af8c8dbd011cfae4e920a35fc94b13cc9cb9ad6"
+        "go.mod": "b8e66dda497089691d20f9128a6d51e04698a74536143cea27d42b8a61776024",
+        "go.sum": "62c0e13a849e1744e200a7f9de760898bc2300104f0e470ff6897dff0fe48cb4"
       },
       "native_compiler": "go1.26.9",
       "license_scope": "Third-party upstream terms, separate from first-party MIT"

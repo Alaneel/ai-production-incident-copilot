@@ -16,6 +16,20 @@ The Postgres checkpoint fix follows the [namespace advisory](https://github.com/
 
 The additional npm overrides address the actual nested Babel, PostCSS, URI, expansion, websocket, compression, image and esbuild findings. Vite/Cloudflare secure versions changed 83 nested package records; the installed graph matches the regenerated lock and all 209 original frontend tests remain. The upgraded Vinext output imports `cloudflare:workers`; HTML tests now run the real local workerd runtime rather than using Node to impersonate that platform. [Release validation](release-verification-2026-10-13.md) separates local observed checks from future hosted CI.
 
+## 2026-11-27 UTC Dependabot remediation
+
+GitHub reported 22 open alerts on `main`, all opened 2026-11-10. Each was fixed at the smallest change that reaches a patched release at least two weeks old:
+
+| Alerts | Where | Change |
+|---|---|---|
+| `undici` ×5 (4 High) | `package-lock.json`, via `miniflare` | Override `undici@^7` → 7.30.2 |
+| `fast-uri` ×4 | `package-lock.json`, via `ajv` | Existing override 3.1.8 → 3.1.9 |
+| `minimatch` ×1 | `package-lock.json`, via `@typescript-eslint/typescript-estree` | Override `minimatch@^10` → 11.0.7 (upstream `typescript-eslint` 8.73 moved to minimatch 11); adds `@isaacs/nonrecursive-glob-match` 1.1.0, BlueOak-1.0.0 |
+| `go-jose/v4` ×6 (2 High) | Loki and Tempo recipe `go.mod` | v4.1.4 → v4.1.9 |
+| `otlptrace` exporters ×6 (Low) | Loki and Tempo recipe `go.mod` | v1.44.0 / v1.43.0 → v1.47.0, matching the already-pinned OpenTelemetry SDK |
+
+The Go updates were resolved with `go get` against the pinned upstream source archives inside the digest-pinned Go 1.26.9 builder; only the listed modules changed. Both images were then rebuilt on linux/arm64 (`opspilot-loki:3.7.8-security-20261127`, `opspilot-tempo:2.10.8-security-20261127`), the binaries' embedded module versions were read back, and each started as UID 10001 and answered `/ready` on loopback. The image IDs and lock hashes are bound in [`container-images.lock.json`](../container-images.lock.json). The images were not scanned, published or deployed, and the fault-lab matrix was not re-run on them. The 220 frontend tests and lint pass on the new npm graph.
+
 ## Remaining unfixed build advisory: conditionally mitigated
 
 Final native `npm audit` reports **eight High inherited package records, zero Critical/Moderate/Low**. These eight records reduce to one vulnerable package/advisory: `braces 3.0.3`, [CVE-2026-93687 / GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm). The reviewed affected range is <= 3.0.3, no patched version is listed, and the official registry's latest remains 3.0.3. The vulnerable upstream package has not been declared fixed. `fflate 0.8.3` removed its separate malformed-ZIP finding; forced npm suggestions to downgrade Next/Vinext were rejected.
