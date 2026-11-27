@@ -1,5 +1,5 @@
 {
-  "status": "NATIVE_ARM64_BUILD_SCAN_PERSISTENCE_VERIFIED_OPS_ACCEPTANCE_PENDING",
+  "status": "ZLIB_1_4_R0_REBUILD_LOCAL_ARM64_AND_EMULATED_AMD64_BUILD_VERIFIED_2026_11_27_NOT_RESCANNED",
   "parent": "redis:7.4.11-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499",
   "server_version": "7.4.11",
   "parent_alpine_version": "3.21.8",
@@ -26,9 +26,9 @@
     {
       "architecture": "aarch64",
       "package": "zlib",
-      "version": "1.3.2-r1",
-      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/zlib-1.3.2-r1.apk",
-      "sha256": "47bdb66edfddca8b64438369affabd9debc05159aa1bff5c26027270cb28b3f7"
+      "version": "1.4-r0",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/aarch64/zlib-1.4-r0.apk",
+      "sha256": "05b5663e2559dcd4b0914b946e358f34830c6897ed73404cdfa958ea3b0d0b46"
     },
     {
       "architecture": "x86_64",
@@ -47,9 +47,9 @@
     {
       "architecture": "x86_64",
       "package": "zlib",
-      "version": "1.3.2-r1",
-      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/zlib-1.3.2-r1.apk",
-      "sha256": "52ed3729bec11d63313f38ade503d40650bb57a36ec72a0050619391fb6bfd5e"
+      "version": "1.4-r0",
+      "url": "https://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/zlib-1.4-r0.apk",
+      "sha256": "a88ff332b239e7efa688a04832da72687fe3701a952b92c9422b3dc985a3c220"
     }
   ],
   "parent_config_preserved": {
@@ -95,7 +95,7 @@
     "UNKNOWN": 0
   },
   "primary_severity_notes": [
-    "CVE-2026-85091 is scanner MEDIUM but primary CNA HIGH (CVSS3.1 7.4 / CVSS4.0 8.3); exact vendor 1.3.2-r1 package required.",
+    "CVE-2026-85091 is scanner MEDIUM but primary CNA HIGH (CVSS3.1 7.4 / CVSS4.0 8.3); the vendor recipe lists it as fixed from 1.3.2-r1, and lists CVE-2026-4738 as fixed in the 1.4-r0 package now pinned.",
     "CVE-2026-84782 primary OpenSSL HIGH concerns DTLS retransmission; TCP-only Redis does not use DTLS, but the installed library package is patched rather than suppressed."
   ],
   "support_limit": "Alpine 3.21 main support ends 2026-11-01; the upstream OpenSSL 3.3 branch is unsupported and this fix is an Alpine vendor backport. Recheck a supported official Redis 7.4 image base before that date.",
@@ -109,42 +109,42 @@
     },
     {
       "package": "zlib",
-      "source_commit": "c973d294927355eac1d2a6e97d86e41fbab8ffda",
-      "url": "https://github.com/alpinelinux/aports/blob/c973d294927355eac1d2a6e97d86e41fbab8ffda/main/zlib/APKBUILD",
-      "recipe_sha256": "6a3c1cfd5f3670a84b1ad522d0007be2282b4fa2441b29273a12d32a86693ec3"
+      "source_commit": "d3332621d44c2c4cf52e52217b16674db190212c",
+      "url": "https://github.com/alpinelinux/aports/blob/d3332621d44c2c4cf52e52217b16674db190212c/main/zlib/APKBUILD",
+      "recipe_sha256": "4f36ca092f06125076baff75624deb977a1ecbd3deda6e1bbdc7ebc02802ce21"
     }
   ],
   "newer_official_alpine_tags": [
     {
       "tag": "7.4.11-alpine3.22",
       "http_status": 404,
-      "checked_at": "2026-10-13T21:33:37.702915+00:00"
+      "checked_at": "2026-11-27T16:06:31+00:00"
     },
     {
       "tag": "7.4.11-alpine3.23",
       "http_status": 404,
-      "checked_at": "2026-10-13T21:33:38.549531+00:00"
+      "checked_at": "2026-11-27T16:06:31+00:00"
     },
     {
       "tag": "7.4.11-alpine3.24",
       "http_status": 404,
-      "checked_at": "2026-10-13T21:33:39.386623+00:00"
+      "checked_at": "2026-11-27T16:06:31+00:00"
     }
   ],
-  "verified_at_utc": "2026-10-14T13:30:04.412415+00:00",
-  "local_tag": "opspilot-redis:7.4.11-security-20261013",
-  "image_id": "sha256:cf899dc251f3311931b823b9b2d7093af5d5a202e76615c879e935570a599aaf",
+  "verified_at_utc": "2026-11-27T16:05:00+00:00",
+  "local_tag": "opspilot-redis:7.4.11-security-20261127",
+  "image_id": "sha256:68f4580049ecced4ac675b7887452cb8ab97102050c7f2fa819e1a4fa09642a4",
   "verified_platform": "linux/arm64",
   "not_executed_platforms": [
     "linux/amd64"
   ],
   "build_runtime_input_sha256": {
-    "Dockerfile": "ce8675e0538bf10611b5861b06994f84bc0752770e4c813abc5f1874d88bc0b8",
-    "install-patches.sh": "b7e931d4c4cbdd94fa81c46e0aa43f4ecd2d07ba320172ddf5ac7d803efbe4ef",
+    "Dockerfile": "e45f80cd512be8e825a251d7f276ae8aee43077d2808330f56d3e29a486bdf33",
+    "install-patches.sh": "be20b13134dddbf50c2f4feaf869492cdbe7489a07ed6abd98b8f32242fb4e52",
     "licenses/OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
     "licenses/Redis-LICENSE.txt": "abffee3703161c0a6a0cd7f635b2c1ebb3b81bd199e9d18ea89652d678ae4287",
     "licenses/zlib-LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
-    "packages.lock": "db904181223e2e21af0025b9eaf845c83a530bd9d81e43feb6b9155a5c6757f3"
+    "packages.lock": "a130f72b4a9c2923a3b311f15a5bd3c1c377a3013710419c7e69c95777e0ef7a"
   },
   "package_inventory_changes": {
     "libcrypto3": {
@@ -157,71 +157,121 @@
     },
     "zlib": {
       "before": "1.3.2-r0",
-      "after": "1.3.2-r1"
+      "after": "1.4-r0"
     }
   },
-  "preserved_other_os_packages": 16,
-  "parent_configuration_identical": true,
   "inherited_runtime_files": [
     "0c24c3dd1769ee917c1748c4eb189b2e45da3aaaef5f1dfd0b25ec697fca61e7  /usr/local/bin/redis-server",
     "a978d671f03f2773790936034089d54a8e8c2a77b06088550e24cc050fa09f5d  /usr/local/bin/redis-cli",
     "f8122ddc0eb2ae6ca7762725999f08b2ee7a6975da54e9061feee88f6d4ab2bb  /usr/local/bin/docker-entrypoint.sh"
   ],
-  "runtime_validation": {
-    "checks": 26,
-    "all_passed": true,
-    "fixture_values": 1000,
-    "fixture_sha256": "eb7d45e9f42615c591a8e636c2bb8185132073141f87b2421a04791a10aa5043",
-    "AOF_rewrite_restart_recreate_exact": true,
-    "actual_server_uid_gid": "999:1000",
-    "nonroot_readonly_startup": true,
-    "owned_resource_inventory_unchanged": true,
-    "initial_failure": "First build retained: apk2.14 lacks apk3 --exists; corrected to stable installed-database version validation and forced empty repositories file. Subsequent successful build contains no index download."
+  "official_tag_recheck_2026_11_27": {
+    "checked_at": "2026-11-27T16:06:31+00:00",
+    "7.4.11-alpine": "sha256:d9436322172a5b482c187bf1f363d3c4fea086fcca6b9c8a94de8f0f39ed3193",
+    "7.4.12-alpine": "sha256:7f7d30b7fdd09467bac58198a1f166dd69789d348d4fe859cccb20e0cf287fbe",
+    "note": "The 7.4.11-alpine tag no longer resolves to this recipe's pinned parent, and a 7.4.12 image now exists. Neither was pulled, inspected or validated here; moving the parent is separate work."
   },
-  "runtime_license_readback": [
-    {
-      "file": "Redis-LICENSE.txt",
-      "sha256": "abffee3703161c0a6a0cd7f635b2c1ebb3b81bd199e9d18ea89652d678ae4287",
-      "matches_exact_upstream_text": true
+  "local_validation_2026_11_27": {
+    "reason": "zlib-1.3.2-r1.apk returned HTTP 404 from dl-cdn.alpinelinux.org for aarch64 and x86_64, so the recipe could not be built; Alpine v3.21 main now publishes zlib 1.4-r0 (built 2026-11-06 UTC).",
+    "architecture": "linux/arm64",
+    "local_image_id": "sha256:68f4580049ecced4ac675b7887452cb8ab97102050c7f2fa819e1a4fa09642a4",
+    "package_check": "19 installed packages; libcrypto3 3.3.7-r2, libssl3 3.3.7-r2, zlib 1.4-r0",
+    "vendor_signature_checked_during_build": true,
+    "server_cli_entrypoint_sha256_match_inherited_runtime_files": true,
+    "zlib_license_sha256_matches_retained": true,
+    "runtime": "Started with --network none, a read-only root filesystem, all capabilities dropped and uid:gid 999:1000; PING, SET/GET and an AOF rewrite succeeded on Redis 7.4.11.",
+    "amd64_emulated": {
+      "local_image_id": "sha256:07a16f7bfc0e04250ae9be7d1b9fb794902b4d0f32f07a87456c422b2af15574",
+      "vendor_signature_checked_during_build": true,
+      "zlib_version": "1.4-r0",
+      "note": "Emulated local build and package check only; the server was not started on amd64."
     },
-    {
-      "file": "OpenSSL-LICENSE.txt",
-      "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
-      "matches_exact_upstream_text": true
-    },
-    {
-      "file": "zlib-LICENSE",
-      "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
-      "matches_exact_upstream_text": true
-    }
-  ],
-  "scan": {
-    "tool_version": "0.75.0",
-    "platform": "linux/arm64",
+    "not_done": [
+      "vulnerability scan of the new image",
+      "the 26-check persistence validation",
+      "Compose acceptance",
+      "Kubernetes acceptance",
+      "publication"
+    ]
+  },
+  "previous_image_2026_10_14": {
+    "local_tag": "opspilot-redis:7.4.11-security-20261013",
     "image_id": "sha256:cf899dc251f3311931b823b9b2d7093af5d5a202e76615c879e935570a599aaf",
-    "db_metadata": {
-      "Version": 2,
-      "NextUpdate": "2026-10-15T07:11:52.271767002Z",
-      "UpdatedAt": "2026-10-14T07:11:52.271767627Z",
-      "DownloadedAt": "2026-10-14T13:07:06.707178Z"
+    "verified_at_utc": "2026-10-14T13:30:04.412415+00:00",
+    "zlib_version": "1.3.2-r1",
+    "note": "Everything in this block describes the earlier image. Its pinned zlib 1.3.2-r1 package was later withdrawn from the Alpine v3.21 mirror, so that image can no longer be rebuilt.",
+    "build_runtime_input_sha256": {
+      "Dockerfile": "ce8675e0538bf10611b5861b06994f84bc0752770e4c813abc5f1874d88bc0b8",
+      "install-patches.sh": "b7e931d4c4cbdd94fa81c46e0aa43f4ecd2d07ba320172ddf5ac7d803efbe4ef",
+      "licenses/OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "licenses/Redis-LICENSE.txt": "abffee3703161c0a6a0cd7f635b2c1ebb3b81bd199e9d18ea89652d678ae4287",
+      "licenses/zlib-LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+      "packages.lock": "db904181223e2e21af0025b9eaf845c83a530bd9d81e43feb6b9155a5c6757f3"
     },
-    "db_sha256": "88daf0f4f0789698811bec5ebf95ef9610cd0f4d0571394f754a5cdb8cf081c9",
-    "report_sha256": "ae31dbd182e816b3645f88a7c86d52e1c64fa12d14aadfe6d4b9b8c53dbfb6be",
-    "severity_counts": {
-      "CRITICAL": 0,
-      "HIGH": 0,
-      "MEDIUM": 0,
-      "LOW": 0,
-      "UNKNOWN": 0
+    "vendor_source_recipe_zlib": {
+      "package": "zlib",
+      "source_commit": "d3332621d44c2c4cf52e52217b16674db190212c",
+      "url": "https://github.com/alpinelinux/aports/blob/d3332621d44c2c4cf52e52217b16674db190212c/main/zlib/APKBUILD",
+      "recipe_sha256": "4f36ca092f06125076baff75624deb977a1ecbd3deda6e1bbdc7ebc02802ce21"
     },
-    "package_count": 19,
-    "suppression": "None; empty ignore/config and disabled telemetry/version checks; no DB update or external package graph query",
-    "scope": "Known package vulnerabilities in this exact native image at this database snapshot, not host or application-wide security certification"
-  },
-  "proof_sha256": {
-    "build-results.json": "7b0b0efbf6ed1e83ccf2ff1b70b5423097fcb7ce0d837c46b38e061564793785",
-    "runtime-results.json": "fbd96d011794dcae9f0f656f824619af4d062059744e309b1dde3afbe40a8ad8",
-    "scan-results.json": "5b11fd04d627a6acdf04893e1f2b85f2772ce61a72fba8ce48505bf35c1e6d33",
-    "license-runtime-readback.json": "8bce6fbdb2e27ec88df3cbb757d8fd522d8c40358cfff2a1706319315d1eb11f"
+    "runtime_validation": {
+      "checks": 26,
+      "all_passed": true,
+      "fixture_values": 1000,
+      "fixture_sha256": "eb7d45e9f42615c591a8e636c2bb8185132073141f87b2421a04791a10aa5043",
+      "AOF_rewrite_restart_recreate_exact": true,
+      "actual_server_uid_gid": "999:1000",
+      "nonroot_readonly_startup": true,
+      "owned_resource_inventory_unchanged": true,
+      "initial_failure": "First build retained: apk2.14 lacks apk3 --exists; corrected to stable installed-database version validation and forced empty repositories file. Subsequent successful build contains no index download."
+    },
+    "runtime_license_readback": [
+      {
+        "file": "Redis-LICENSE.txt",
+        "sha256": "abffee3703161c0a6a0cd7f635b2c1ebb3b81bd199e9d18ea89652d678ae4287",
+        "matches_exact_upstream_text": true
+      },
+      {
+        "file": "OpenSSL-LICENSE.txt",
+        "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+        "matches_exact_upstream_text": true
+      },
+      {
+        "file": "zlib-LICENSE",
+        "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+        "matches_exact_upstream_text": true
+      }
+    ],
+    "scan": {
+      "tool_version": "0.75.0",
+      "platform": "linux/arm64",
+      "image_id": "sha256:cf899dc251f3311931b823b9b2d7093af5d5a202e76615c879e935570a599aaf",
+      "db_metadata": {
+        "Version": 2,
+        "NextUpdate": "2026-10-15T07:11:52.271767002Z",
+        "UpdatedAt": "2026-10-14T07:11:52.271767627Z",
+        "DownloadedAt": "2026-10-14T13:07:06.707178Z"
+      },
+      "db_sha256": "88daf0f4f0789698811bec5ebf95ef9610cd0f4d0571394f754a5cdb8cf081c9",
+      "report_sha256": "ae31dbd182e816b3645f88a7c86d52e1c64fa12d14aadfe6d4b9b8c53dbfb6be",
+      "severity_counts": {
+        "CRITICAL": 0,
+        "HIGH": 0,
+        "MEDIUM": 0,
+        "LOW": 0,
+        "UNKNOWN": 0
+      },
+      "package_count": 19,
+      "suppression": "None; empty ignore/config and disabled telemetry/version checks; no DB update or external package graph query",
+      "scope": "Known package vulnerabilities in this exact native image at this database snapshot, not host or application-wide security certification"
+    },
+    "proof_sha256": {
+      "build-results.json": "7b0b0efbf6ed1e83ccf2ff1b70b5423097fcb7ce0d837c46b38e061564793785",
+      "runtime-results.json": "fbd96d011794dcae9f0f656f824619af4d062059744e309b1dde3afbe40a8ad8",
+      "scan-results.json": "5b11fd04d627a6acdf04893e1f2b85f2772ce61a72fba8ce48505bf35c1e6d33",
+      "license-runtime-readback.json": "8bce6fbdb2e27ec88df3cbb757d8fd522d8c40358cfff2a1706319315d1eb11f"
+    },
+    "preserved_other_os_packages": 16,
+    "parent_configuration_identical": true
   }
 }

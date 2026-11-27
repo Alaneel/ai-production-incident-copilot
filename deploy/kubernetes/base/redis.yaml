@@ -34,7 +34,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: redis
-          image: opspilot-redis:7.4.11-security-20261013
+          image: opspilot-redis:7.4.11-security-20261127
           args: ["redis-server", "--appendonly", "yes"]
           ports:
             - name: redis

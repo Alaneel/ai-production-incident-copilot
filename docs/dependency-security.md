@@ -30,6 +30,14 @@ GitHub reported 22 open alerts on `main`, all opened 2026-11-10. Each was fixed 
 
 The Go updates were resolved with `go get` against the pinned upstream source archives inside the digest-pinned Go 1.26.9 builder; only the listed modules changed. Both images were then rebuilt on linux/arm64 (`opspilot-loki:3.7.8-security-20261127`, `opspilot-tempo:2.10.8-security-20261127`), the binaries' embedded module versions were read back, and each started as UID 10001 and answered `/ready` on loopback. The image IDs and lock hashes are bound in [`container-images.lock.json`](../container-images.lock.json). The images were not scanned, published or deployed, and the fault-lab matrix was not re-run on them. The 220 frontend tests and lint pass on the new npm graph.
 
+## 2026-11-27 UTC Redis recipe: withdrawn zlib package replaced
+
+The Redis recipe pinned Alpine v3.21 `zlib-1.3.2-r1.apk` by URL and SHA-256. Alpine replaced it with `zlib 1.4-r0` on 2026-11-06 UTC and the pinned URL then returned 404 for both architectures, so the recipe, and `docker compose up --build` on a clean machine, stopped building. No alert reported this; it was found by running the Compose build.
+
+`packages.lock` now pins the v3.21 `zlib 1.4-r0` packages, whose vendor recipe lists CVE-2026-4738 as fixed in that revision. The image was rebuilt as `opspilot-redis:7.4.11-security-20261127` on linux/arm64 and, under emulation, linux/amd64; both passed the URL, SHA-256 and Alpine signature checks. On arm64 the installed package set, the inherited server, CLI and entrypoint hashes and a locked-down start (no network, read-only root, no capabilities, uid 999) with `PING`, `SET`/`GET` and an AOF rewrite were checked. The new image was **not** scanned, and the earlier 26-check persistence validation and Compose acceptance were not repeated. The official `7.4.11-alpine` tag has since been rebuilt and `7.4.12-alpine` exists; neither was validated, and moving the parent is still to do. The [recipe record](../deploy/images/redis-security/README.md) has the details.
+
+A pin by URL to a distribution mirror fails this way whenever the distribution publishes a newer revision. The postgres and Grafana recipes pin v3.24 `zlib 1.4-r0` the same way and were still served on this date.
+
 ## Remaining unfixed build advisory: conditionally mitigated
 
 Final native `npm audit` reports **eight High inherited package records, zero Critical/Moderate/Low**. These eight records reduce to one vulnerable package/advisory: `braces 3.0.3`, [CVE-2026-93687 / GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm). The reviewed affected range is <= 3.0.3, no patched version is listed, and the official registry's latest remains 3.0.3. The vulnerable upstream package has not been declared fixed. `fflate 0.8.3` removed its separate malformed-ZIP finding; forced npm suggestions to downgrade Next/Vinext were rejected.
