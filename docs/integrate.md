@@ -113,6 +113,8 @@ docker compose -f docker-compose.yml -f compose.connect.yml up --build
 
 [`compose.connect.yml`](../compose.connect.yml) mounts `deploy/signal-profiles` read-only. Set `SIGNAL_PROFILE_DIR` to use profiles kept in your own repository.
 
+The orchestrator serves the console at its own address: `http://localhost:8080` with Compose. `CONSOLE_URL` is the address other people open it at, and is what alert responses, notifications and MCP results link to.
+
 On Kubernetes, ship the profile as a ConfigMap and point the gateway at it. The [base](../deploy/kubernetes/base/telemetry-gateway.yaml) already reads `PROMETHEUS_URL`, `LOKI_URL` and `TEMPO_URL`:
 
 ```yaml
@@ -198,6 +200,8 @@ Grafana-managed alerts work the same way. Add a **Webhook** contact point:
 Then route the alerts you want diagnosed to it with a notification policy. Use **Continue matching** to keep your existing contact points. Grafana sends the Alertmanager alert shape plus fields of its own (`values`, `generatorURL`, `title`), which OpsPilot ignores.
 
 The service comes from the same `ALERT_SERVICE_LABELS`. Give the alert rule a `service` label, or keep a `service_name` or `job` label from the query. Grafana's **Test** button sends an alert without a service label. It appears under `skipped` with the reason, which is a quick way to check the contact point and its token. Deduplication, limits and console links are shared with the Alertmanager route.
+
+Checked on 2026-11-27 UTC against Grafana 12.4.13: a provisioned rule with a `service` label, routed to a webhook contact point with Bearer authorization, started a diagnosis through this endpoint. Other Grafana versions are untested.
 
 ### Find alert-started incidents
 

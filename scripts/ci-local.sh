@@ -73,6 +73,7 @@ frontend() {
   npm ci --ignore-scripts --no-audit --no-fund
   npm test
   npm run test:stream-contract
+  npm run test:console-export
 }
 
 gateway() {

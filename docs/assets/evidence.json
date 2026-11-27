@@ -1,16 +1,16 @@
 {
   "measured_at": [
-    "2026-11-27T01:06:40.776024+00:00",
-    "2026-11-27T01:06:42.697588+00:00"
+    "2026-11-27T16:09:04.818083+00:00",
+    "2026-11-27T16:09:06.738439+00:00"
   ],
   "source_scope_verified": true,
   "source_fingerprint_counts": [
-    38,
-    40
+    39,
+    41
   ],
   "artifacts": [
-    "evals/results/workflow_benchmark_20261127T010640Z_e07ea495.json",
-    "evals/results/cross_service_benchmark_20261127T010642Z_d8a3f006744e4345b98a6c0ed7f43188.json"
+    "evals/results/workflow_benchmark_20261127T160904Z_e3c5310f.json",
+    "evals/results/cross_service_benchmark_20261127T160906Z_7fa4cff4283c4c7bbbe0797982635228.json"
   ],
   "single_fault_snapshots": {
     "cases": 150,
@@ -112,7 +112,7 @@
       "zstandard": "0.25.0"
     },
     "release_recipe_sha256": {
-      "container-images.lock.json": "a4ea544bacba000396f8ff7fd01c5af21c7a77e63cd4f9b965c5086488fa7fa7",
+      "container-images.lock.json": "1fe143635a75d04a93d726fdc1087675fffb41f48f59a2564ee0ed773cbf90ea",
       "deploy/images/collector-security/.dockerignore": "84d175a2881b936a15811161fb8aa3a9efc7bd81dc4ab7c4b5ff3357f658c702",
       "deploy/images/collector-security/Dockerfile": "1ed868710d70a5d2fb37d725305d9f6d281ba8165f9a94de2e072a779afa7e51",
       "deploy/images/collector-security/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
@@ -162,12 +162,12 @@
       "deploy/images/prometheus-security/prepare-ui.sh": "ea5c2568ce71bc9a0b023ea62fb3ea23964f4234db960cfa053cb769ade98a85",
       "deploy/images/prometheus-security/source-lock.json": "d79bd78c50441e5b86296d18fae52fd6e180ecb20472e690faa2593707d6962e",
       "deploy/images/redis-security/.dockerignore": "b42291f2acfaf84ec05adfab0ef1e489ccf62b7b06163e606abc7dc270b3c618",
-      "deploy/images/redis-security/Dockerfile": "ce8675e0538bf10611b5861b06994f84bc0752770e4c813abc5f1874d88bc0b8",
-      "deploy/images/redis-security/install-patches.sh": "b7e931d4c4cbdd94fa81c46e0aa43f4ecd2d07ba320172ddf5ac7d803efbe4ef",
+      "deploy/images/redis-security/Dockerfile": "e45f80cd512be8e825a251d7f276ae8aee43077d2808330f56d3e29a486bdf33",
+      "deploy/images/redis-security/install-patches.sh": "be20b13134dddbf50c2f4feaf869492cdbe7489a07ed6abd98b8f32242fb4e52",
       "deploy/images/redis-security/licenses/OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
       "deploy/images/redis-security/licenses/Redis-LICENSE.txt": "abffee3703161c0a6a0cd7f635b2c1ebb3b81bd199e9d18ea89652d678ae4287",
       "deploy/images/redis-security/licenses/zlib-LICENSE": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
-      "deploy/images/redis-security/packages.lock": "db904181223e2e21af0025b9eaf845c83a530bd9d81e43feb6b9155a5c6757f3",
+      "deploy/images/redis-security/packages.lock": "a130f72b4a9c2923a3b311f15a5bd3c1c377a3013710419c7e69c95777e0ef7a",
       "deploy/images/tempo-security/.dockerignore": "1293c2472cf341de662cb3855b61516164a319ee6b4641a33f17bd718e8e9cb7",
       "deploy/images/tempo-security/Dockerfile": "cb1c4b9a94451c1b737b13bd45128b42df015a5bde61fa50d40f7650112095d7",
       "deploy/images/tempo-security/LICENSE": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",

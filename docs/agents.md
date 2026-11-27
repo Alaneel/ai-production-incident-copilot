@@ -86,3 +86,4 @@ Agents that want to run their own queries can also connect to the MCP server beh
 - A diagnosis that stops early returns a tool error with the error class, for example when discovery is on and the environment isn't an allowed namespace. It isn't left looking like it's still running. This record is kept per orchestrator process, for the last 500 failures.
 - The endpoint answers each request in full. It doesn't stream progress or push notifications, so for a long diagnosis, call `get_incident` again.
 - Like the API, it uses scoped tokens rather than per-user identity. OAuth for MCP clients is not implemented.
+- Checked on 2026-11-27 UTC with the official MCP Python SDK client 2.3.0 over Streamable HTTP: initialize, tool listing, all three tools, and a refused unknown tool. Claude Code and Cursor themselves have not been run against it.

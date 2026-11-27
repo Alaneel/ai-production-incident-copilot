@@ -1,9 +1,11 @@
 name: helm chart
 on:
   push:
-    paths: ["deploy/helm/**", "deploy/signal-profiles/**", "services/**", "requirements-*.lock", ".github/workflows/chart.yml"]
+    paths: ["deploy/helm/**", "deploy/signal-profiles/**", "services/**", "requirements-*.lock", ".github/workflows/chart.yml",
+            "app/**", "build/**", "public/**", "worker/**", "package.json", "package-lock.json", "vite.config.ts", ".dockerignore"]
   pull_request:
-    paths: ["deploy/helm/**", "deploy/signal-profiles/**", "services/**", "requirements-*.lock", ".github/workflows/chart.yml"]
+    paths: ["deploy/helm/**", "deploy/signal-profiles/**", "services/**", "requirements-*.lock", ".github/workflows/chart.yml",
+            "app/**", "build/**", "public/**", "worker/**", "package.json", "package-lock.json", "vite.config.ts", ".dockerignore"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -82,6 +84,33 @@ jobs:
           assert code == 403, code
           print("ok: cited diagnosis, no rollback without live deployment history, reader approval refused")'
           test "$(kubectl auth can-i get deployments --namespace default --as system:serviceaccount:opspilot:opspilot-mcp-server)" = no
+      - name: The bundled console is served unchanged from the API origin
+        run: |
+          kubectl --namespace opspilot exec deploy/opspilot-orchestrator -- python -c '
+          import hashlib, json, pathlib, urllib.error, urllib.request
+          base = "http://127.0.0.1:8080"
+          manifest = json.loads(pathlib.Path("/app/console/console-manifest.json").read_text())
+          def get(path):
+              with urllib.request.urlopen(base + path, timeout=10) as response:
+                  return response.headers, response.read()
+          headers, page = get("/")
+          policy = headers["Content-Security-Policy"]
+          assert manifest["inline_scripts_sha256"] and all("sha256-" + value in policy for value in manifest["inline_scripts_sha256"]), policy
+          assert "unsafe-eval" not in policy and "default-src" in policy and "frame-ancestors" in policy, policy
+          assert b"data-backend=\"same-origin\"" in page
+          for name, entry in manifest["files"].items():
+              headers, body = get("/" if name == "index.html" else "/" + name)
+              assert hashlib.sha256(body).hexdigest() == entry["sha256"], name
+              assert headers["Content-Type"] == entry["type"], (name, headers["Content-Type"])
+              assert headers["X-Content-Type-Options"] == "nosniff", name
+          # The page is public; the API behind it still needs a credential.
+          try:
+              urllib.request.urlopen(base + "/v1/incidents", timeout=10)
+              raise SystemExit("the incident API answered without a credential")
+          except urllib.error.HTTPError as error:
+              assert error.code == 401, error.code
+          assert json.load(urllib.request.urlopen(base + "/health", timeout=10))["console"] == "bundled"
+          print("ok:", len(manifest["files"]), "console files served unchanged; scripts are limited to this origin and exported hashes")'
       - name: helm upgrade to discovery in one namespace keeps credentials
         run: |
           # A real Deployment for discovery to read, in the target namespace.

@@ -53,7 +53,7 @@ python scripts/portfolio_demo.py
 
 The [demo runtime lock](requirements-demo.lock) pins 59 platform-marked third-party distributions and their SHA256 artifacts; the separate [build lock](requirements-build.lock) pins installation/build tools. Both first-party services report version 0.2.0. The command runs eight fault families and two controls through the **real compiled LangGraph**, uses the BM25 index, rejects every destructive proposal, and checks in-memory checkpoint round trips. Execution requires no API key, Docker, database, cluster or network service. Expected summary: `cases: 10`, `passed: 10`, `model_calls: 0`, `execution_attempts: 0`. The current output includes exact runtime and lock provenance. [Understand each result](docs/demo.md).
 
-The fuller console and service setup is in the [project reference](docs/project-reference.md#run-the-console). The lightweight stack uses deterministic fixtures behind the actual orchestrator → MCP → Go gateway path; fault-lab overrides add live observability. Production identity integration remains unfinished: the development console uses scoped Reader/Operator credentials rather than per-user SSO.
+The fuller console and service setup is in the [project reference](docs/project-reference.md#run-the-console): `docker compose up --build` serves the API and the console together at `http://localhost:8080`. The lightweight stack uses deterministic fixtures behind the actual orchestrator → MCP → Go gateway path; fault-lab overrides add live observability. Production identity integration remains unfinished: the development console uses scoped Reader/Operator credentials rather than per-user SSO.
 
 Checkpoint modes are separate: without `DATABASE_URL`, the API uses in-memory checkpoints and incident storage; the offline ten-case demo and 150/32 synthetic suites do not prove PostgreSQL durability. A configured PostgreSQL path uses `AsyncPostgresSaver` and durable incident/approval records. The retained 27 PostgreSQL checks and 39-check Compose experiment exercise that separate path; they are not memory-demo results.
 
@@ -69,6 +69,7 @@ OpsPilot reads your existing telemetry through one gateway, and you don't need t
 - **Inbox and notifications**: the console's incident inbox and `GET /v1/incidents` list what alerts started, and an optional Slack-compatible webhook tells a channel when a diagnosis [needs a human](docs/integrate.md#notify-a-channel-when-a-human-is-needed).
 - **MCP for your agents**: Claude Code, Cursor and other MCP clients can [diagnose through OpsPilot](docs/agents.md) and read cited evidence. No tool on that endpoint can approve or execute; a proposed fix still waits for a named human.
 - **Helm chart**: [`helm install`](docs/kubernetes.md) gives a read-only install by default. Read access, and then approved restarts and rollbacks, are granted per namespace through namespaced Roles. CI installs the chart on kind and runs `helm test`.
+- **Console included**: the orchestrator image serves the [console](docs/kubernetes.md#open-the-console) at its own address, so a Compose or Helm install has one URL for the API, the inbox and approvals. The page holds no credential, loads nothing from another origin, and runs only scripts from the exported bundle.
 
 ```bash
 bash deploy/helm/kind-quickstart.sh     # throwaway kind cluster, demo telemetry, helm test

@@ -26,7 +26,7 @@ as a current project or resume claim.
 | Backend depth | Python/FastAPI orchestration plus a separate authenticated Go telemetry gateway |
 | Observability | Live Prometheus metrics, Loki logs, Tempo traces, OpenTelemetry Collector, and provisioned Grafana dashboard |
 | Safety | Input injection checks, citation integrity, dry-run, exact action/namespace/target-bound approval, RBAC, and cross-replica idempotency; these do not prove semantic grounding or repair efficacy |
-| Deployment | Compose, a hardened 21-resource Kustomize base, and a repeatable Kind rollout/safety verifier |
+| Deployment | Compose, a Helm chart, a hardened 21-resource Kustomize base, and a repeatable Kind rollout/safety verifier; the orchestrator image serves the console from its own origin under a hash-based script policy |
 | Evaluation | Current 150 single-fault and 32 cross-service synthetic contracts, a BM25 retrieval benchmark, eight bounded lab modes, an actual-graph model runner and independent semantic-review protocol; historical prompt-comparison outputs remain separate |
 | Console reliability | Persisted node-boundary diagnosis streaming, partial-prefix read-only inspection, memory-only scoped development credentials, and explicit completion before approval |
 

@@ -1,6 +1,10 @@
 {{- $c := dict "root" . "component" "orchestrator" }}
 {{- $hasDatabase := include "opspilot.hasDatabase" . }}
 {{- $o := .Values.orchestrator }}
+{{- $consoleUrl := $o.consoleUrl }}
+{{- if and (not $consoleUrl) $o.console.enabled .Values.ingress.enabled .Values.ingress.host }}
+{{- $consoleUrl = printf "%s://%s" (ternary "https" "http" (gt (len .Values.ingress.tls) 0)) .Values.ingress.host }}
+{{- end }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -75,7 +79,12 @@ spec:
             - name: CORS_ALLOWED_ORIGINS
               value: {{ join "," $o.corsAllowedOrigins | default "http://localhost:3000" | quote }}
             - name: CONSOLE_URL
-              value: {{ $o.consoleUrl | quote }}
+              value: {{ $consoleUrl | quote }}
+            {{- if not $o.console.enabled }}
+            # The image serves its bundled console unless this is empty.
+            - name: CONSOLE_STATIC_DIR
+              value: ""
+            {{- end }}
             - name: ALERT_SERVICE_LABELS
               value: {{ $o.alerts.serviceLabels | quote }}
             - name: ALERT_DEFAULT_ENVIRONMENT

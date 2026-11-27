@@ -5,21 +5,25 @@ OpsPilot {{ .Chart.AppVersion }} is installed in namespace {{ .Release.Namespace
 Telemetry:   {{ if include "opspilot.liveTelemetry" . }}live ({{ .Values.telemetry.prometheusUrl }}){{ else }}demo fixtures. Set telemetry.prometheusUrl, lokiUrl and tempoUrl for real data{{ end }}
 Persistence: {{ if include "opspilot.hasDatabase" . }}PostgreSQL{{ else }}in memory, single replica; incidents are lost on restart{{ end }}
 Cluster:     {{ if .Values.remediation.enabled }}may restart or roll back Deployments in {{ join ", " .Values.targetNamespaces }} after a named human approves{{ else if .Values.discovery.enabled }}reads rollout history in {{ join ", " .Values.targetNamespaces }}; cannot change anything{{ else }}no Kubernetes access; cannot change anything{{ end }}
-
-{{- if and (or .Values.discovery.enabled .Values.remediation.enabled) (not (has .Values.orchestrator.alerts.defaultEnvironment .Values.targetNamespaces)) }}
+{{ if and (or .Values.discovery.enabled .Values.remediation.enabled) (not (has .Values.orchestrator.alerts.defaultEnvironment .Values.targetNamespaces)) }}
 Note: orchestrator.alerts.defaultEnvironment ({{ .Values.orchestrator.alerts.defaultEnvironment }}) is not in targetNamespaces.
 OpsPilot reads rollout history in the namespace named by an incident's environment
 and fails closed elsewhere; give alerts an environment label or set the default.
-
-{{ end -}}
+{{ end }}
 1. Check the install (runs a read-only diagnosis and confirms a reader cannot approve):
 
    helm test {{ .Release.Name }} -n {{ .Release.Namespace }}
 
-2. Reach the API:
+2. Reach the API{{ if .Values.orchestrator.console.enabled }} and its console (same port){{ end }}:
 
    kubectl -n {{ .Release.Namespace }} port-forward svc/{{ $api }} 8080:8080
    export OPSPILOT_READER_TOKEN=$(kubectl -n {{ .Release.Namespace }} get secret {{ $secret }} -o jsonpath='{.data.orchestrator-read-token}' | base64 -d)
+{{- if .Values.orchestrator.console.enabled }}
+
+   Open http://localhost:8080 and, under "API connection", confirm the
+   backend and paste the reader token (echo $OPSPILOT_READER_TOKEN). The page
+   keeps tokens in memory only. Over a network it sends them only to HTTPS.
+{{- end }}
 
 3. Connect an agent (diagnose and read only; no tool can approve):
 
@@ -32,3 +36,6 @@ and fails closed elsewhere; give alerts an environment label or set the default.
 
 Approvals need the operator token (key orchestrator-operator-token), which
 records "{{ .Values.auth.operatorActor }}" as the approving actor. Keep it with your on-call engineers.
+{{- if .Values.orchestrator.console.enabled }}
+To approve in the console, enter that token and "{{ .Values.auth.operatorActor }}" as the operator actor.
+{{- end }}

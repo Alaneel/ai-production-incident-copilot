@@ -9,6 +9,7 @@ const hostingConfig = JSON.parse(readFileSync(
 )) as { d1?: string; r2?: string };
 import { sites } from "./build/sites-vite-plugin";
 import { releaseBundleBoundary } from "./build/release-bundle-boundary";
+import { consoleBundleNotices } from "./build/console-bundle-notices";
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   "00000000-0000-4000-8000-000000000000";
@@ -58,6 +59,7 @@ export default defineConfig(async () => {
     plugins: [
       vinext(),
       releaseBundleBoundary(),
+      consoleBundleNotices(),
       sites(),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },

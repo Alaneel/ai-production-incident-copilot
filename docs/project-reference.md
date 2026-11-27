@@ -394,6 +394,9 @@ See the [dated results and remaining gaps](../docs/verification.md).
   notification webhook for alert-started diagnoses that need a human. The
   notification is an escaped pointer with no evidence, command or approval
   capability; delivery is best effort and never alters incident state.
+- The console exported as static files and served by the orchestrator at its
+  own origin (`CONSOLE_STATIC_DIR`), verified against a build manifest at
+  startup, with a hash-based script policy and no credential of its own.
 - An agent-facing MCP endpoint on the orchestrator (`POST /mcp`, Streamable
   HTTP with JSON responses) with three tools: `diagnose_incident`,
   `get_incident` and `list_incidents`. It accepts reader or operator API
@@ -482,7 +485,14 @@ the Agent or MCP interfaces.
 
 ## Run the console
 
-Requires Node.js 22.13 or newer.
+The orchestrator image already serves the console. With `docker compose up --build`
+or the [Helm chart](kubernetes.md#open-the-console), open the API's own address
+(`http://localhost:8080` locally); the page uses the origin that served it as
+its backend. `npm run build:console` writes that bundle to `dist/console`, and
+`CONSOLE_STATIC_DIR=dist/console` makes a locally started orchestrator serve it.
+
+To work on the console itself, run it separately with hot reload. Requires
+Node.js 22.13 or newer.
 
 ```bash
 npm install
@@ -510,7 +520,7 @@ docker compose up --build
 
 Services:
 
-- orchestrator: `http://localhost:8080`;
+- orchestrator: `http://localhost:8080` (the API and the console);
 - Go telemetry gateway: `http://localhost:8081`;
 - MCP server: `http://localhost:8082/mcp`;
 - PostgreSQL and Redis remain internal to the Compose network.
@@ -588,6 +598,8 @@ pip install -e 'services/orchestrator[dev]' -e 'services/mcp-server[dev]'
 npm test
 # Requires the backend .venv/dependencies; no model, DB or MCP configuration is inherited.
 npm run test:stream-contract
+# Builds the console the image serves and checks the exported bundle.
+npm run test:console-export
 (cd services/telemetry-gateway && go test ./...)
 .venv/bin/pytest services/orchestrator/tests services/mcp-server/tests \
   evals/tests fault-lab/app/tests -q -p no:cacheprovider
@@ -623,6 +635,7 @@ audience-bound OAuth 2.1 access tokens.
 
 ```text
 app/                         incident console
+build/                       console build plugins and the static export
 services/orchestrator/       Python workflow and API
 services/mcp-server/         custom guarded MCP tool server
 services/telemetry-gateway/  Go telemetry/query gateway

@@ -6,7 +6,7 @@
 #
 # Creates a kind cluster named opspilot-quickstart (refuses to touch an
 # existing one), installs the chart with demo telemetry, runs `helm test`,
-# and prints how to reach the API. Delete it with:
+# and prints how to open the console and reach the API. Delete it with:
 #   kind delete cluster --name opspilot-quickstart
 set -euo pipefail
 cd "$(dirname "$0")/../.."
@@ -46,6 +46,12 @@ exhaustion, and won't propose a rollback without live deployment history.
 
   kubectl --context $context -n opspilot port-forward svc/opspilot-orchestrator 8080:8080
   export OPSPILOT_READER_TOKEN=\$(kubectl --context $context -n opspilot get secret opspilot-credentials -o jsonpath='{.data.orchestrator-read-token}' | base64 -d)
+
+In the console: open http://localhost:8080, expand "API connection",
+confirm the backend and paste the reader token (echo \$OPSPILOT_READER_TOKEN).
+
+From an agent:
+
   claude mcp add --transport http opspilot http://localhost:8080/mcp --header "Authorization: Bearer \$OPSPILOT_READER_TOKEN"
 
 Remove everything with: kind delete cluster --name $cluster

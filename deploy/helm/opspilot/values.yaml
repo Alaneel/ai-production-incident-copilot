@@ -53,9 +53,16 @@ auth:
 
 orchestrator:
   replicas: 1
-  # Console base URL used for links in alerts, notifications and MCP results.
+  console:
+    # Serve the bundled console from the API's own Service, port and Ingress
+    # host. It holds no credential: people paste their own token into it.
+    enabled: true
+  # Base URL people open the console at, used for links in alerts,
+  # notifications and MCP results. Defaults to the Ingress host when the
+  # bundled console and the Ingress are both enabled.
   consoleUrl: ""
-  # Browser origins allowed to call the API and /mcp (the console's origin).
+  # Other browser origins allowed to call the API and /mcp, for a console
+  # hosted somewhere else. The bundled console needs none.
   corsAllowedOrigins: []
   alerts:
     serviceLabels: service,service_name,app_kubernetes_io_name,app,job

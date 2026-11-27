@@ -55,6 +55,7 @@ jobs:
           npm ci --ignore-scripts --no-audit --no-fund
           npm test
           npm run test:stream-contract
+          npm run test:console-export
       - name: Offline entry point and evidence provenance
         run: |
           .venv/bin/python -B scripts/portfolio_demo.py
