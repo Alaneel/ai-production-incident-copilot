@@ -52,6 +52,18 @@ A `docker compose up --build` stack reported `"task_state":"redis"`. The Helm ch
 
 Alpine 3.22's later OpenSSL revisions `3.5.9-r1` and `-r2` fix seven Low-severity CVEs. They are not in the parent and are deliberately not pinned. The new image was **not** scanned, and the 26-check persistence validation and Kubernetes acceptance were not run. The [recipe record](../deploy/images/redis-security/README.md) has the details. The Redis row in the qualification table below still describes the 2026-10-14 image.
 
+## 2026-11-28 UTC PostgreSQL recipe: names corrected
+
+The PostgreSQL recipe's image title, license directory and `dev.*` labels still carried names from the recipe it was adapted from: `TPP local PostgreSQL 17.11 security derivative`, `/usr/local/share/licenses/tpp-postgres-helper/` and `dev.tpp.*`. They now use OpsPilot's names, and the image is tagged `opspilot-postgres:17.11-security-20261128`. Nothing else in the recipe changed.
+
+The linux/arm64 rebuild matches the previous `…-20261121` image file for file. The server, entrypoint, gosu, zlib and container configuration are identical. Three things differ:
+
+- the license directory's name;
+- a build timestamp in `/var/log/apk.log`;
+- the mode of the four license files, now 0644. The previous image had 0600, from the checkout it was built in.
+
+The image started the way Compose starts it, kept its data across a restart and passed a compressed dump/restore. The linux/amd64 build could not be checked locally, because the Go toolchain crashes under Docker Desktop's emulator; CI builds the recipe natively on x86_64. The image was not scanned. The PostgreSQL row in the qualification table below still describes the 2026-10-14 image. The [recipe record](../deploy/images/postgres-security/README.md) has the details.
+
 ## Remaining unfixed build advisory: conditionally mitigated
 
 Final native `npm audit` reports **eight High inherited package records, zero Critical/Moderate/Low**. These eight records reduce to one vulnerable package/advisory: `braces 3.0.3`, [CVE-2026-93687 / GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm). The reviewed affected range is <= 3.0.3, no patched version is listed, and the official registry's latest remains 3.0.3. The vulnerable upstream package has not been declared fixed. `fflate 0.8.3` removed its separate malformed-ZIP finding; forced npm suggestions to downgrade Next/Vinext were rejected.

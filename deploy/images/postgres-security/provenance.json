@@ -23,6 +23,31 @@
     "x86_64_sha256": "7b05bc778b8b25cd880835b40114182bd4d1581717504d0129c810c0a14291cb"
   },
   "validation_status": "PENDING_BUILD_AND_RUNTIME",
+  "local_rebuild_2026_11_28": {
+    "change": "Names only: image title, license directory and dev.* labels renamed from the recipe this one was adapted from (TPP) to OpsPilot",
+    "local_image_tag": "opspilot-postgres:17.11-security-20261128",
+    "linux_arm64_image_id": "sha256:1fbdf94775da428cbda36d4f3bd8b3727f600b0098ba455deda305616866b1b7",
+    "compared_with": "sha256:4ab06ae65adc3673eeae34c7fe28301e79966c536e470e3cc86bfef23c85a1d6 (opspilot-postgres:17.11-security-20261121)",
+    "identical": [
+      "container configuration apart from labels",
+      "3,895 filesystem entries with content hashes and modes, including server, entrypoint, gosu and zlib, apart from the differences below"
+    ],
+    "differences": [
+      "license directory /usr/local/share/licenses/tpp-postgres-helper renamed to opspilot-postgres-security",
+      "/var/log/apk.log build timestamp",
+      "licenses/* files mode 0644; the previous image had 0600 from its build checkout"
+    ],
+    "linux_arm64_runtime_checks": [
+      "entrypoint start as root, server running as postgres through gosu 1.19 (go1.26.9 on linux/arm64)",
+      "1,000-row table survived a restart",
+      "pg_dump -Fc -Z 6 and pg_restore into a new database returned the same rows"
+    ],
+    "not_done": [
+      "linux/amd64 build: the Go toolchain crashed twice under Docker Desktop emulation during go mod download; CI builds the recipe natively on ubuntu-24.04",
+      "image scan",
+      "the remaining items of the pending validation list in README.md"
+    ]
+  },
   "module_sums": [
     "github.com/moby/sys/user v0.4.1 h1:RgjRlaDKi/Xmyrz4t8lyzXT6v2ooFeO/7xtchmhVWE0=",
     "github.com/moby/sys/user v0.4.1/go.mod h1:E9QsW5WRe1kUAf7kW8hXKwu1uhsZEAdPLYHYSDudF4Y=",
@@ -30,8 +55,8 @@
     "golang.org/x/sys v0.1.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg="
   ],
   "proposal_files": {
-    "Dockerfile": "af3729bd114d5a5e68015fb3051c2deb9a93dc74800058d2c9bd332b38919a2d",
-    "README.md": "b3a4042b8b07caeb61a42d1e8f5265a9634f4b7910a021027935f4137e44ecef",
+    "Dockerfile": "20c31182424f9176c72bc49fb736c35261d94188f18f3558ade19c12cab48d77",
+    "README.md": "6d3725197796974a934ba52e280b9decc4fc859ccc833269de8fae94e8e2f401",
     "gosu/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
     "gosu/go.mod": "2447b9b5daca5823aeaaf296a96f698e29b8d9a23e79265ce1eb292b411b6f0b",
     "gosu/go.sum": "3f4d244f09dc5009ad68d99b2d99815f48fddf693fad8e734bbe820b315f43e7",

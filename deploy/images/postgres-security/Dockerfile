@@ -33,12 +33,12 @@ RUN set -eu; \
     apk info --no-network --exists 'zlib=1.4-r0'
 COPY --from=gosu-build /out/gosu /usr/local/bin/gosu
 RUN chmod 0755 /usr/local/bin/gosu
-COPY --from=gosu-build /usr/local/go/LICENSE /usr/local/share/licenses/tpp-postgres-helper/go-LICENSE
-COPY --from=gosu-build /usr/local/go/PATENTS /usr/local/share/licenses/tpp-postgres-helper/go-PATENTS
-COPY licenses/ /usr/local/share/licenses/tpp-postgres-helper/
-LABEL org.opencontainers.image.title="TPP local PostgreSQL 17.11 security derivative" \
+COPY --from=gosu-build /usr/local/go/LICENSE /usr/local/share/licenses/opspilot-postgres-security/go-LICENSE
+COPY --from=gosu-build /usr/local/go/PATENTS /usr/local/share/licenses/opspilot-postgres-security/go-PATENTS
+COPY licenses/ /usr/local/share/licenses/opspilot-postgres-security/
+LABEL org.opencontainers.image.title="OpsPilot local PostgreSQL 17.11 security derivative" \
       org.opencontainers.image.base.name="postgres:17.11-alpine" \
       org.opencontainers.image.base.digest="sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24" \
-      dev.tpp.gosu.upstream.commit="6456aaa0f3c854d199d0f037f068eb97515b7513" \
-      dev.tpp.gosu.toolchain="go1.26.9" \
-      dev.tpp.zlib.version="1.4-r0"
+      dev.opspilot.postgres.gosu.upstream.commit="6456aaa0f3c854d199d0f037f068eb97515b7513" \
+      dev.opspilot.postgres.gosu.toolchain="go1.26.9" \
+      dev.opspilot.postgres.zlib="1.4-r0"
