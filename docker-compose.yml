@@ -92,7 +92,7 @@ services:
   redis:
     build:
       context: deploy/images/redis-security
-    image: opspilot-redis:7.4.11-security-20261127
+    image: opspilot-redis:7.4.12-security-20261127
     command: ["redis-server", "--appendonly", "yes"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
