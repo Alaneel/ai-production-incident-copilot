@@ -4,7 +4,7 @@ services:
   lab-pool-postgres:
     build:
       context: deploy/images/postgres-security
-    image: opspilot-postgres:17.11-security-20261121
+    image: opspilot-postgres:17.11-security-20261128
     command: ["postgres", "-c", "listen_addresses=", "-c", "unix_socket_directories=/var/run/postgresql", "-c", "unix_socket_permissions=0770"]
     environment:
       POSTGRES_DB: incident_pool_lab

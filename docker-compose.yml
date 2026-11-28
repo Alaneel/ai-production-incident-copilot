@@ -76,7 +76,7 @@ services:
   postgres:
     build:
       context: deploy/images/postgres-security
-    image: opspilot-postgres:17.11-security-20261121
+    image: opspilot-postgres:17.11-security-20261128
     environment:
       POSTGRES_DB: incident_copilot
       POSTGRES_USER: incident

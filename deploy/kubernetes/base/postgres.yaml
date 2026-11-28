@@ -38,7 +38,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: postgres
-          image: opspilot-postgres:17.11-security-20261121
+          image: opspilot-postgres:17.11-security-20261128
           env:
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata

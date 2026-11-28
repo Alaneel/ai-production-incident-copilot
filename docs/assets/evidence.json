@@ -1,7 +1,7 @@
 {
   "measured_at": [
-    "2026-11-27T17:02:59.742509+00:00",
-    "2026-11-27T17:03:01.598611+00:00"
+    "2026-11-28T14:36:03.504302+00:00",
+    "2026-11-28T14:36:06.266735+00:00"
   ],
   "source_scope_verified": true,
   "source_fingerprint_counts": [
@@ -9,8 +9,8 @@
     41
   ],
   "artifacts": [
-    "evals/results/workflow_benchmark_20261127T170259Z_343f866e.json",
-    "evals/results/cross_service_benchmark_20261127T170301Z_060828ddb59949bdb1af769d2603de11.json"
+    "evals/results/workflow_benchmark_20261128T143603Z_2bafba9a.json",
+    "evals/results/cross_service_benchmark_20261128T143606Z_299454c1449e4c6ea35d4ec844822c14.json"
   ],
   "single_fault_snapshots": {
     "cases": 150,
@@ -112,7 +112,7 @@
       "zstandard": "0.25.0"
     },
     "release_recipe_sha256": {
-      "container-images.lock.json": "45188ef36c2d3aa8f93b7d0f758939627009a628c855786b2c88760de049f579",
+      "container-images.lock.json": "803aabf5fccc8568303655f86e87d415317c9a3065c6e3934c663915dab421fd",
       "deploy/images/collector-security/.dockerignore": "84d175a2881b936a15811161fb8aa3a9efc7bd81dc4ab7c4b5ff3357f658c702",
       "deploy/images/collector-security/Dockerfile": "1ed868710d70a5d2fb37d725305d9f6d281ba8165f9a94de2e072a779afa7e51",
       "deploy/images/collector-security/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
@@ -139,7 +139,7 @@
       "deploy/images/loki-security/go.sum": "62c0e13a849e1744e200a7f9de760898bc2300104f0e470ff6897dff0fe48cb4",
       "deploy/images/loki-security/source-lock.json": "010ff7b0f9118e8af3c8c59fc3cf2159a020e90911462db474778f9209104605",
       "deploy/images/postgres-security/.dockerignore": "a4d19dcda7f31c0b955cd8feb51ffc5623ad03e488cdb2b2e76b32737300d7fb",
-      "deploy/images/postgres-security/Dockerfile": "af3729bd114d5a5e68015fb3051c2deb9a93dc74800058d2c9bd332b38919a2d",
+      "deploy/images/postgres-security/Dockerfile": "20c31182424f9176c72bc49fb736c35261d94188f18f3558ade19c12cab48d77",
       "deploy/images/postgres-security/gosu/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
       "deploy/images/postgres-security/gosu/go.mod": "2447b9b5daca5823aeaaf296a96f698e29b8d9a23e79265ce1eb292b411b6f0b",
       "deploy/images/postgres-security/gosu/go.sum": "3f4d244f09dc5009ad68d99b2d99815f48fddf693fad8e734bbe820b315f43e7",
